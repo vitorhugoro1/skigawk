@@ -598,48 +598,122 @@ function get_weight($modalidade, $id_peso, $sexo, $fetaria)
         '11' => '80.1 - 999',
       ),
       'masculino' => array(
-        '1' => '00.1 - 34',
-        '2' => '34.1 - 39',
-        '3' => '39.1 - 44',
-        '4' => '44.1 - 49',
-        '5' => '49.1 - 54',
-        '6' => '54.1 - 59',
-        '7' => '59.1 - 64',
-        '8' => '64.1 - 69',
-        '9' => '69.1 - 74',
-        '10' => '74.1 - 79',
-        '11' => '79.1 - 84',
-        '12' => '84.1 - 89',
-        '13' => '89.1 - 94',
-        '14' => '94.1 - 99',
-        '15' => '99.1 - 999',
+        '1' => '00.1 - 35',
+    		'2' => '35.1 - 40',
+    		'3' => '40.1 - 45',
+    		'4' => '45.1 - 50',
+    		'5' => '40.1 - 55',
+    		'6' => '55.1 - 60',
+    		'7' => '60.1 - 65',
+    		'8' => '65.1 - 70',
+    		'9' => '70.1 - 75',
+    		'10' => '75.1 - 80',
+    		'11' => '80.1 - 85',
+    		'12' => '85.1 - 90',
+    		'13' => '90.1 - 95',
+    		'14' => '95.1 - 100',
+    		'15' => '100.1 - 999'
       ),
     );
     $wushu = array(
       'feminino' => array(
-        '1' => '00.1 - 52',
-        '2' => '52.1 - 56',
-        '3' => '56.1 - 60',
-        '4' => '60.1 - 65',
-        '5' => '65.1 - 70',
-        '6' => '70.1 - 75',
-        '7' => '75.1 - 80',
-        '8' => '80.1 - 999',
+        '1' => '00.1 - 40',
+				'2' => '40.1 - 45',
+				'3' => '45.1 - 50',
+        '4' => '50.1 - 55',
+        '5' => '55.1 - 60',
+        '6' => '60.1 - 65',
+        '7' => '65.1 - 70',
+        '8' => '70.1 - 75',
+        '9' => '75.1 - 80',
+        '10' => '80.1 - 85',
+        '11' => '85.1 - 90',
+        '12' => '90.1 - 999',
       ),
       'masculino' => array(
-        '1' => '00.1 - 52',
-        '2' => '52.1 - 56',
-        '3' => '56.1 - 60',
-        '4' => '60.1 - 65',
-        '5' => '65.1 - 70',
-        '6' => '70.1 - 75',
-        '7' => '75.1 - 80',
-        '8' => '80.1 - 85',
-        '9' => '85.1 - 90',
-        '10' => '90.1 - 999',
+        '1' => '00.1 - 40',
+				'2' => '40.1 - 45',
+				'3' => '45.1 - 50',
+        '4' => '50.1 - 55',
+        '5' => '55.1 - 60',
+        '6' => '60.1 - 65',
+        '7' => '65.1 - 70',
+        '8' => '70.1 - 75',
+        '9' => '75.1 - 80',
+        '10' => '80.1 - 85',
+        '11' => '85.1 - 90',
+        '12' => '90.1 - 999',
       ),
     );
     $shuai = array(
+      'mirim' => array(
+    		'feminino'	=> array(
+    			'1'	=> '00.1 - 20',
+    			'2'	=> '20.1 - 24',
+    			'3'	=> '24.1 - 28',
+    			'4'	=> '28.1 - 32',
+    			'5'	=> '32.1 - 36',
+    			'6'	=> '36.1 - 40',
+    			'7'	=> '40.1 - 44',
+    			'8'	=> '44.1 - 48'
+    		),
+    		'masculino'	=> array(
+    			'1'	=> '00.1 - 20',
+    			'2'	=> '20.1 - 24',
+    			'3'	=> '24.1 - 28',
+    			'4'	=> '28.1 - 32',
+    			'5'	=> '32.1 - 36',
+    			'6'	=> '36.1 - 40',
+    			'7'	=> '40.1 - 44',
+    			'8'	=> '44.1 - 48'
+    		)
+    	),
+    	'infantil' => array(
+    		'feminino'	=> array(
+    			'1'	=> '00.1 - 20',
+    			'2'	=> '20.1 - 24',
+    			'3'	=> '24.1 - 28',
+    			'4'	=> '28.1 - 32',
+    			'5'	=> '32.1 - 36',
+    			'6'	=> '36.1 - 40',
+    			'7'	=> '40.1 - 44',
+    			'8'	=> '44.1 - 48'
+    		),
+    		'masculino'	=> array(
+    			'1'	=> '00.1 - 20',
+    			'2'	=> '20.1 - 24',
+    			'3'	=> '24.1 - 28',
+    			'4'	=> '28.1 - 32',
+    			'5'	=> '32.1 - 36',
+    			'6'	=> '36.1 - 40',
+    			'7'	=> '40.1 - 44',
+    			'8'	=> '44.1 - 48'
+    		)
+    	),
+      'junior' => array(
+    		'feminino' => array(
+    			'1' => '00.1 - 20',
+    			'2' => '20.1 - 23',
+    			'3' => '23.1 - 26',
+    			'4' => '26.1 - 29',
+    			'5' => '29.1 - 32',
+    			'6' => '32.1 - 35',
+    			'7' => '35.1 - 38',
+    			'8' => '38.1 - 41',
+    			'9' => '41.1 - 999'
+    		) ,
+    		'masculino' => array(
+    			'1' => '00.1 - 20',
+    			'2' => '20.1 - 23',
+    			'3' => '23.1 - 26',
+    			'4' => '26.1 - 29',
+    			'5' => '29.1 - 32',
+    			'6' => '32.1 - 35',
+    			'7' => '35.1 - 38',
+    			'8' => '38.1 - 41',
+    			'9' => '41.1 - 999'
+    		)
+    	),
       'infanto-juvenil' => array(
         'feminino' => array(
           '1' => '00.1 - 20',
@@ -841,12 +915,12 @@ function get_weight($modalidade, $id_peso, $sexo, $fetaria)
     $formastradicionais = array(
       '1' => 'Tradicional Arma Articulada',
       '2' => 'Tradicional Arma Bastão',
-        '3' => 'Tradicional Arma Espada',
+      '3' => 'Tradicional Arma Espada',
       '4' => 'Tradicional Arma Especial',
       '5' => 'Tradicional Arma Facão',
       '6' => 'Tradicional Arma Lança',
       '7' => 'Tradicional Forma sincronizada armas',
-        '8' => 'Tradicional Forma sincronizada mãos',
+      '8' => 'Tradicional Forma sincronizada mãos',
       '9' => 'Tradicional Mãos Choy Lay Fut',
       '10' => 'Tradicional Mãos Fei Hok Phai',
       '11' => 'Tradicional Mãos Fu Xin Chuan',
@@ -872,6 +946,11 @@ function get_weight($modalidade, $id_peso, $sexo, $fetaria)
       '8' => 'ESPADA DE TAI CHI FORMA 42',
       '9' => 'LANÇA',
       '10' => 'TAI CHI FORMA 42 MÃOS',
+    );
+    $tree = array(
+        '1' => 'Arma Longa',
+        '2' => 'Arma Média',
+        '3' => 'Mãos Livres',
     );
 
     switch ($modalidade) {
@@ -924,6 +1003,7 @@ function get_weight($modalidade, $id_peso, $sexo, $fetaria)
         $array = $data;
       break;
       case 'wushu':
+      case 'sanda':
         if ($sexo == 'm') {
             $data = $wushu['masculino'][$id_peso];
         } elseif ($sexo == 'f') {
@@ -942,9 +1022,25 @@ function get_weight($modalidade, $id_peso, $sexo, $fetaria)
       case 'shuai':
         switch ($fetaria) {
           case 'mirim':
+            if ($sexo == 'm') {
+                $data = $shuai[$fetaria]['masculino'][$id_peso];
+            } elseif ($sexo == 'f') {
+                $data = $shuai[$fetaria]['feminino'][$id_peso];
+            }
+            break;
           case 'infantil':
+            if ($sexo == 'm') {
+                $data = $shuai[$fetaria]['masculino'][$id_peso];
+            } elseif ($sexo == 'f') {
+                $data = $shuai[$fetaria]['feminino'][$id_peso];
+            }
+            break;
           case 'junior':
-            $data = 'Categoria não disponivel';
+            if ($sexo == 'm') {
+                $data = $shuai[$fetaria]['masculino'][$id_peso];
+            } elseif ($sexo == 'f') {
+                $data = $shuai[$fetaria]['feminino'][$id_peso];
+            }
             break;
           case 'ijuvenil':
             if ($sexo == 'm') {
@@ -999,6 +1095,9 @@ function get_weight($modalidade, $id_peso, $sexo, $fetaria)
         case 'formasolimpicas':
             $array = $formasolimpicas[$id_peso];
         break;
+        case 'tree':
+        		$array = $tree[$id_peso];
+    		break;
     }
 
     return $array;

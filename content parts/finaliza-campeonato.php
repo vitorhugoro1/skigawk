@@ -115,5 +115,6 @@
                 <input type="hidden" name="groups" value='<?php echo htmlspecialchars(json_encode($groups)); ?>'>
                 <?php } ?>
                 <input type="hidden" name="insider" value="<?php echo ($insider) ? 's' : 'n'; ?>">
-                <input type="submit" class="btn btn-primary fp-button" value="Finalizar" />
+                <input type="submit" class="btn btn-primary fp-button" value="Finalizar"/>
+                <a href="javascript:history.back()" class="btn fp-button">Voltar</a>
               </form>

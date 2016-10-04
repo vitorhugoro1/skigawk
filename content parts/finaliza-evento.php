@@ -61,6 +61,7 @@
 	    <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
 	    <input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
 	    <input type="hidden" name="insider" value="<?php echo ($insider) ? 's' : 'n'; ?>">
-	    <input type="submit" class="btn btn-primary fp-button" value="Finalizar"></input>
+	    <input type="submit" class="btn btn-primary fp-button" value="Finalizar"/>
+			<a href="javascript:history.back()" class="btn fp-button">Voltar</a>
     </form>
 </div>

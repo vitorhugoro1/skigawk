@@ -50,7 +50,7 @@ Selecione o estilo que vai participar
                 $in = get_the_author_meta('insiders', $user->ID, true);
                 if(empty($in) || ! array_key_exists($_POST['camp_id'], $in)){
                   echo '<li>';
-                  echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />'.$term->name;
+                  echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;
                   echo '<div id="'.$term->slug.'"></div>';
                   echo '</li>';
                 } else {

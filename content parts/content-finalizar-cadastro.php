@@ -66,11 +66,6 @@ switch($type){
                ?>
 
             </div>
-            <script type="text/javascript">
-              $(document).ready(function(){
-
-              });
-            </script>
         </div>
     <?php do_action( '__after_content' ); ?>
 </section>

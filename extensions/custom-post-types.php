@@ -147,7 +147,8 @@ function register_terms(){
     wp_insert_term( 'Semi Contato', 'categoria', array('slug' => 'semi'));
     wp_insert_term( 'Kuo Shu Light', 'categoria', array('slug' => 'kuolight'));
     wp_insert_term( 'Kuo Shu Lei Tai', 'categoria', array('slug' => 'kuoleitai'));
-    wp_insert_term( 'Wu Shu Sanda', 'categoria', array('slug' => 'wushu'));
+    wp_insert_term( 'Wu Shu', 'categoria', array('slug' => 'wushu'));
+    wp_insert_term( 'Sanda', 'categoria', array('slug' => 'sanda'));
     wp_insert_term( 'Shuai Jiao', 'categoria', array('slug' => 'shuai'));
     wp_insert_term( 'Muay Thai', 'categoria', array('slug' => 'muaythai'));
     wp_insert_term( 'MMA', 'categoria', array('slug' => 'mma'));
@@ -156,6 +157,7 @@ function register_terms(){
     wp_insert_term( 'Formas Internas', 'categoria', array('slug' => 'formasinternas'));
     wp_insert_term( 'Formas Tradicionais', 'categoria', array('slug' => 'formastradicionais'));
     wp_insert_term( 'Formas Olimpicas', 'categoria', array('slug' => 'formasolimpicas'));
+    wp_insert_term( 'Tree Star Formas Profissional', 'categoria', array('slug' => 'tree'));
 }
 
 function register_academias(){
