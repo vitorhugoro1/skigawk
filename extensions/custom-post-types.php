@@ -147,10 +147,11 @@ function register_terms(){
     wp_insert_term( 'Semi Contato', 'categoria', array('slug' => 'semi'));
     wp_insert_term( 'Kuo Shu Light', 'categoria', array('slug' => 'kuolight'));
     wp_insert_term( 'Kuo Shu Lei Tai', 'categoria', array('slug' => 'kuoleitai'));
-    wp_insert_term( 'Wu Shu', 'categoria', array('slug' => 'wushu'));
-    wp_insert_term( 'Sanda', 'categoria', array('slug' => 'sanda'));
+    wp_insert_term( 'Wushu Sansou', 'categoria', array('slug' => 'wushu'));
+    wp_insert_term( 'Sanda Profissional', 'categoria', array('slug' => 'sanda'));
     wp_insert_term( 'Shuai Jiao', 'categoria', array('slug' => 'shuai'));
-    wp_insert_term( 'Muay Thai', 'categoria', array('slug' => 'muaythai'));
+    wp_insert_term( 'Muay Thai Amador', 'categoria', array('slug' => 'muaythai-a'));
+    wp_insert_term( 'Muay Thai Profissional', 'categoria', array('slug' => 'muaythai-p'));
     wp_insert_term( 'MMA', 'categoria', array('slug' => 'mma'));
     wp_insert_term( 'CMMA', 'categoria', array('slug' => 'cmma'));
     wp_insert_term( 'Formas Livres', 'categoria', array('slug' => 'formaslivres'));

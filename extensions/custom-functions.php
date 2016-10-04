@@ -1011,7 +1011,8 @@ function get_weight($modalidade, $id_peso, $sexo, $fetaria)
         }
         $array = $data;
       break;
-        case 'muaythai':
+      case 'muaythai-a':
+      case 'muaythai-p':
             if ($sexo == 'm') {
                 $data = $muaythai['masculino'][$id_peso];
             } elseif ($sexo == 'f') {

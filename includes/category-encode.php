@@ -584,7 +584,8 @@ case 'sanda':
 
     break;
 
-    case 'muaythai':
+    case 'muaythai-a':
+    case 'muaythai-p':
 
         if ($sexo == 'm') {
             $data = $muaythai['masculino'];
