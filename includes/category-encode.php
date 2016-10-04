@@ -475,7 +475,7 @@ $formastradicionais = array(
     '16' => 'Tradicional Mãos Pam Pou Kiu',
     '17' => 'Tradicional Mãos Sul',
     '18' => 'Tradicional Mãos Tam Tuei',
-        '19' => 'Tradicional Mãos Tchon-I-Tchen',
+    '19' => 'Tradicional Mãos Tchon-I-Tchen',
     '20' => 'Tradicional Toi Tcha de armas',
     '21' => 'Tradicional Toi Tcha de mãos',
 );
@@ -683,7 +683,7 @@ if ($slug == 'formaslivres' || $slug == 'formasinternas' || $slug == 'formastrad
         if (!in_array($dado, $peso)) {
             $group_tradicional = array(7, 8, 20, 21);
             $group_interno = array(7, 8);
-            $group_livre = array(8, 9);
+            $group_livre = array(8, 9, 12, 13);
             if (
             in_array($dado, $group_tradicional) && $slug == 'formastradicionais' ||
             in_array($dado, $group_interno) && $slug == 'formasinternas' ||

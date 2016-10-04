@@ -53,9 +53,9 @@ $pages_id = pages_group_ids();
                       <td>
                         <ul class="list-inscrito">
                         <?php
-                        $formaGrupo['formaslivres'] = array(7,8,20,21);
-                        $formaGrupo['formasinternas'] = array(8,9);
-                        $formaGrupo['formastradicionais'] = array(7,8);
+                        $formaGrupo['formaslivres'] = array(7,8);
+                        $formaGrupo['formasinternas'] = array(8, 9, 12, 13);
+                        $formaGrupo['formastradicionais'] = array(7,8, 20, 21);
                          foreach($value['categorias'] as $cat_slug => $cat_data){
                              $category = get_term_by( 'slug', $cat_slug, 'categoria');
                              echo '<li>';

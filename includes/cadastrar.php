@@ -27,18 +27,6 @@ switch ($type) {
             $peso = json_decode(stripslashes($_POST['peso']), true);
             $groups = json_decode(stripslashes($_POST['groups']), true);
             $armas = json_decode(stripslashes($_POST['armas']), true);
-          //   $peso_new['tree'][] = array(
-          //      'peso'  => $peso['tree'][0],
-          //      'arma' => $armas[$peso['tree'][0]],
-          //      'id_pagamento' => '0'
-          //    );
-          //    $peso_new['tree'][] = array(
-          //       'peso'  => $peso['tree'][1],
-          //       'arma' => $armas[$peso['tree'][1]],
-          //       'id_pagamento' => '0'
-          //     );
-          //  var_dump($peso_new);
-          //   die();
         break;
     case 'eventos':
             $pay = esc_attr($_POST['pay']);
@@ -101,7 +89,7 @@ if (userInsider($user_id, $post_id)) { // Verifica se o usuario está inscrito
                   if($term_name == 'formastradicionais'){
                     $valida_item = array(7,8,20,21);
                   } else if($term_name == 'formaslivres'){
-                    $valida_item = array(8, 9);
+                    $valida_item = array(8, 9, 12, 13);
                   } else if($term_name == 'formasinternas'){
                     $valida_item = array(7, 8);
                   }
@@ -204,7 +192,7 @@ if (userInsider($user_id, $post_id)) { // Verifica se o usuario está inscrito
                   if($cat == 'formastradicionais'){
                     $valida_item = array(7,8,20,21);
                   } else if($cat == 'formaslivres'){
-                    $valida_item = array(8, 9);
+                    $valida_item = array(8, 9, 12, 13);
                   } else if($cat == 'formasinternas'){
                     $valida_item = array(7, 8);
                   }
