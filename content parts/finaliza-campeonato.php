@@ -51,14 +51,31 @@
                         </td>
                         <td>
                           <?php if($type == 'campeonatos'){
-                            if ($cat == 'formaslivres' || $cat == 'formasinternas' || $cat == 'formastradicionais' || $cat == 'formasolimpicas'){
-                              $group = array(7,8,20,21);
+                            switch ($cat) {
+                              case 'formaslivres':
+                                $group = array(8, 9);
+                                break;
+                              case 'formastradicionais':
+                                $group = array(7,8,20,21);
+                                break;
+                              case 'formasinternas':
+                                $group = array(7, 8);
+                                break;
+                            }
+
+                            if ($cat == 'formaslivres' || $cat == 'formasinternas' ||
+                             $cat == 'formastradicionais' || $cat == 'formasolimpicas'){
                                 foreach($value as $item){
                                     echo get_weight($cat, $item, $sexo, $fetaria).'<br>';
                                     if(in_array($item, $group)){
-                                      echo '<b>Equipe: </b>'.implode(', ', $groups[$item]).'<br>';
+                                      echo '<b>Equipe: </b>'.implode(', ', $groups[$cat][$item]).'<br>';
                                     }
                                 }
+                            } elseif ( $cat == 'tree') {
+                              foreach($value as $item){
+                                  echo get_weight($cat, $item, $sexo, $fetaria);
+                                  echo sprintf('  <b>Arma:</b> %s<br>', $arma[$item]);
+                              }
                             } else {
                               echo get_weight($cat, $value, $sexo, $fetaria). ' Kg';
                             }
@@ -102,19 +119,20 @@
                 <p>
                     Ao realizar o pagamento enviar o comprovante para o e-mail <a href="mailto:adriel@skigawk.com.br">adriel@skigawk.com.br</a>.
                 </p>
-              <form action="<?php echo home_url(); ?>/wp-content/themes/skigawk/includes/cadastrar.php" method="post" class="form-inline">
+              <form action="<?php echo get_template_directory_uri() . '/includes/cadastrar.php' ?>" method="post" class="form-inline">
                 <?php if($priceOption == 's') { ?>
-                  <input type="hidden" name="priceTotal" value="<?php echo $subscriberPrice; ?>">
+                  <input type="hidden" name="priceTotal" value="<?php echo $subscriberPrice; ?>"/>
               <?php  } else { ?>
-                  <input type="hidden" name="priceTotal" value="0">
+                  <input type="hidden" name="priceTotal" value="0"/>
               <?php  } ?>
-                <input type="hidden" name="post_id" value="<?php echo $_POST['camp_id']; ?>">
-                <input type="hidden" name="user_id" value="<?php echo $_POST['user_id']; ?>">
+                <input type="hidden" name="post_id" value="<?php echo $_POST['camp_id']; ?>"/>
+                <input type="hidden" name="user_id" value="<?php echo $_POST['user_id']; ?>"/>
                 <?php if($type == 'campeonatos') { ?>
-                <input type="hidden" name="peso" value='<?php echo htmlspecialchars(json_encode($peso)); ?>'>
-                <input type="hidden" name="groups" value='<?php echo htmlspecialchars(json_encode($groups)); ?>'>
+                <input type="hidden" name="peso" value='<?php echo htmlspecialchars(json_encode($peso)); ?>'/>
+                <input type="hidden" name="groups" value='<?php echo htmlspecialchars(json_encode($groups)); ?>'/>
+                <input type="hidden" name="armas" value='<?php echo htmlspecialchars(json_encode($arma)); ?>'/>
                 <?php } ?>
-                <input type="hidden" name="insider" value="<?php echo ($insider) ? 's' : 'n'; ?>">
+                <input type="hidden" name="insider" value="<?php echo ($insider) ? 's' : 'n'; ?>"/>
                 <input type="submit" class="btn btn-primary fp-button" value="Finalizar"/>
                 <a href="javascript:history.back()" class="btn fp-button">Voltar</a>
               </form>

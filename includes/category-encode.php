@@ -677,7 +677,7 @@ foreach ($in[$post_id]['categorias'][$slug] as $item) {
     $peso[] = $item['peso'];
 }
 
-if ($slug == 'formaslivres' || $slug == 'formasinternas' || $slug == 'formastradicionais' || $slug == 'formasolimpicas') {
+if ($slug == 'formaslivres' || $slug == 'formasinternas' || $slug == 'formastradicionais' || $slug == 'formasolimpicas' || $slug == 'tree') {
     echo '<ul>';
     foreach ($array as $dado => $value) {
         if (!in_array($dado, $peso)) {
@@ -689,30 +689,40 @@ if ($slug == 'formaslivres' || $slug == 'formasinternas' || $slug == 'formastrad
             in_array($dado, $group_interno) && $slug == 'formasinternas' ||
             in_array($dado, $group_livre) && $slug == 'formaslivres') {
                 echo '<li>';
-                echo '<input type="checkbox" name="data-'.$slug.'[]" value="'.$dado.'">  &nbsp;'.$value; ?>
-					<ul id="group-<?php echo $dado; ?>" class="groups">
-						<li>
-							<input type="text" name="group-<?php echo $slug.'['.$dado.'][]'; ?>"/>
-						</li>
-						<li>
-							<input type="text" name="group-<?php echo $slug.'['.$dado.'][]'; ?>"/>
-						</li>
-						<li>
-							<input type="text" name="group-<?php echo $slug.'['.$dado.'][]'; ?>"/>
-						</li>
-						<li>
-							<input type="text" name="group-<?php echo $slug.'['.$dado.'][]'; ?>"/>
-						</li>
-						<li>
-							<input type="text" name="group-<?php echo $slug.'['.$dado.'][]'; ?>"/>
-						</li>
-						<li>
-							<input type="button" class="btn add-member" data-name="group-<?php echo $slug.'['.$dado.'][]'; ?>" value="Adicionar membro"/>
-							<a href="javascript:void(0);" class="btn btn-warning remove-member">Remover membro</a>
-						</li>
-					</ul>
-				<?php
+                echo '<input type="checkbox" name="data-'.$slug.'[]" value="'.$dado.'">&nbsp;'.$value; ?>
+          					<ul id="group-<?php echo $dado; ?>" class="groups">
+          						<li>
+          							<input type="text" name="group-<?php echo $slug.'['.$dado.'][]'; ?>" placeholder="Nome do integrante"/>
+          						</li>
+          						<li>
+          							<input type="text" name="group-<?php echo $slug.'['.$dado.'][]'; ?>" placeholder="Nome do integrante"/>
+          						</li>
+          						<li>
+          							<input type="text" name="group-<?php echo $slug.'['.$dado.'][]'; ?>" placeholder="Nome do integrante"/>
+          						</li>
+          						<li>
+          							<input type="text" name="group-<?php echo $slug.'['.$dado.'][]'; ?>" placeholder="Nome do integrante"/>
+          						</li>
+          						<li>
+          							<input type="text" name="group-<?php echo $slug.'['.$dado.'][]'; ?>" placeholder="Nome do integrante"/>
+          						</li>
+          						<li>
+          							<input type="button" class="btn add-member" data-name="group-<?php echo $slug.'['.$dado.'][]'; ?>" value="Adicionar membro"/>
+          							<a href="javascript:void(0);" class="btn btn-warning remove-member">Remover membro</a>
+          						</li>
+          					</ul>
+          				<?php
                 echo '</li>';
+            } else if($slug == 'tree') {
+              echo '<li>';
+              echo '<input type="checkbox" name="data-'.$slug.'[]" value="'.$dado.'">&nbsp;'.$value; ?>
+                      <ul id="groups-<?php echo $dado; ?>" class="groups">
+                        <li>
+                          <input type="text" name="tree-arma-<?php echo $slug.'['.$dado.']'; ?>" placeholder="Nome da arma"/>
+                        </li>
+                      </ul>
+                    <?php
+              echo '</li>';
             } else {
                 echo '<li>';
                 echo '<input type="checkbox" name="data-'.$slug.'[]" value="'.$dado.'">&nbsp;'.$value;

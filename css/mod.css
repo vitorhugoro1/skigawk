@@ -127,13 +127,24 @@ img.avatar {
   cursor: pointer;
   display: inline;
 }
+.inscricoes .titleField {
+  font-weight: bold;
+  width: auto;
+  border-bottom: 1px solid #adadad;
+}
+.hentry div {
+  font-size: 17px;
+}
+.list-inscrito {
+  list-style-type: none;
+}
 
 /**
  * Inscrever
  */
 
 .inscrever input[type=radio], input[type=checkbox] {
-    margin:-2px 0 0;
+  margin: -2px 0 0;
 }
 #frame {
   border: 1px solid #eee;
@@ -142,6 +153,4 @@ img.avatar {
   display: none;
   list-style: none;
 }
-.groups > input[type="button"] {
-
-}
+.groups > input[type="button"] {}

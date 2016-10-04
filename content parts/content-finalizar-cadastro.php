@@ -14,7 +14,7 @@ switch($type){
     // Carrega os pesos
     foreach($categoria as $cat){
         $peso[$cat] = $_POST['data-'.$cat];
-        if ($cat == 'formaslivres' || $cat == 'formasinternas' || $cat == 'formastradicionais' || $cat == 'formasolimpicas'){
+        if ($cat == 'formaslivres' || $cat == 'formasinternas' || $cat == 'formastradicionais' || $cat == 'formasolimpicas' || $cat == 'tree'){
             $value -= 1;
             if(isset($_POST['data-'.$cat])){
                 foreach($_POST['data-'.$cat] as $item){
@@ -23,7 +23,10 @@ switch($type){
             }
         }
     }
-    $groups = $_POST['group-formastradicionais'];
+    $groups['formastradicionais'] = $_POST['group-formastradicionais'];
+    $groups['formasinternas'] = $_POST['group-formasinternas'];
+    $groups['formaslivres'] = $_POST['group-formaslivres'];
+    $arma = $_POST['tree-arma-tree'];
       // fim Carrega pesos
     $arr = array(7,8,20,21);
     $value += $extra;
@@ -64,7 +67,6 @@ switch($type){
                       require('finaliza-evento.php');
                     }
                ?>
-
             </div>
         </div>
     <?php do_action( '__after_content' ); ?>

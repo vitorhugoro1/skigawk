@@ -310,12 +310,22 @@ jQuery(document).ready(function($) {
     }
   });
 
+  $('input[type=checkbox]#tree').parent().children("div#tree").unbind().on('click', 'input[type=checkbox]', function () {
+    var check = $(this).is(':checked');
+    if(check == true){
+      $(this).parent().children('.groups').show();
+    } else if(check == false) {
+      $(this).parent().children('.groups').hide();
+    }
+  });
+
   $('div').on('click', '.groups .add-member' ,function(e){
     e.stopPropagation();
     var li = document.createElement('LI');
     var ipt = document.createElement('INPUT');
     $(ipt).prop('name', $(this).data('name'));
     $(ipt).prop('type', 'text');
+    $(ipt).attr('placeholder', 'Nome do integrante');
     li.appendChild(ipt);
     $(this).parents('.groups').children('li:last').before(li);
   });

@@ -68,13 +68,13 @@ Selecione o estilo que vai participar
                       if($k == 'categorias'){
                         if($term->slug == 'formaslivres' || $term->slug == 'formasinternas' || $term->slug == 'formastradicionais' || $term->slug == 'formasolimpicas'){
                           echo '<li>';
-                          echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />'.$term->name;
+                          echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;
                           echo '<div id="'.$term->slug.'"></div>';
                           echo '</li>';
                         } else {
                           if(!array_key_exists($term->slug, $i)){
                             echo '<li>';
-                            echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />'.$term->name;
+                            echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;
                             echo '<div id="'.$term->slug.'"></div>';
                             echo '</li>';
                           }
@@ -97,15 +97,15 @@ Selecione o estilo que vai participar
                   } else {
                     foreach($in[$_POST['camp_id']] as $k => $i){
                       if($k == 'categorias'){
-                        if($term->slug == 'formaslivres' || $term->slug == 'formasinternas' || $term->slug == 'formastradicionais' || $term->slug == 'formasolimpicas'){
+                        if($term->slug == 'formaslivres' || $term->slug == 'formasinternas' || $term->slug == 'formastradicionais' || $term->slug == 'formasolimpicas' || $term->slug == 'tree'){
                           echo '<li>';
-                          echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />'.$term->name;
+                          echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;
                           echo '<div id="'.$term->slug.'"></div>';
                           echo '</li>';
                         } else {
                           if(!array_key_exists($term->slug, $i)){
                             echo '<li>';
-                            echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />'.$term->name;
+                            echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;
                             echo '<div id="'.$term->slug.'"></div>';
                             echo '</li>';
                           }

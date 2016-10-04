@@ -9,20 +9,7 @@ $pages_id = pages_group_ids();
 <section class="tc-content <?php echo $_layout_class; ?>">
     <?php do_action( '__before_content' ); ?>
         <div class="entry-content">
-            <style type="text/css">
-                    .titleField{
-                        font-weight: bold;
-                        width: auto;
-                        border-bottom: 1px solid #adadad;
-                    }
-                    .hentry div {
-                        font-size:17px;
-                    }
-                    .list-inscrito {
-                      list-style-type: none;
-                    }
-            </style>
-            <div class="hentry">
+            <div class="hentry inscricoes">
               <?php
               if(!empty($inscricoes)) {
                 $list = array();
@@ -66,11 +53,13 @@ $pages_id = pages_group_ids();
                       <td>
                         <ul class="list-inscrito">
                         <?php
-                         $formaGrupo = array(7,8,20,21);
+                        $formaGrupo['formaslivres'] = array(7,8,20,21);
+                        $formaGrupo['formasinternas'] = array(8,9);
+                        $formaGrupo['formastradicionais'] = array(7,8);
                          foreach($value['categorias'] as $cat_slug => $cat_data){
                              $category = get_term_by( 'slug', $cat_slug, 'categoria');
                              echo '<li>';
-                             if($cat_slug == 'formaslivres' || $cat_slug == 'formasinternas' || $cat_slug == 'formastradicionais' || $cat_slug == 'formasolimpicas'){
+                             if($cat_slug == 'formaslivres' || $cat_slug == 'formasinternas' || $cat_slug == 'formastradicionais' || $cat_slug == 'formasolimpicas' || $cat_slug == 'tree'){
                                $count = count($cat_data);
                                $c = 0;
                                ?>
@@ -82,16 +71,23 @@ $pages_id = pages_group_ids();
                                       $forma = get_weight($cat_slug, $item['peso'], $sexo, $fetaria);
                                       echo '<li>';
                                       echo $forma;
-                                      if(in_array($item['peso'], $formaGrupo)){
-                                        if(isset($item['groups'])) {
-                                          ?>
-                                          <div class="tooltip top">
-                                            <span class="tooltip-inner"><?php echo implode(",", $item['groups'] ); ?></span>
-                                          </div>
-                                          <?php
-                                        }
-                                      }
-                                      echo ($c == $count) ? '.' : ', ';
+                                      if($cat_slug == 'formaslivres' ||
+                                       $cat_slug == 'formasinternas' ||
+                                       $cat_slug == 'formastradicionais'){
+                                         if(in_array($item['peso'], $formaGrupo[$cat_slug])){
+                                           if(isset($item['groups'])) {
+                                             echo ' <i>' . implode(", ", array_filter( $item['groups']) ) . '</i>';
+                                           }
+                                         }
+                                       } else if($cat_slug == 'tree'){
+                                         if(isset($item['arma'])){
+                                           echo ' - ' . $item['arma'];
+                                         } else {
+                                           echo (empty($forma)) ? '' : ' - sem cadastro';
+                                         }
+                                       }
+
+                                      echo (empty($forma)) ? '' : (($c == $count) ? '.' : ', ');
                                       echo '</li>';
                                   }
                                    ?>
