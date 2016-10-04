@@ -301,6 +301,8 @@ jQuery(document).ready(function($) {
     switch ($(this).val()) {
       case '8':
       case '9':
+      case '12':
+      case '13':
         if(check == true){
           $(this).parent().children('.groups').show();
         } else if(check == false) {
