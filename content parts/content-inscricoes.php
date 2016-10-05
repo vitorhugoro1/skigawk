@@ -53,9 +53,9 @@ $pages_id = pages_group_ids();
                       <td>
                         <ul class="list-inscrito">
                         <?php
-                        $formaGrupo['formaslivres'] = array(7,8);
-                        $formaGrupo['formasinternas'] = array(8, 9, 12, 13);
-                        $formaGrupo['formastradicionais'] = array(7,8, 20, 21);
+                        $formaGrupo['formaslivres'] = array(7,8,20,21);
+                        $formaGrupo['formasinternas'] = array(8,9);
+                        $formaGrupo['formastradicionais'] = array(7,8);
                          foreach($value['categorias'] as $cat_slug => $cat_data){
                              $category = get_term_by( 'slug', $cat_slug, 'categoria');
                              echo '<li>';
@@ -108,13 +108,13 @@ $pages_id = pages_group_ids();
                             $id_pag = '';
                         		$category = get_term_by( 'slug', $cat_slug, 'categoria');
                                 echo '<li>';
-                                if($cat_slug == 'formaslivres' || $cat_slug == 'formasinternas' || $cat_slug == 'formastradicionais' || $cat_slug == 'formasolimpicas'){
+                                if($cat_slug == 'formaslivres' || $cat_slug == 'formasinternas' || $cat_slug == 'formastradicionais' || $cat_slug == 'formasolimpicas' || $cat_slug == 'tree'){
                                     foreach($cat_data as $item){
                                         $id_pag[] = $item['id_pagamento'];
                                     }
                                     $unique = array_unique($id_pag);
 
-                                    echo '<b>'.$category->name.'</b> - '.implode(', ', $unique);
+                                    echo '<b>'.$category->name.'</b> - '.implode(', ', array_filter($unique));
 
                                 } else {
                                     $query = "SELECT id FROM `wp_payments` WHERE id = ".esc_sql($cat_data['id_pagamento']);

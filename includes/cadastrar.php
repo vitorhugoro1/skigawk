@@ -340,10 +340,37 @@ if ($pay == 's') {
     /**
      * Envio de e-mail de confirmação da inscrição no campeonato ou evento
      */
+     $options = unserialize(get_option('deposito'));
+    $home = home_url();
+    $nome = get_the_author_meta('display_name', $user_id );
+    $titulo = get_the_title($post_id);
+    $tipo = (get_post_type($post_id) == 'campeonatos') ? 'Campeonato' : 'Evento';
+    $conta = sprintf('%s<br> %s<br>Agência: %s<br>Conta: %s', $options['banco'], $options['beneficiario'], $options['agencia'], $options['conta']);
+    $admin_email = get_option('admin_email');
+
     $to =  get_the_author_meta('user_email', $user_id);
-    $subject = "Inscrição no ".((get_post_type($post_id) == 'campeonatos') ? 'Campeonato' : 'Evento' ).' '.get_the_title($post_id);
-    $message = "Inscrição realizada com sucesso. <br> Para realizar o pagamento acesse <a href='".$url."'>aqui</a>";
-    $headers[] = "From: Skigawk <".get_option('admin_email').">". "\r\n";
+    $subject = sprintf("Inscrição no %s da Skigawk", $tipo);
+    // $message = "Inscrição realizada com sucesso. <br> Para realizar o pagamento acesse <a href='".$url."'>aqui</a>";
+    $message = "<div style='background-color:#fff;padding:10px;'>
+  		<div style='width: auto;display: flex;background-color:#f1c40f'>
+  			<a href='{$home}' style='margin: 0 auto;'>
+  				<img src='http://skigawk.com.br/testes/wordpress/wp-content/uploads/2016/07/logo-home2.png' alt='SKIGAWK' title='Skigawk' />
+  			</a>
+  		</div>
+  		<div>
+  			<p>Olá, <b>{$nome}</b> sua inscrição para o <b>{$titulo}</b> foi realizada com sucesso.</p>
+  			<p>&nbsp;&nbsp;Para darmos continuidade ao processo de validação, por favor realize o pagamento para os dados abaixo: </p>
+  			<p>
+  				{$conta}
+  			</p>
+  			<p>&nbsp;Ao realizar o pagamento, envie o seu <b>nome completo</b> e o <b>comprovante</b> para <a href='mailto:adriel@skigawk.com.br'>adriel@skigawk.com.br</a>.</p>
+  			<p style='font-size:11px;'>
+  				<i>Se o e-mail não foi para você, desconsidere este e-mail e avise o administrador do sistema em <a href='mailto:{$admin_email}'>{$admin_email}</a>.</i>
+  				<br>
+  			</p>
+  		</div>
+  	</div>";
+    $headers[] = "From: Skigawk <{$admin_email}>". "\r\n";
     $headers[] = "MIME-Version: 1.0";
     $headers[] = "Content-type:text/html;charset=UTF-8";
     wp_mail( $to, $subject, $message, $headers);
