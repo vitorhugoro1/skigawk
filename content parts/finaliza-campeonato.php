@@ -53,7 +53,7 @@
                           <?php if($type == 'campeonatos'){
                             switch ($cat) {
                               case 'formaslivres':
-                                $group = array(8, 9);
+                                $group = array(8, 9, 12, 13);
                                 break;
                               case 'formastradicionais':
                                 $group = array(7,8,20,21);
