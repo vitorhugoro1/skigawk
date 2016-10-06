@@ -68,13 +68,13 @@
                                 foreach($value as $item){
                                     echo get_weight($cat, $item, $sexo, $fetaria).'<br>';
                                     if(in_array($item, $group)){
-                                      echo '<b>Equipe: </b>'.implode(', ', $groups[$cat][$item]).'<br>';
+                                      echo '<b>Equipe: </b>'.implode(', ', array_filter($groups[$cat][$item])).'<br>';
                                     }
                                 }
                             } elseif ( $cat == 'tree') {
                               foreach($value as $item){
                                   echo get_weight($cat, $item, $sexo, $fetaria);
-                                  echo sprintf('  <b>Arma:</b> %s<br>', $arma[$item]);
+                                  echo sprintf('  <b>Arma:</b> %s<br>', array_filter($arma[$item]));
                               }
                             } else {
                               echo get_weight($cat, $value, $sexo, $fetaria). ' Kg';
