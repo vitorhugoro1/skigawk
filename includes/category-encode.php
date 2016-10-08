@@ -692,7 +692,12 @@ case 'tree':
 		break;
 case 'submission-infantil':
 case 'submission-adulto':
-    $array = $submission;
+    if ($sexo == 'm') {
+        $data = $submission['masculino'];
+    } elseif ($sexo == 'f') {
+          $data = $submission['feminino'];
+    }
+    $array = $data;
     break;
 }
 
