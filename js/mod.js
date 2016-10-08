@@ -169,7 +169,7 @@ jQuery(document).ready(function($) {
       });
     }
   });
-
+  
   $("#dateNasc").change(function() {
     var data = $(this).val();
     var dataS = data.split("/");

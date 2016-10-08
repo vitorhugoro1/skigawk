@@ -47,8 +47,6 @@ $pages_ids = pages_group_ids();
 
           $uploadedfile = $_FILES['avatar'];
 
-          $uploadedfile = $_FILES['avatar'];
-
           if($uploadedfile['error'] == 0 ){
             $upload_overrides = array( 'test_form' => false );
             $movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
