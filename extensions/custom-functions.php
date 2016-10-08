@@ -952,6 +952,36 @@ function get_weight($modalidade, $id_peso, $sexo, $fetaria)
         '2' => 'Arma Média',
         '3' => 'Mãos Livres',
     );
+    $submission = array(
+        'feminino' => array(
+            '1' => '00.1 - 55',
+            '2' => '55.1 - 59',
+            '3' => '59.1 - 63',
+            '4' => '63.1 - 67',
+            '5' => '67.1 - 71',
+            '6' => '71.1 - 75',
+            '7' => '75.1 - 79',
+            '8' => '79.1 - 83',
+            '9' => '83.1 - 87',
+            '10' => '87.1 - 91',
+            '11' => '91.1 - 95',
+            '12' => '95.1 - 999',
+        ),
+        'masculino' => array(
+            '1' => '00.1 - 55',
+            '2' => '55.1 - 59',
+            '3' => '59.1 - 63',
+            '4' => '63.1 - 67',
+            '5' => '67.1 - 71',
+            '6' => '71.1 - 75',
+            '7' => '75.1 - 79',
+            '8' => '79.1 - 83',
+            '9' => '83.1 - 87',
+            '10' => '87.1 - 91',
+            '11' => '91.1 - 95',
+            '12' => '95.1 - 999',
+        ),
+    );
 
     switch ($modalidade) {
       case 'cassetete':
@@ -1099,6 +1129,15 @@ function get_weight($modalidade, $id_peso, $sexo, $fetaria)
         case 'tree':
         		$array = $tree[$id_peso];
     		break;
+        case 'submission-infantil':
+        case 'submission-adulto':
+            if ($sexo == 'm') {
+                $data = $submission['masculino'][$id_peso];
+            } elseif ($sexo == 'f') {
+                  $data = $submission['feminino'][$id_peso];
+            }
+            $array = $data;
+            break;
     }
 
     return $array;
