@@ -1,3 +1,6 @@
+<?php
+$arr_sub_adulto = array('adulto', 'senior');
+?>
 <div class="relation-post">
                 <h3><?php echo get_the_title($post_id); ?></h3>
                 <div class="">
@@ -8,7 +11,15 @@
                      <?php
                          $list = wp_get_post_terms( $_POST['camp_id'], 'categoria', array('fields' => 'all') );
                          foreach($list as $term){
-                             $in = get_the_author_meta('insiders', $_POST['user_id'], true);
+                             $in = get_the_author_meta('insiders', $_POST['user_id']);
+                             $fetaria = get_the_author_meta('fEtaria', $_POST['user_id']);
+
+                             if($term->slug == 'submission-adulto' && ! in_array($fetaria, $arr_sub_adulto) ){
+                               continue;
+                             } else if($term->slug == 'submission-infantil' && in_array($fetaria, $arr_sub_adulto)) {
+                               continue;
+                             }
+
                              if(empty($in)){
                               echo '<li>'.$term->name.'</li>';
                              } else {

@@ -1,9 +1,10 @@
 <?php
 $ordem_apresentar = array(
-  'combate' => array('guardas', 'cassetete', 'semi', 'shuai', 'kuolight', 'kuoleitai', 'wushu', 'sanda', 'muaythai-a', 'muaythai-p', 'cmma', 'mma'),
+  'combate' => array('guardas', 'cassetete', 'semi','submission-adulto', 'submission-infantil', 'shuai', 'kuolight', 'kuoleitai', 'wushu', 'sanda', 'muaythai-a', 'muaythai-p', 'cmma', 'mma' ),
   'formas'  => array('formastradicionais', 'formasinternas', 'formasolimpicas', 'formaslivres', 'tree')
 );
 
+$arr_sub_adulto = array('adulto', 'senior');
 
 if($fetaria == 'mirim' || $fetaria ==  'infantil' || $fetaria == 'ijuvenil' || $fetaria == 'junior'){
     $file = get_post_meta($_POST['camp_id'], '_vhr_autorizacao_file_id');
@@ -56,8 +57,16 @@ Selecione o estilo que vai participar
               if('combate' == $key){
                 echo sprintf('<h4>%s</h4>', 'Modalidades de Combate');
                 foreach($modalidade as $term_slug){
+                  $fetaria = get_the_author_meta('fEtaria', $user->ID);
+
+                  if($term_slug == 'submission-adulto' && ! in_array($fetaria, $arr_sub_adulto) ){
+                    continue;
+                  } else if($term_slug == 'submission-infantil' && in_array($fetaria, $arr_sub_adulto)) {
+                    continue;
+                  }
+
                   $term = get_term_by('slug', $term_slug, 'categoria');
-                  $in = get_the_author_meta('insiders', $user->ID, true);
+                  $in = get_the_author_meta('insiders', $user->ID);
                   if(empty($in) || ! array_key_exists($_POST['camp_id'], $in)){
                     echo '<li>';
                     echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;

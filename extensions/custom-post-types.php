@@ -159,6 +159,8 @@ function register_terms(){
     wp_insert_term( 'Formas Tradicionais', 'categoria', array('slug' => 'formastradicionais'));
     wp_insert_term( 'Formas Olimpicas', 'categoria', array('slug' => 'formasolimpicas'));
     wp_insert_term( 'Tree Star Formas Profissional', 'categoria', array('slug' => 'tree'));
+    wp_insert_term( 'Submission Infantil', 'categoria', array('slug' => 'submission-infantil'));
+    wp_insert_term( 'Submission Adulto', 'categoria', array('slug' => 'submission-adulto'));
 }
 
 function register_academias(){

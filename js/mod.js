@@ -98,9 +98,6 @@ jQuery(document).ready(function($) {
   $("#dateNasc").mask("00/00/0000", {
     placeholder: "00/00/0000"
   });
-  $("#cep").mask("00000-000", {
-    placeholder: "00000-000"
-  });
   $("#phone").mask("(00) 0000-0000", {
     placeholder: "(00) 0000-0000"
   });
@@ -124,6 +121,9 @@ jQuery(document).ready(function($) {
       $("input#city").prop('readonly', true);
       $("input#district").prop('readonly', true);
       $("input#address").prop('readonly', true);
+      $("#cep").mask("00000-000", {
+        placeholder: "00000-000"
+      });
     }
   });
   jQuery('.list-inscrito li ul li').hover(
@@ -151,17 +151,8 @@ jQuery(document).ready(function($) {
       $("input#city").prop('readonly', false);
       $("input#district").prop('readonly', false);
       $("input#address").prop('readonly', false);
-    }
-
-    if (cep_code.length <= 0) {
-      $("input#state").val("");
-      $("input#city").val("");
-      $("input#district").val("");
-      $("input#address").val("");
-      return;
-    }
-
-    $.get("http://apps.widenet.com.br/busca-cep/api/cep.json", {
+    } else {
+      $.get("http://apps.widenet.com.br/busca-cep/api/cep.json", {
         code: cep_code
       },
       function(result) {
@@ -176,6 +167,7 @@ jQuery(document).ready(function($) {
         $("input#district").val(result.district);
         $("input#address").val(result.address);
       });
+    }
   });
 
   $("#dateNasc").change(function() {
