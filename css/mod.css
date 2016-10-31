@@ -1,0 +1,156 @@
+/**
+ * Author: Vitor Hugo R Merencio
+ * Date: 15 Out 2016
+ */
+
+
+/**
+ * Cadastro e Editar Perfil
+ */
+
+#confirm {
+  background-color: #388E3C;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+#confirm.error {
+  background-color: #D32F2F;
+}
+#alerts.sucess {
+  background-color: #388E3C;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 5px;
+}
+#categoria.categoria {
+  display: none;
+}
+ul#categoria {
+  margin: 0 0 10px 5px;
+}
+ul#categoria li {
+  display: inline-block;
+  margin: 0 10px 0 0;
+}
+ul#categoria li > input {
+  margin: 2px;
+}
+ul.modalidade {
+  margin: 0 0 10px 5px;
+}
+ul.modalidade li {
+  list-style: none;
+  /*display: inline-block;*/
+  margin: 0 10px 0 0;
+}
+ul.modalidade li > input {
+  margin: 2px;
+}
+.margin-10 {
+  margin: 0 0 0 10px;
+}
+span.red {
+  color: red;
+}
+.label-mod > label {
+  display: inline-table;
+  padding: 0.3rem;
+}
+label[for=avatar] .avatar {
+  width: 96px;
+}
+
+/**
+ * Header da pagina
+ */
+
+.bar-top {
+  width: 100vw;
+  height: 25px;
+  background-color: #f1c40f;
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  font-weight: bold;
+}
+.bar-top div {
+  float: right;
+  margin-right: 10px;
+}
+.bar-top div a {
+  color: #adadad;
+}
+
+/**
+ * Perfil
+ */
+
+.titleField {
+  font-weight: bold;
+  width: auto;
+  border-bottom: 1px solid #adadad;
+}
+.hentry div {
+  font-size: 17px;
+}
+img.avatar {
+  width: 96px !important;
+  margin: 1rem !important;
+}
+
+/**
+ * Visualizar Inscritos
+ */
+
+.list-inscrito {
+  list-style-type: none;
+}
+.vizu-title {
+  margin-left: 5px;
+  line-height: 15px;
+  font-weight: bold;
+}
+
+/**
+ * Inscrições
+ */
+
+.tooltip.top {
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+.list-inscrito li ul li {
+  cursor: pointer;
+  display: inline;
+}
+.inscricoes .titleField {
+  font-weight: bold;
+  width: auto;
+  border-bottom: 1px solid #adadad;
+}
+.hentry div {
+  font-size: 17px;
+}
+.list-inscrito {
+  list-style-type: none;
+}
+
+/**
+ * Inscrever
+ */
+
+.inscrever input[type=radio], input[type=checkbox] {
+  margin: -2px 0 0;
+}
+#frame {
+  border: 1px solid #eee;
+}
+.groups {
+  display: none;
+  list-style: none;
+}
+.groups > input[type="button"] {}
