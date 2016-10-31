@@ -76,12 +76,6 @@ function countCheck(){
 }
 
 jQuery(document).ready(function($){
-var term_url = $('#term_url').val();
-
-  $("#frame").attr("src", term_url);
-});
-
-jQuery(document).ready(function($) {
   setInterval(function() {
     $("#tc-page-wrap header.tc-header").css({
       "top": "25px",
@@ -93,6 +87,10 @@ jQuery(document).ready(function($) {
   setTimeout(function() {
     $("#alerts").remove();
   }, 8000);
+
+  var term_url = $('#term_url').val();
+
+  $("#frame").attr("src", term_url);
 
   $("#responsavel").hide();
   $("#dateNasc").mask("00/00/0000", {
@@ -110,13 +108,7 @@ jQuery(document).ready(function($) {
   $("#state").val($("#Astate").val());
 
   $("#nacionalidade").on('change', function() {
-    if ($(this).val() != 'br') {
-      $("input#cep").prop('readonly', false);
-      $("input#state").prop('readonly', false);
-      $("input#city").prop('readonly', false);
-      $("input#district").prop('readonly', false);
-      $("input#address").prop('readonly', false);
-    } else {
+    if ($(this).val() == 'br') {
       $("input#state").prop('readonly', true);
       $("input#city").prop('readonly', true);
       $("input#district").prop('readonly', true);
@@ -124,8 +116,15 @@ jQuery(document).ready(function($) {
       $("#cep").mask("00000-000", {
         placeholder: "00000-000"
       });
+    } else {
+      $("input#cep").prop('readonly', false);
+      $("input#state").prop('readonly', false);
+      $("input#city").prop('readonly', false);
+      $("input#district").prop('readonly', false);
+      $("input#address").prop('readonly', false);
     }
   });
+  
   jQuery('.list-inscrito li ul li').hover(
     function(){
       jQuery(this).children('.tooltip').addClass('in');
@@ -169,7 +168,7 @@ jQuery(document).ready(function($) {
       });
     }
   });
-  
+
   $("#dateNasc").change(function() {
     var data = $(this).val();
     var dataS = data.split("/");

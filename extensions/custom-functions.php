@@ -16,6 +16,8 @@ add_action('admin_enqueue_scripts', 'admin_functions');
 function admin_functions()
 {
     wp_enqueue_script('maskinput', get_template_directory_uri().'/js/jquery.mask.min.js', array('jquery'), '', true);
+    wp_enqueue_style('modcss', get_template_directory_uri() . '/css/mod.css');
+    wp_enqueue_script('mods', get_template_directory_uri() . '/js/adminfunctions.js', array('jquery'), '', true);
 }
 
 add_action('wp_enqueue_scripts', 'enqueue_scripts_and_styles');

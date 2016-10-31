@@ -1,36 +1,9 @@
 <?php
 $user_id = $_GET['user'];
 ?>
-<style type="text/css">
-    ul#categoria {
-      margin: 5px 0 0 0;
-    }
-    ul#categoria li {
-      display:inline-block;
-      margin: 0 10px 0 0;
-    }
-    ul#categoria li > input {
-      margin: 2px;
-    }
-    ul.modalidade {
-      margin: 0 0 10px 0px;
-    }
-    ul.modalidade li {
-      list-style: none;
-      /*display: inline-block;*/
-      margin: 0 10px 0 0;
-    }
-    ul.modalidade li > input {
-      margin: 2px;
-    }
-    .margin-10 {
-      margin:0 0 0 10px;
-    }
-</style>
 <div class="wrap">
 	<h2>Editar Usuário - <b><?php echo get_the_author_meta( 'display_name', $user_id ); ?></b></h2>
 	<?php
-		// $message = 'error';
 		if(isset($_GET['m']) && $_GET['m'] == '1'){
 		?>
 			<div id="message" class="updated fade"><p><strong>Dados atualizados com sucesso</strong></p></div>
@@ -41,7 +14,7 @@ $user_id = $_GET['user'];
 		<?php
 		}
     ?>
-	<form action="admin-post.php" method="post">
+	<form action="admin-post.php" method="post" class="edit_user_form">
 		<input type="hidden" name="action" value="vhr_edit_user">
 		<input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
 		<?php	wp_nonce_field( 'vhr_edit_user' ); ?>
@@ -51,7 +24,7 @@ $user_id = $_GET['user'];
 					<label for="nome">Nome <!-- <?php echo get_the_author_meta('fEtaria', $user_id);?> --></label>
 				</th>
 				<td>
-					<input type="text" name="nome" id="nome" class="regular-text" value="<?php echo esc_attr(get_the_author_meta( 'display_name', $user_id )); ?>" />
+					<input type="text" name="nome" id="nome" class="regular-text" value="<?php echo esc_attr(get_the_author_meta( 'display_name', $user_id )); ?>" required/>
 				</td>
 			</tr>
 			<tr>
@@ -59,24 +32,24 @@ $user_id = $_GET['user'];
 					<label for="idade">Idade</label>
 				</th>
 				<td>
-					<input type="text" id="idade" name="idade" value="<?php echo esc_attr(get_the_author_meta( 'birthday', $user_id )); ?>" />
+					<input type="text" id="idade" name="idade" value="<?php echo esc_attr(get_the_author_meta( 'birthday', $user_id )); ?>" required/>
 				</td>
 			</tr>
-            <tr id="responsavel">
-                <th scope="row">
-                    <label for="id_responsavel">Responsavel</label>
-                </th>
-                <td>
-                    <input type="text" id="id_responsavel" name="responsavel" class="regular-text" value="<?php echo get_the_author_meta( 'responsavel', $user_id ); ?>" />
-                </td>
-            </tr>
+      <tr id="responsavel">
+          <th scope="row">
+              <label for="id_responsavel">Responsavel</label>
+          </th>
+          <td>
+              <input type="text" id="id_responsavel" name="responsavel" class="regular-text" value="<?php echo get_the_author_meta( 'responsavel', $user_id ); ?>" />
+          </td>
+      </tr>
 			<tr>
 				<th scope="row">
 					<label for="mail">Email</label>
 				</th>
 				<td>
-					<input type="email" name="mail" id="mail" class="regular-text" value="<?php echo esc_attr(get_userdata( $user_id )->user_email); ?>" />
-                    <p class="description"> Ao alterar o e-mail, o usuário para acessar passa a ser o novo e-mail cadastrado.</p>
+					<input type="email" name="mail" id="mail" class="regular-text" value="<?php echo esc_attr(get_userdata( $user_id )->user_email); ?>"  required/>
+                  <p class="description"> Ao alterar o e-mail, o usuário para acessar passa a ser o novo e-mail cadastrado.</p>
 				</td>
 			</tr>
 			<tr>
@@ -84,23 +57,23 @@ $user_id = $_GET['user'];
 					<label for="phone">Telefone Fixo</label>
 				</th>
 				<td>
-					<input type="text" id="phone" name="phone" value="<?php echo get_the_author_meta('phone', $user_id); ?>" />
+					<input type="text" id="phone" name="phone" value="<?php echo get_the_author_meta('phone', $user_id); ?>" required/>
 				</td>
 			</tr>
-            <tr>
-            	<th scope="row">
-            		<label for="cellphone">Celular</label>
-            	</th>
-            	<td>
-            		<input type="text" id="cellphone" name="cellphone" value="<?php echo get_the_author_meta('cellphone', $user_id); ?>" />
-            	</td>
-            </tr>
+      <tr>
+      	<th scope="row">
+      		<label for="cellphone">Celular</label>
+      	</th>
+      	<td>
+      		<input type="text" id="cellphone" name="cellphone" value="<?php echo get_the_author_meta('cellphone', $user_id); ?>" />
+      	</td>
+      </tr>
 						<tr>
             	<th scope="row">
             		<label for="nacionalidade">Nacionalidade</label>
             	</th>
             	<td>
-								<select name="nacionalidade" id="nacionalidade">
+								<select name="nacionalidade" id="nacionalidade" required>
 									<?php $nacionalidade = get_the_author_meta('nacionalidade', $user_id); ?>
 									<option value="br" <?php selected($nacionalidade, 'br'); ?>>Brasil</option>
 									<option value="py" <?php selected($nacionalidade, 'py'); ?>>Paraguai</option>
@@ -113,7 +86,7 @@ $user_id = $_GET['user'];
             		<label for="cep">CEP/ Zip Code</label>
             	</th>
             	<td>
-            		<input type="text" id="cep" name="cep" value="<?php echo get_the_author_meta('cep', $user_id); ?>" />
+            		<input type="text" id="cep" name="cep" value="<?php echo get_the_author_meta('cep', $user_id); ?>" required/>
             	</td>
             </tr>
             <tr>
@@ -184,7 +157,7 @@ $user_id = $_GET['user'];
             		<label for="assoc">Nome da Associação</label>
             	</th>
             	<td>
-                    <select name="assoc" id="assoc">
+                    <select name="assoc" id="assoc" required>
                         <?php
                         $assoc = get_terms('academia', array('fields'   => 'all', 'hide_empty' => false));
                         foreach($assoc as $term){
@@ -201,7 +174,7 @@ $user_id = $_GET['user'];
             		<label for="estilo">Estilo Principal</label>
             	</th>
             	<td>
-            		<input type="text" name="estilo" id="estilo" class="regular-text" value="<?php echo get_the_author_meta('estilo', $user_id); ?>" />
+            		<input type="text" name="estilo" id="estilo" class="regular-text" value="<?php echo get_the_author_meta('estilo', $user_id); ?>" required/>
             	</td>
             </tr>
             <tr>
@@ -219,7 +192,7 @@ $user_id = $_GET['user'];
                         $date = date('Y-m-d');
                     }
                     ?>
-                    <input type="date" name="data-pratica" id="data-pratica" value="<?php echo $date; ?>" min="<?php echo $birthday; ?>"/>
+                    <input type="date" name="data-pratica" id="data-pratica" value="<?php echo $date; ?>" min="<?php echo $birthday; ?>" required/>
                 </td>
             </tr>
             <tr>
@@ -261,163 +234,4 @@ $user_id = $_GET['user'];
 		</table>
 		<p class="submit"><?php submit_button(__('Save'), 'primary'); ?></p>
 	</form>
-	<script type="text/javascript">
-        function cep(){
-					var cep_code = jQuery(this).val();
-
-					if (jQuery("#nacionalidade").val() != 'br') {
-						jQuery("input#cep").prop('readonly', false);
-						jQuery("input#state").prop('readonly', false);
-						jQuery("input#city").prop('readonly', false);
-						jQuery("input#district").prop('readonly', false);
-						jQuery("input#address").prop('readonly', false);
-					} else {
-						jQuery.get("http://apps.widenet.com.br/busca-cep/api/cep.json", {
-							code: cep_code
-						},
-						function(result) {
-							if (result.status != 1) {
-								alert(result.message || "Houve um erro desconhecido");
-								jQuery("input#cep").val("");
-								return;
-							}
-							jQuery("input#cep").val(result.code);
-							jQuery("input#state").val(result.state);
-							jQuery("input#city").val(result.city);
-							jQuery("input#district").val(result.district);
-							jQuery("input#address").val(result.address);
-						});
-					}
-        }
-
-        jQuery(document).ready(function($){
-            jQuery("div ul.categoria").each(function(){
-                var check = jQuery(this).parent().parent().children('input').prop('checked');
-                if(check == true){
-                } else {
-                  jQuery(this).hide();
-                }
-            });
-            jQuery("#idade").mask("00/00/0000",{placeholder: "00/00/0000"});
-            data = jQuery("#idade").val();
-            fieldResp(data);
-            // jQuery("#cep").mask("00000-000", {placeholder: "00000-000"});
-            jQuery("#phone").mask("(00) 0000-0000", {placeholder: "(00) 0000-0000"});
-            jQuery("#cellphone").mask("(00) 00000-0000", {placeholder: "(00) 00000-0000"});
-            jQuery("#address").val(jQuery("#Aaddress").val());
-            jQuery("#district").val(jQuery("#Adistrict").val());
-            jQuery("#city").val(jQuery("#Acity").val());
-            jQuery("#state").val(jQuery("#Astate").val());
-            cep();
-
-						$("#nacionalidade").on('change', function() {
-					    if ($(this).val() != 'br') {
-					      $("input#cep").prop('readonly', false);
-					      $("input#state").prop('readonly', false);
-					      $("input#city").prop('readonly', false);
-					      $("input#district").prop('readonly', false);
-					      $("input#address").prop('readonly', false);
-					    } else {
-					      $("input#state").prop('readonly', true);
-					      $("input#city").prop('readonly', true);
-					      $("input#district").prop('readonly', true);
-					      $("input#address").prop('readonly', true);
-					      $("#cep").mask("00000-000", {
-					        placeholder: "00000-000"
-					      });
-					    }
-					  });
-
-            jQuery("td.modalidade input[type=checkbox]").change(function(){
-              var check = jQuery(this).prop('checked');
-              if(check == true){
-                var elem = jQuery(this).parent().children('div').children('.categoria');
-                elem.show();
-              } else {
-                var elem = jQuery(this).parent().children('div').children('.categoria');
-                elem.hide();
-              }
-            });
-        });
-        jQuery("#cep").change(function(){
-					var cep_code = jQuery(this).val();
-
-					if (jQuery("#nacionalidade").val() != 'br') {
-						jQuery("input#cep").prop('readonly', false);
-						jQuery("input#state").prop('readonly', false);
-						jQuery("input#city").prop('readonly', false);
-						jQuery("input#district").prop('readonly', false);
-						jQuery("input#address").prop('readonly', false);
-					} else {
-						jQuery.get("http://apps.widenet.com.br/busca-cep/api/cep.json", {
-							code: cep_code
-						},
-						function(result) {
-							if (result.status != 1) {
-								alert(result.message || "Houve um erro desconhecido");
-								jQuery("input#cep").val("");
-								return;
-							}
-							jQuery("input#cep").val(result.code);
-							jQuery("input#state").val(result.state);
-							jQuery("input#city").val(result.city);
-							jQuery("input#district").val(result.district);
-							jQuery("input#address").val(result.address);
-						});
-					}
-        });
-        function idade(ano_aniversario, mes_aniversario, dia_aniversario) {
-            var d = new Date,
-                ano_atual = d.getFullYear(),
-                mes_atual = d.getMonth() + 1,
-                dia_atual = d.getDate(),
-
-                ano_aniversario = +ano_aniversario,
-                mes_aniversario = +mes_aniversario,
-                dia_aniversario = +dia_aniversario,
-
-                quantos_anos = ano_atual - ano_aniversario;
-
-            if (mes_atual < mes_aniversario || mes_atual == mes_aniversario && dia_atual < dia_aniversario) {
-                quantos_anos--;
-            }
-
-            return quantos_anos < 0 ? 0 : quantos_anos;
-        }
-
-        function fieldResp(data){
-
-            var dataS = data.split("/");
-            var userIdade = idade(dataS[2],dataS[1],dataS[0]);
-            if(userIdade < 18){
-                jQuery("#responsavel").show();
-                jQuery("#responsavel input").prop("disabled", false);
-                jQuery("#responsavel input").prop("required", true);
-            } else {
-                jQuery("#responsavel").hide();
-                jQuery("#responsavel input").prop("disabled", true);
-                jQuery("#responsavel input").prop("required", false);
-            }
-        }
-
-        jQuery("#idade").change(fieldResp(jQuery(this).val()));
-
-        jQuery("#confirm_password").change(function(){
-            var pass = jQuery("#id_password").val();
-            var confirm = jQuery(this).val();
-
-            if(pass == confirm){
-                jQuery("#confirm").show();
-                jQuery("#confirm").removeClass('error');
-                jQuery("#confirm").html("Senhas iguais");
-                jQuery(".input-submit-fix input.btn").prop("disabled", false);
-            } else {
-                jQuery("#confirm").show();
-                jQuery("#confirm").addClass('error');
-                jQuery("#confirm").html("Senhas diferentes");
-                jQuery(".input-submit-fix input.btn").prop("disabled", true);
-            }
-
-        });
-    </script>
 </div>

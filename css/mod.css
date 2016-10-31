@@ -154,3 +154,32 @@ img.avatar {
   list-style: none;
 }
 .groups > input[type="button"] {}
+
+/**
+ * Editar Usuário - ADMIN
+ */
+
+ .edit_user_form ul#categoria {
+   margin: 5px 0 0 0;
+ }
+ .edit_user_form ul#categoria li {
+   display:inline-block;
+   margin: 0 10px 0 0;
+ }
+ .edit_user_form ul#categoria li > input {
+   margin: 2px;
+ }
+ .edit_user_form ul.modalidade {
+   margin: 0 0 10px 0px;
+ }
+ .edit_user_form ul.modalidade li {
+   list-style: none;
+   margin: 0 10px 0 0;
+ }
+ .edit_user_form ul.modalidade li > input {
+   margin: 2px;
+ }
+
+ .edit_user_form #responsavel {
+   display: none;
+ }
