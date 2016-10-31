@@ -2,6 +2,7 @@
 
 require get_template_directory() . '/extensions/controller/manage-inscritos.php';
 require get_template_directory() . '/extensions/controller/manage-users.php';
+include (get_template_directory() . '/extensions/controller/admin-edit-action.php');
 
 add_action('admin_menu', 'menus' );
 
@@ -41,6 +42,7 @@ function editar_insider(){
   require('tela-edit-insider.php');
 }
 
+add_action('admin_post_vhr_edit_user', 'vhr_edit_user');
 add_action( 'admin_menu', 'adjust_the_wp_menu', 999 );
 
 function adjust_the_wp_menu() {
@@ -56,7 +58,7 @@ function adjust_the_wp_menu() {
   remove_submenu_page( 'edit.php?post_type=campeonatos', 'edit_icamp_pag' );
 
   remove_submenu_page( 'users.php', 'edit_cad' );
-  
+
   // $page[0] is the menu title
 
   // $page[1] is the minimum level or capability required

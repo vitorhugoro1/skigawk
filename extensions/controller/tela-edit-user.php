@@ -1,97 +1,5 @@
 <?php
-$nonce = wp_create_nonce('edit_user');
-$user_id = esc_attr($_GET['user']);
-
-$birth = date_create_from_format('d/m/Y', get_the_author_meta('birthday', $user_id));
-$birth = get_etaria_user($birth);
-update_user_meta($user_id, 'fEtaria', $birth);
-
-
-if(!wp_verify_nonce( $_POST['_wpnonce'], 'edit_user'))
-{
-	if(isset($_POST['_wpnonce']))
-	{
-		$message = 'error';
-	}
-}
-else
-{
-		$args = array(
-		    'ID'         => $user_id,
-		    'user_email' => esc_attr( $_POST['mail'] ),
-		    'user_login' => esc_attr( $_POST['mail'] ),
-        'display_name' => esc_attr($_POST['nome'])
-		);
-		$error = wp_update_user( $args );
-
-        update_user_meta($user_id, 'birthday', $_POST['idade']);
-
-        $birth = date_create_from_format('d/m/Y', get_the_author_meta('birthday', $user_id));
-		$birth = get_etaria_user($birth);
-		update_user_meta($user_id, 'fEtaria', $birth);
-		if($birth !== 'adulto' || $birth !== 'senior'){
-			update_user_meta($user_id, 'responsavel', $_POST['responsavel']);
-        }
-		update_user_meta($user_id, 'phone', $_POST['phone']);
-		update_user_meta($user_id, 'cellphone', $_POST['cellphone']);
-		update_user_meta( $user_id, 'nacionalidade', $_POST['nacionalidade']);
-		update_user_meta($user_id, 'cep', $_POST['cep']);
-		update_user_meta($user_id, 'address', $_POST['address']);
-		update_user_meta($user_id, 'addressnumber', $_POST['endnumber']);
-		update_user_meta($user_id, 'addresscomplement', $_POST['endcomplement']);
-		update_user_meta($user_id, 'district', $_POST['district']);
-		update_user_meta($user_id, 'city', $_POST['city']);
-		update_user_meta($user_id, 'state', $_POST['state']);
-    update_user_meta($user_id, 'assoc', $_POST['assoc']);
-    update_user_meta($user_id, 'estilo', $_POST['estilo']);
-    update_user_meta($user_id, 'data-pratica', date('d/m/Y', strtotime($_POST['data-pratica'])));
-    update_user_meta($user_id, 'exp', get_exp_user($_POST['data-pratica']));
-    $modalidades = $_POST['modalidade'];
-    foreach ($modalidades as $cat) {
-        $periodo[$cat] = $_POST['data-'.$cat];
-    }
-    update_user_meta($user_id, 'modalidades', $periodo);
-
-		$uploadedfile = $_FILES['avatar'];
-
-		if($uploadedfile['error'] == 0 ){
-			$upload_overrides = array( 'test_form' => false );
-			$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
-			if ( $movefile && ! isset( $movefile['error'] ) ) {
-					// echo "File is valid, and was successfully uploaded.\n";
-					// $filename should be the path to a file in the upload directory.
-					$filename = $movefile['file'];
-
-					// Check the type of file. We'll use this as the 'post_mime_type'.
-					$filetype = $movefile['type'];
-
-					// Get the path to the upload directory.
-					$wp_upload_dir = wp_upload_dir();
-
-					// Prepare an array of post data for the attachment.
-					$attachment = array(
-						'guid'           => $wp_upload_dir['url'] . '/' . basename( $filename ),
-						'post_mime_type' => $filetype,
-						'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
-						'post_content'   => '',
-						'post_status'    => 'inherit'
-					);
-
-					// Insert the attachment.
-					$attach_id = wp_insert_attachment( $attachment, $filename, $parent_post_id );
-
-					update_user_meta( $user->ID, 'avatar_id', $attach_id );
-				}
-		}
-
-		if(is_wp_error( $error )){
-			$message = 'error';
-		} else {
-			$message = 'success';
-		}
-
-}
-
+$user_id = $_GET['user'];
 ?>
 <style type="text/css">
     ul#categoria {
@@ -120,21 +28,23 @@ else
     }
 </style>
 <div class="wrap">
-	<h2>Editar Usuário - <b><?php echo get_the_author_meta( 'display_name', $_REQUEST['user'] ); ?></b></h2>
+	<h2>Editar Usuário - <b><?php echo get_the_author_meta( 'display_name', $user_id ); ?></b></h2>
 	<?php
 		// $message = 'error';
-		if(isset($message) && $message == 'success'){
+		if(isset($_GET['m']) && $_GET['m'] == '1'){
 		?>
 			<div id="message" class="updated fade"><p><strong>Dados atualizados com sucesso</strong></p></div>
 		<?php
-		} else if(isset($message) && $message == 'error'){
+	} else if(isset($_GET['m']) && $_GET['m'] == '0'){
 		?>
 			<div id="message" class="error fade"><p><strong>Erro ao atualizar os dados</strong></p></div>
 		<?php
 		}
     ?>
-	<form method="post">
-		<input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>" />
+	<form action="admin-post.php" method="post">
+		<input type="hidden" name="action" value="vhr_edit_user">
+		<input type="hidden" name="user_id" value="<?php echo $user_id; ?>">
+		<?php	wp_nonce_field( 'vhr_edit_user' ); ?>
 		<table class="form-table">
 			<tr valign="top">
 				<th scope="row">

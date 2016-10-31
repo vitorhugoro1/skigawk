@@ -1,4 +1,4 @@
-<?php 
+<?php
 foreach($inscricao as $key => $info)
 {
 	$term = get_term_by('slug', $key, 'categoria');
@@ -10,7 +10,7 @@ foreach($inscricao as $key => $info)
 			</th>
 			<td>
 				<?php if ($term->slug == 'formaslivres' || $term->slug == 'formasinternas' || $term->slug == 'formastradicionais' || $term->slug == 'formasolimpicas'){
-
+					
 					foreach($info as $item){
 						$selected[] = $item['peso'];
 					}
@@ -119,7 +119,7 @@ foreach($inscricao as $key => $info)
 									<?php
 								}
 						}
-						
+
 					 ?>
 				</select>
 				<?php } ?>
