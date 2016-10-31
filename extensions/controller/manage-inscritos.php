@@ -230,10 +230,10 @@ class Inscritos extends WP_List_Table
                        if(in_array($value['peso'], $mods)){
                        	continue;
                        }
-                       
+
                        $cadastros[] = array(
                        		'modalidade' => get_weight($_REQUEST['categoria'],$value['peso'],$sex, $fetaria),
-                       		'equipe'	 => ((isset($value['groups'])) ? implode(',', array_filter($value['groups'])) : ''), 
+                       		'equipe'	 => ((isset($value['groups'])) ? implode(',', array_filter($value['groups'])) : ''),
                        );
 
                        $mods[] = $value['peso'];
@@ -244,11 +244,11 @@ class Inscritos extends WP_List_Table
                     	if(is_null($cadastro['modalidade'])){
                     		continue;
                     	}
-                    	
+
                     	if($cadastro['equipe'] == ''){
                     		$items .= sprintf('<li> %s </li>', $cadastro['modalidade']);
                     	} else {
-                    		$items .= sprintf('<li> %s - %s </li>', $cadastro['modalidade'], $cadastro['equipe']);                    		
+                    		$items .= sprintf('<li> %s - %s </li>', $cadastro['modalidade'], $cadastro['equipe']);
                     	}
                     }
                     $items .= "</ul>";
@@ -262,10 +262,10 @@ class Inscritos extends WP_List_Table
                        if(in_array($value['peso'], $mods) || is_int($value['arma'])){
                        	continue;
                        }
-                       
+
                        $cadastros[] = array(
                        		'modalidade' => get_weight($_REQUEST['categoria'],$value['peso'],$sex, $fetaria),
-                       		'arma'		 => $value['arma'] 
+                       		'arma'		 => $value['arma']
                        );
 
                        $mods[] = $value['peso'];

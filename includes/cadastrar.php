@@ -1,5 +1,4 @@
 <?php
-
 /**
 
  * Itens Principais para funcionamento do cadastro
@@ -7,33 +6,19 @@
  */
 
 require '../../../../wp-blog-header.php';
-
 global $wpdb;
-
 error_reporting();
-
 date_default_timezone_set('America/Sao_Paulo');
-
 $pages_ids = pages_group_ids();
-
 $user_id = $_POST['user_id'];
-
 $post_id = $_POST['post_id'];
-
 $price = $_POST['priceTotal'];
-
 $insider = $_POST['insider'];
-
 $inscricoes = get_the_author_meta('insiders', $user_id, true);
-
 $data_inscricao = date('d/m/Y G:i');
-
 $pagamento = array();
-
 $type = get_post_type($post_id);
-
 $usuario = get_userdata($user_id);
-
 
 
 /**
@@ -45,29 +30,17 @@ $usuario = get_userdata($user_id);
  */
 
 switch ($type) {
-
     case 'campeonatos':
-
             $pay = get_post_meta($post_id, '_vhr_price_option', true);
-
             $peso = json_decode(stripslashes($_POST['peso']), true);
-
             $groups = json_decode(stripslashes($_POST['groups']), true);
-
             $armas = json_decode(stripslashes($_POST['armas']), true);
-
         break;
-
     case 'eventos':
-
             $pay = esc_attr($_POST['pay']);
-
             $category = esc_attr($_POST['category']);
-
         break;
-
 }
-
 
 
 /*
@@ -78,78 +51,46 @@ switch ($type) {
 
 $table = $wpdb->prefix.'payments';
 
-
-
 $query = 'INSERT INTO '.esc_sql($table).' (user_id, post_id, valor, cat_inscricao, meio_pag, data_pag ) ';
-
-
 
 if($type == 'campeonatos'){
 
     if ($price > 00.00) {
-
         $query .= 'VALUES ('.esc_sql($user_id).', '.esc_sql($post_id).', '.esc_sql($price).", '".esc_sql(serialize($peso))."', 'pagseg', '".date('Y-m-d H:i:s')."' )";
-
     } else {
-
         $query .= 'VALUES ('.esc_sql($user_id).', '.esc_sql($post_id).', '.esc_sql($price).", '".esc_sql(serialize($peso))."', 'gratuito', '".date('Y-m-d H:i:s')."' )";
-
     }
-
-
 
     $wpdb->query($query);
 
     $lastItem = $wpdb->get_var("SELECT MAX(id) FROM $table");
 
-
-
     $pagamento = array(
-
         'id_pagamento'  => $lastItem,
-
         'valor'         => $price,
-
         'status'        => 'v'
-
         );
 
 } else {
 
     if ($price > 00.00) {
-
         $query .= 'VALUES ('.esc_sql($user_id).', '.esc_sql($post_id).', '.esc_sql($price).", '".esc_sql($category)."', 'pagseg', '".date('Y-m-d H:i:s')."' )";
-
     } else {
-
         $query .= 'VALUES ('.esc_sql($user_id).', '.esc_sql($post_id).', '.esc_sql($price).", '".esc_sql($category)."', 'gratuito', '".date('Y-m-d H:i:s')."' )";
-
     }
-
-
 
     $wpdb->query($query);
 
     $lastItem = $wpdb->get_var("SELECT MAX(id) FROM $table");
 
-
-
     $pagamento = array(
-
         'id_pagamento'  => $lastItem,
-
         'category'      => $category, // *
-
         'valor'         => $price, // *
-
         'status'        => '1' // * , 'p' => pago, 'v' => à verificar
-
     );
 
 }
-
-
-
 
 
 
@@ -321,7 +262,6 @@ if (userInsider($user_id, $post_id)) { // Verifica se o usuario está inscrito
                         'pagamento' => $pagamentos,
                         'data_inscricao' => $datas_inscricao,
                     ),
-
                 );
 
                 if (!empty($inscricoes)) {
@@ -368,7 +308,6 @@ if (userInsider($user_id, $post_id)) { // Verifica se o usuario está inscrito
             }
 
             foreach ($peso as $cat => $value) {
-
                 $array = array();
 
                 switch ($cat) {
