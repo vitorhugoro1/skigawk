@@ -3,6 +3,7 @@
 require get_template_directory() . '/extensions/controller/manage-inscritos.php';
 require get_template_directory() . '/extensions/controller/manage-users.php';
 include (get_template_directory() . '/extensions/controller/admin-edit-action.php');
+include (get_template_directory() . '/extensions/controller/admin-generate-report.php');
 
 add_action('admin_menu', 'menus' );
 

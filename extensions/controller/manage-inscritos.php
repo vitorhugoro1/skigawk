@@ -335,8 +335,8 @@ class Inscritos extends WP_List_Table
                 if (isset($_GET['categoria'])) {
                     ?>
                     <div class="alignleft actions bulkactions">
-                        <label for="button-exportar" class="screen-reader-text">Gerar</label>
-                        <a href="<?php echo get_stylesheet_directory_uri() . '/extensions/controller/generate.php?post_id='.esc_attr($_GET['post_id']).'&categoria='.esc_attr($_GET['categoria']); ?>" id="button-exportar" class="button">Gerar Relatório</a>
+                      <label for="button-exportar" class="screen-reader-text">Gerar</label>
+                      <a href="<?php echo get_stylesheet_directory_uri() . '/extensions/controller/generate.php?post_id='.esc_attr($_GET['post_id']).'&categoria='.esc_attr($_GET['categoria']); ?>" id="button-exportar" class="button">Gerar Relatório</a>
                     </div>
                     <?php
                 }
@@ -350,19 +350,6 @@ class Inscritos extends WP_List_Table
                         document.location.href = 'edit.php?post_type=".esc_attr($_REQUEST['post_type'])."&page=".esc_attr($_REQUEST['page'])."&post_id=".esc_attr($_REQUEST['post_id'])."'+activeFilter;
                     });";
                 echo '</script>';
-
-                foreach($this->table_data() as $user){
-                    $inscricoes = get_the_author_meta('insiders', $user->ID);
-                    $cat = $inscricoes[$_REQUEST['post_id']]['pagamento']['category'];
-
-                    $relatorio[] = array(
-                        'nome'              => $user->display_name,
-                        'faixa-etaria'      => get_the_author_meta('fEtaria', $user->ID),
-                        'categoria'         => $cat
-                    );
-                }
-                $json = json_encode($relatorio);
-                $json = htmlentities(urlencode($json));
 
                 ?>
                  <div class="alignleft actions bulkactions">
