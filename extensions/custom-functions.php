@@ -12,6 +12,8 @@ if (!function_exists('wp_handle_upload')) {
     require_once ABSPATH.'wp-admin/includes/file.php';
 }
 
+include get_template_directory() . '/actions/action-editar-perfil.php';
+
 add_action('admin_enqueue_scripts', 'admin_functions');
 function admin_functions()
 {

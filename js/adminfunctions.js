@@ -93,7 +93,7 @@ function userMaskLoad(){
     placeholder: "(00) 00000-0000"
   });
 
-  defineIdade(jQuery('#idade').val());
+  defineIdade(jQuery('#idade').val() + '');
 }
 
 jQuery(document).ready(function($) {
@@ -182,7 +182,7 @@ jQuery(document).ready(function($) {
   });
 
   $("#idade").change(function() {
-    var data = $(this).val();
+    var data = $(this).val() + '';
     var obj = $("#responsavel");
     var dataS = data.split("/");
     var userIdade = idade(dataS[2], dataS[1], dataS[0]);

@@ -43,6 +43,61 @@ function readURL(input) {
   }
 }
 
+function defineIdade(data){
+  var obj = jQuery("#responsavel");
+  var dataS = data.split("/");
+  var userIdade = idade(dataS[2], dataS[1], dataS[0]);
+
+  if (userIdade < 18) {
+    obj.show();
+    obj.children('input').attr({
+      disabled:"false",
+      required:"required"
+    });
+  } else {
+    obj.hide();
+    obj.children('input').attr({
+      disabled:"disabled",
+      required:"false",
+      value:""
+    });
+  }
+}
+
+function userMaskLoad(){
+  jQuery("#idade").mask("00/00/0000", {
+    placeholder: "00/00/0000"
+  });
+  jQuery("#phone").mask("(00) 0000-0000", {
+    placeholder: "(00) 0000-0000"
+  });
+  jQuery("#cellphone").mask("(00) 00000-0000", {
+    placeholder: "(00) 00000-0000"
+  });
+
+  if(jQuery('#idade') !== undefined){
+    defineIdade(jQuery('#idade').val() + '');
+  }
+}
+
+function nacionalLoad(elem){
+  if (jQuery(elem).val() == 'br') {
+    jQuery("input#state").prop('readonly', true);
+    jQuery("input#city").prop('readonly', true);
+    jQuery("input#district").prop('readonly', true);
+    jQuery("input#address").prop('readonly', true);
+    jQuery("#cep").mask("00000-000", {
+      placeholder: "00000-000"
+    });
+  } else {
+    jQuery("input#cep").prop('readonly', false);
+    jQuery("input#state").prop('readonly', false);
+    jQuery("input#city").prop('readonly', false);
+    jQuery("input#district").prop('readonly', false);
+    jQuery("input#address").prop('readonly', false);
+  }
+}
+
 jQuery("#id_assoc").change(function() {
   var value = jQuery(this).val();
   if (value == 'other') {
@@ -75,7 +130,35 @@ function countCheck(){
     return count;
 }
 
+/**
+ * Lê a Url da imagem que está fazendo upload
+ * @param  DOM input DOM Objeto Input
+ * @return string
+ */
+
+function readURL(input) {
+  if (input.files && input.files[0]) {
+    var reader = new FileReader();
+
+    reader.onload = function(e) {
+      jQuery('label[for=avatar] img').attr('src', e.target.result);
+    }
+
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+function loadTermo(){
+  var term = jQuery("#term_url");
+
+  jQuery("#frame").attr('src', term.val());
+}
+
 jQuery(document).ready(function($){
+  loadTermo();
+  userMaskLoad();
+  nacionalLoad($('#nacionalidade'));
+
   setInterval(function() {
     $("#tc-page-wrap header.tc-header").css({
       "top": "25px",
@@ -88,24 +171,6 @@ jQuery(document).ready(function($){
     $("#alerts").remove();
   }, 8000);
 
-  var term_url = $('#term_url').val();
-
-  $("#frame").attr("src", term_url);
-
-  $("#responsavel").hide();
-  $("#dateNasc").mask("00/00/0000", {
-    placeholder: "00/00/0000"
-  });
-  $("#phone").mask("(00) 0000-0000", {
-    placeholder: "(00) 0000-0000"
-  });
-  $("#cellphone").mask("(00) 00000-0000", {
-    placeholder: "(00) 00000-0000"
-  });
-  $("#address").val($("#Aaddress").val());
-  $("#district").val($("#Adistrict").val());
-  $("#city").val($("#Acity").val());
-  $("#state").val($("#Astate").val());
 
   $("#nacionalidade").on('change', function() {
     if ($(this).val() == 'br') {
@@ -124,15 +189,6 @@ jQuery(document).ready(function($){
       $("input#address").prop('readonly', false);
     }
   });
-  
-  jQuery('.list-inscrito li ul li').hover(
-    function(){
-      jQuery(this).children('.tooltip').addClass('in');
-    },
-    function(){
-      jQuery(this).children('.tooltip').removeClass('in');
-    }
-  );
 
   $("#cep").click(function() {
     if ($("#nacionalidade").val() == '') {
@@ -168,6 +224,16 @@ jQuery(document).ready(function($){
       });
     }
   });
+
+
+  jQuery('.list-inscrito li ul li').hover(
+    function(){
+      jQuery(this).children('.tooltip').addClass('in');
+    },
+    function(){
+      jQuery(this).children('.tooltip').removeClass('in');
+    }
+  );
 
   $("#dateNasc").change(function() {
     var data = $(this).val();
@@ -332,6 +398,10 @@ jQuery(document).ready(function($){
     } else {
       $(this).parents('.groups').children('li:last').prev().remove();
     }
+  });
+
+  $('#avatar').change(function() {
+    readURL(this);
   });
 
 });

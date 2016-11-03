@@ -121,7 +121,7 @@ $pages_ids = pages_group_ids();
                       <div id="confirm" class="hide"></div>
                   </label>
                   <label for="dateNasc" class="alignleft"><b>Data de nascimento</b><span class="red">*</span><br>
-                    <input type="text" class="input-medium" id="dateNasc" name="id_datanasc" required>
+                    <input type="text" class="input-medium" id="idade" name="id_datanasc" required>
                   </label>
                   <label for="id_sex" class="alignleft label-mod margin-10"><b>Sexo</b> <span class="red">*</span><br>
                       <input type="radio" name="id_sex" id="id_masc" value="m" required> <label for="id_masc">Masculino</label>
