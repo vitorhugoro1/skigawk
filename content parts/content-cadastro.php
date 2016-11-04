@@ -9,13 +9,11 @@ $pages_ids = pages_group_ids();
        ));
 
      if (!is_wp_error($user_id)) {
-         update_user_meta($user_id, 'birthday', date('d/m/Y', strtotime($_POST['id_datanasc'])));
-         $birth = date_create_from_format('d/m/Y', get_the_author_meta('birthday', $user_id));
-         $birth = get_etaria_user($birth);
-
-         update_user_meta($user_id, 'fEtaria', $birth);
-         if ($birth !== 'adulto') {
-             update_user_meta($user_id, 'responsavel', $_POST['id_responsavel']);
+         update_user_meta($user_id, 'birthday', $_POST['id_datanasc']);
+         update_user_age_group($user_id);
+         
+         if (!empty($_POST['responsavel'])) {
+             update_user_meta($user_id, 'responsavel', $_POST['responsavel']);
          }
          update_user_meta($user_id, 'phone', $_POST['id_tel']);
          update_user_meta($user_id, 'cellphone', $_POST['id_cellphone']);
