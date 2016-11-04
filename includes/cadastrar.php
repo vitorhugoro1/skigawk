@@ -19,7 +19,8 @@ $data_inscricao = date('d/m/Y G:i');
 $pagamento = array();
 $type = get_post_type($post_id);
 $usuario = get_userdata($user_id);
-
+$table = array();
+$valor = $price;
 
 /**
 
@@ -143,9 +144,27 @@ if (userInsider($user_id, $post_id)) { // Verifica se o usuario está inscrito
 
                            );
 
+                           $table[$term_name][] = array(
+
+                              'peso'  => $item,
+
+                              'groups' => $groups[$term_name][$item],
+
+                              'id_pagamento' => $lastItem
+
+                          );
+
                         } else if(!in_array($item, $inscricoes[$post_id]['categorias'][$term_name])) {
 
                           $peso_new[$term_name][] = array(
+
+                              'peso'  => $item,
+
+                              'id_pagamento' => $lastItem
+
+                          );
+
+                          $table[$term_name][] = array(
 
                               'peso'  => $item,
 
@@ -181,6 +200,14 @@ if (userInsider($user_id, $post_id)) { // Verifica se o usuario está inscrito
 
                          );
 
+                         $table[$term_name][] = array(
+
+                             'peso'  => $item,
+
+                             'id_pagamento' => $lastItem
+
+                         );
+
                      }
 
                   }
@@ -209,6 +236,16 @@ if (userInsider($user_id, $post_id)) { // Verifica se o usuario está inscrito
 
                            );
 
+                           $table[$term_name][] = array(
+
+                              'peso'  => $item,
+
+                              'arma' => $armas[$item],
+
+                              'id_pagamento' => $lastItem
+
+                            );
+
                       }
 
                   }
@@ -230,11 +267,20 @@ if (userInsider($user_id, $post_id)) { // Verifica se o usuario está inscrito
                             'peso' => $term_value,
 
                             'id_pagamento' => $lastItem,
+                        );
 
+                        $table[$term_name] = array(
+                            'peso' => $term_value,
+                            'id_pagamento' => $lastItem,
                         );
 
                     } else if(isset($inscricoes[$post_id]['categorias'][$term_name])) {
                         $peso_new[$term_name] = array(
+                            'peso' => $term_value,
+                            'id_pagamento' => $lastItem,
+                        );
+
+                        $table[$term_name] = array(
                             'peso' => $term_value,
                             'id_pagamento' => $lastItem,
                         );
@@ -364,6 +410,7 @@ if (userInsider($user_id, $post_id)) { // Verifica se o usuario está inscrito
                 }
 
                 $categorias[$cat] = $array;
+                $table[$cat] = $array;
             }
 
             $inscricoes[$post_id]['pagamento'][] = $pagamento;
@@ -549,7 +596,7 @@ if ($pay == 's') {
 
      */
 
-     $options = unserialize(get_option('deposito'));
+    $options = unserialize(get_option('deposito'));
 
     $home = home_url();
 
@@ -563,13 +610,103 @@ if ($pay == 's') {
 
     $admin_email = get_option('admin_email');
 
-
+    $sexo = get_the_author_meta( 'sex', $user_id );
+    $fetaria = get_the_author_meta( 'fEtaria', $user_id );
 
     $to =  get_the_author_meta('user_email', $user_id);
 
     $subject = sprintf("Inscrição no %s da Skigawk", $tipo);
 
-    // $message = "Inscrição realizada com sucesso. <br> Para realizar o pagamento acesse <a href='".$url."'>aqui</a>";
+    $tab = "<table class='modalidade'>";
+    $tab .= "<thead>
+            <th>Modalidade</th>
+  					<th>Peso ou Forma</th></thead>";
+    $tab .= "<tbody>";
+    foreach($table as $key => $value){
+      switch ($key) {
+        case 'formaslivres':
+        case 'formastradicionais':
+        case 'formasinternas':
+          if($key == 'formastradicionais'){
+            $valida_item = array(7,8,20,21);
+          } else if($key == 'formaslivres'){
+            $valida_item = array(8, 9, 12, 13);
+          } else if($key == 'formasinternas'){
+            $valida_item = array(7, 8);
+          }
+
+          $term = get_term_by( 'slug', $key, 'categoria');
+
+          $tab .= '<tr>';
+          $tab .= "<th>{$term->name}</th>";
+          $tab .= '<td>';
+          $tab .= '<ul class="modalidade">';
+          foreach ($value as $item){
+            $tab .= "<li>";
+              if(in_array($item, $valida_item)){
+                $g = (! empty($item['groups'])) ? implode(', ', array_filter($item['groups'])) : '';
+                $tab .= sprintf('%s (Equipe: %s)', get_weight($key, $item['peso'], $sexo, $fetaria), $g);
+              } else {
+                $tab .= get_weight($key, $item['peso'], $sexo, $fetaria);
+              }
+            $tab .= "</li>";
+          }
+          $tab .= '</ul>';
+          $tab .= '</td>';
+          $tab .= '</tr>';
+
+          break;
+        case 'formasolimpicas':
+          $tab .= '<tr>';
+          $tab .= "<th>{$term->name}</th>";
+          $tab .= '<td>';
+          $tab .= '<ul class="modalidade">';
+          foreach ($value as $item){
+            $tab .= "<li>";
+            $tab .= get_weight($key, $item['peso'], $sexo, $fetaria);
+            $tab .= "</li>";
+          }
+          $tab .= '</ul>';
+          $tab .= '</td>';
+          $tab .= '</tr>';
+          break;
+        case 'tree':
+          $tab .= '<tr>';
+          $tab .= "<th>{$term->name}</th>";
+          $tab .= '<td>';
+          $tab .= '<ul class="modalidade">';
+          foreach ($value as $item){
+            $tab .= "<li>";
+            $w = (! empty($item['arma'])) ? implode(', ', array_filter($item['arma'])) : '';
+            $tab .= sprintf('%s (Arma: %s)', get_weight($key, $item['peso'], $sexo, $fetaria), $w);
+            $tab .= "</li>";
+          }
+          $tab .= '</ul>';
+          $tab .= '</td>';
+          $tab .= '</tr>';
+          break;
+        default:
+          $tab .= '<tr>';
+          $tab .= "<th>{$term->name}</th>";
+          $tab .= '<td>';
+          $tab .= get_weight($key, $value['peso'], $sexo, $fetaria) . ' Kg';
+          $tab .= '</td>';
+          $tab .= '</tr>';
+          break;
+      }
+    }
+    $tab .= "</tbody>";
+    $tab .= "<tfoot>
+  					<tr>
+  						<th>&nbsp;</th>
+  						<td>&nbsp;</td>
+  					</tr>
+  					<tr>
+  						<th scope='row'>Total</th>
+	  					<td class='total'>$ {$valor}</td>
+  					</tr>
+  				</tfoot>";
+    $tab .= '</table>';
 
     $message = "<div style='background-color:#fff;padding:10px;'>
 
