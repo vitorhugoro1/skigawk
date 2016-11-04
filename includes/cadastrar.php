@@ -19,7 +19,6 @@ $data_inscricao = date('d/m/Y G:i');
 $pagamento = array();
 $type = get_post_type($post_id);
 $usuario = get_userdata($user_id);
-$table = array();
 $valor = $price;
 
 /**
@@ -109,6 +108,7 @@ if (userInsider($user_id, $post_id)) { // Verifica se o usuario está inscrito
         case 'campeonatos':
 
             $peso_new = array();
+            $table = array();
             foreach ($peso as $term_name => $term_value) { // Vê se as categorias que está se candidatando estão disponiveis
 
               switch ($term_name) {
@@ -657,6 +657,7 @@ if ($pay == 's') {
 
           break;
         case 'formasolimpicas':
+          $term = get_term_by( 'slug', $key, 'categoria');
           $tab .= '<tr>';
           $tab .= "<th>{$term->name}</th>";
           $tab .= '<td>';
@@ -671,6 +672,7 @@ if ($pay == 's') {
           $tab .= '</tr>';
           break;
         case 'tree':
+        $term = get_term_by( 'slug', $key, 'categoria');
           $tab .= '<tr>';
           $tab .= "<th>{$term->name}</th>";
           $tab .= '<td>';
@@ -686,6 +688,7 @@ if ($pay == 's') {
           $tab .= '</tr>';
           break;
         default:
+        $term = get_term_by( 'slug', $key, 'categoria');
           $tab .= '<tr>';
           $tab .= "<th>{$term->name}</th>";
           $tab .= '<td>';
