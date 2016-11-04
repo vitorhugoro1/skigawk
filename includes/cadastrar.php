@@ -708,25 +708,79 @@ if ($pay == 's') {
   				</tfoot>";
     $tab .= '</table>';
 
-    $message = "<div style='background-color:#fff;padding:10px;'>
+    $message = "<style type='text/css'>
+		.full {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+			background-color: #f5f5f5;
+			font-family: 'Roboto', sans-serif;
+		}
 
-  		<div style='width: auto;display: flex;background-color:#f1c40f'>
+		.content {
+			padding:10px;
+		}
 
-  			<a href='{$home}' style='margin: 0 auto;'>
+		header {
+			width: auto;
+			display: flex;
+			background-color: #f1c40f;
+		}
 
-  				<img src='http://skigawk.com.br/testes/wordpress/wp-content/uploads/2016/07/logo-home2.png' alt='SKIGAWK' title='Skigawk' />
+		header a {
+			margin: 0 auto;
+		}
 
-  			</a>
+		.modalidade {
+			box-sizing: border-box;
+			width: 100%;
+			margin: 0 auto;
+		}
 
-  		</div>
+		.modalidade th, .modalidade td  {
+			border: 1px solid rgb(0,0,0);
+			margin: 0;
+			padding: 0;
+		}
 
-  		<div>
+		.modalidade th {
+			width: 200px;
+		}
+
+		.formas {
+			margin: 0;
+			list-style: none;
+			padding: 0;
+		}
+
+		.total {
+			text-align: right;
+			background-color: red;
+			color: rgb(255,255,255);
+		}
+
+		footer {
+			font-size: 11px;
+		}
+	</style>
+	<div class=full>
+		<div class='content'>
+			<header>
+				<a href='{$home}'>
+
+	  			<img src='http://skigawk.com.br/testes/wordpress/wp-content/uploads/2016/07/logo-home2.png' alt='SKIGAWK' title='Skigawk' />
+	  			</a>
+			</header>
+			<div>
 
   			<p>Olá, <b>{$nome}</b> sua inscrição para o <b>{$titulo}</b> foi realizada com sucesso.</p>
 
+        {$tab}
+
   			<p>&nbsp;&nbsp;Para darmos continuidade ao processo de validação, por favor realize o pagamento para os dados abaixo: </p>
 
-  			<p>
+  			<p class='conta'>
 
   				{$conta}
 
@@ -734,16 +788,16 @@ if ($pay == 's') {
 
   			<p>&nbsp;Ao realizar o pagamento, envie o seu <b>nome completo</b> e o <b>comprovante</b> para <a href='mailto:adriel@skigawk.com.br'>adriel@skigawk.com.br</a>.</p>
 
-  			<p style='font-size:11px;'>
 
-  				<i>Se o e-mail não foi para você, desconsidere este e-mail e avise o administrador do sistema em <a href='mailto:{$admin_email}'>{$admin_email}</a>.</i>
-
-  				<br>
-
-  			</p>
 
   		</div>
 
+	  		<footer>
+	  			<p>
+	  				<i>Se o e-mail não foi para você, desconsidere este e-mail e avise o administrador do sistema em <a href='mailto:{$admin_email}'>{$admin_email}</a>.</i>
+	  			</p>
+	  		</footer>
+		</div>
   	</div>";
 
     $headers[] = "From: Skigawk <{$admin_email}>". "\r\n";
