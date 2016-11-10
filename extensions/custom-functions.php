@@ -97,7 +97,7 @@ function get_etaria_user($birth)
         $diff = $birthDate->diff(new DateTime()); // Verifica a diferença entre o dia atual e a data de nascimento
     }
 
-    if ($diff->y <= 5 && $diff->m < 6) {
+    if ($diff->y <= 5 || $diff->y == 5  && $diff->m < 6) {
         $birth = 'mirim';
     }
     if ($diff->y >= 5 && $diff->y <= 8) {

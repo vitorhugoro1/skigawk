@@ -21,7 +21,7 @@ $user_id = $_GET['user'];
 		<table class="form-table">
 			<tr valign="top">
 				<th scope="row">
-					<label for="nome">Nome <!-- <?php echo get_the_author_meta('fEtaria', $user_id);?> --></label>
+					<label for="nome">Nome</label>
 				</th>
 				<td>
 					<input type="text" name="nome" id="nome" class="regular-text" value="<?php echo esc_attr(get_the_author_meta( 'display_name', $user_id )); ?>" required/>
