@@ -86,6 +86,9 @@ function userMaskLoad(){
   jQuery("#idade").mask("00/00/0000", {
     placeholder: "00/00/0000"
   });
+  jQuery("#data-pratica").mask("00/00/0000", {
+    placeholder: "00/00/0000"
+  });
   jQuery("#phone").mask("(00) 0000-0000", {
     placeholder: "(00) 0000-0000"
   });

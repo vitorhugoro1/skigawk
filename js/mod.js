@@ -68,6 +68,9 @@ function userMaskLoad(){
   jQuery("#idade").mask("00/00/0000", {
     placeholder: "00/00/0000"
   });
+  jQuery("#inicio-pratica").mask("00/00/0000", {
+    placeholder: "00/00/0000"
+  });
   jQuery("#phone").mask("(00) 0000-0000", {
     placeholder: "(00) 0000-0000"
   });
@@ -81,16 +84,16 @@ function userMaskLoad(){
 }
 
 function nacionalLoad(elem){
+  jQuery("#cep").mask("00000-000", {
+    placeholder: "00000-000"
+  });
+
   if (jQuery(elem).val() == 'br') {
     jQuery("input#state").prop('readonly', true);
     jQuery("input#city").prop('readonly', true);
     jQuery("input#district").prop('readonly', true);
     jQuery("input#address").prop('readonly', true);
-    jQuery("#cep").mask("00000-000", {
-      placeholder: "00000-000"
-    });
   } else {
-    jQuery("input#cep").prop('readonly', false);
     jQuery("input#state").prop('readonly', false);
     jQuery("input#city").prop('readonly', false);
     jQuery("input#district").prop('readonly', false);
@@ -98,7 +101,7 @@ function nacionalLoad(elem){
   }
 }
 
-jQuery("#id_assoc").change(function() {
+jQuery("#assoc").change(function() {
   var value = jQuery(this).val();
   if (value == 'other') {
     var text = '<input type="text" name="assoc_other" id="assoc_other" placeholder="Qual associação?" value="" required/>';
@@ -235,7 +238,7 @@ jQuery(document).ready(function($){
     }
   );
 
-  $("#dateNasc").change(function() {
+  $("#idade").change(function() {
     var data = $(this).val();
     var dataS = data.split("/");
     var userIdade = idade(dataS[2], dataS[1], dataS[0]);

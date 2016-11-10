@@ -1,9 +1,4 @@
 <?php
-
-if (file_exists(__DIR__.'/admin-config/admin-config.php')) {
-    require __DIR__.'/admin-config/admin-config.php';
-}
-
 if (file_exists(__DIR__.'/admin-config/admin-pagamentos.php')) {
     require __DIR__.'/admin-config/admin-pagamentos.php';
 }
@@ -13,6 +8,7 @@ if (!function_exists('wp_handle_upload')) {
 }
 
 include get_template_directory() . '/actions/action-editar-perfil.php';
+include get_template_directory() . '/actions/action-cadastrar-usuario.php';
 
 add_action('admin_enqueue_scripts', 'admin_functions');
 function admin_functions()
@@ -1207,7 +1203,7 @@ function removeAcentos($string, $slug = false)
  */
 function get_exp_user($date)
 {
-    $exp = new DateTime($date); // Transforma a data de nascimento, para UTC
+    $exp = DateTime::createFromFormat('d/m/Y', $date); // Transforma a data de nascimento, para UTC
     $diff = $exp->diff(new DateTime());
 
     if ($diff->y < 1) {
@@ -1293,4 +1289,39 @@ function scriptRedirect($url)
 	</script>
 <?php
 
+}
+
+
+function send_inscricao($user_id){
+  $name = get_the_author_meta( 'display_name', $user_id );
+  $mail = get_the_author_meta('user_email', $user_id);
+  $admin_email = get_option('admin_email');
+  $home = esc_url(home_url());
+  $perfil = esc_url(home_url( '/login' ));
+
+  $subject = "Cadastro na Skigawk";
+  $message = "
+  <div>
+    <header style='width: auto; display: flex; background-color: #f1c40f;'>
+      <a href='{$home}' style='margin: 0 auto;'>
+        <img src='http://skigawk.com.br/testes/wordpress/wp-content/uploads/2016/07/logo-home2.png' alt='SKIGAWK' title='Skigawk' />
+      </a>
+    </header>
+    <main>
+      <p>
+        Olá <b>{$name}</b>, você acaba de realizar o cadastro no site da <b>Skigawk</b> para visualizar seu perfil <a href='{$perfil}' alt='Perfil'>clique aqui</a>.
+      </p>
+    </main>
+    <footer>
+      <i>Se não foi você que realizou este cadastro, por favor entre contato com <a href='mailto:adriel@skigawk.com.br'>adriel@skigawk.com.br</a>.</i><br>
+      <b><i>Mensagem gerada automaticamente, não responsa este e-mail.</i></b>
+    </footer>
+  </div>
+  ";
+
+  $headers[] = "From: Skigawk <{$admin_email}>". "\r\n";
+  $headers[] = "MIME-Version: 1.0";
+  $headers[] = "Content-type:text/html;charset=UTF-8";
+
+  wp_mail( $mail, $subject, $message, $headers);
 }

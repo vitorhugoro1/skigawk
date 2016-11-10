@@ -182,17 +182,7 @@ $user_id = $_GET['user'];
                     <label for="data-pratica">Data de início de treino</label>
                 </th>
                 <td>
-                    <?php
-                    $new = str_replace("/", "-", get_the_author_meta('birthday', $user_id));
-                    $birthday = date('Y-m-d', strtotime($new));
-                    if(get_the_author_meta('data-pratica', $user_id) !== ''){
-                        $date = str_replace("/", "-", get_the_author_meta('data-pratica', $user_id));
-                        $date = date('Y-m-d', strtotime($date));
-                    } else {
-                        $date = date('Y-m-d');
-                    }
-                    ?>
-                    <input type="date" name="data-pratica" id="data-pratica" value="<?php echo $date; ?>" min="<?php echo $birthday; ?>" required/>
+                    <input type="text" name="data-pratica" id="data-pratica" value="<?php echo get_the_author_meta('data-pratica', $user_id); ?>"required/>
                 </td>
             </tr>
             <tr>
