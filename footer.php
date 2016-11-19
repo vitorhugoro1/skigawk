@@ -7,7 +7,6 @@
  * @since Customizr 3.0
  */
   	do_action( '__before_footer' ); ?>
-      <div class="modal" ><!-- Place at bottom of page --></div>
   		<!-- FOOTER -->
   		<footer id="footer" class="<?php echo tc__f('tc_footer_classes', '') ?>">
   		 	<?php do_action( '__footer' ); // hook of footer widget and colophon?>

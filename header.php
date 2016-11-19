@@ -24,6 +24,7 @@
 	?>
 
 	<body <?php body_class(); ?> <?php echo apply_filters('tc_body_attributes' , 'itemscope itemtype="http://schema.org/WebPage"') ?>>
+		<div class="modal" ><!-- Place at bottom of page --></div>
     <?php do_action( '__before_page_wrapper' );
       $user_role = get_current_user_role();
       $pages_ids = pages_group_ids();
