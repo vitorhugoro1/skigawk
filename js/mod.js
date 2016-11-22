@@ -239,7 +239,7 @@ jQuery(document).ready(function($){
   );
 
   $("#idade").change(function() {
-    var data = $(this).val();
+    var data = $(this).val() + '';
     var dataS = data.split("/");
     var userIdade = idade(dataS[2], dataS[1], dataS[0]);
 
@@ -248,10 +248,10 @@ jQuery(document).ready(function($){
       $("#responsavel input").prop("disabled", false);
       $("#responsavel input").prop("required", true);
     } else {
+      $("#responsavel input").val("");
       $("#responsavel").hide();
       $("#responsavel input").prop("disabled", true);
       $("#responsavel input").prop("required", false);
-      $("#responsavel input").val().empty();
     }
   });
 

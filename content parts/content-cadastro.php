@@ -38,7 +38,7 @@ $pages_ids = pages_group_ids();
                   <div class="row-fluid">
                     <label for="nacionalidade" class="alignleft"><b>Nacionalidade</b><br>
                       <select class="" name="nacionalidade" id="nacionalidade">
-                        <option >Selecione um País</option>
+                        <option value="">Selecione um País</option>
                         <option value="br">Brasil</option>
                         <option value="py">Paraguai</option>
                         <option value="ra">Argentina</option>
@@ -77,7 +77,7 @@ $pages_ids = pages_group_ids();
                   </label>
                   <label for="assoc"><b>Nome da Associação</b><br>
                       <select name="assoc" class="input-xxlarge" id="assoc" required>
-                          <option >Selecione uma associação</option>
+                          <option value="">Selecione uma associação</option>
                           <?php
                           $assoc = get_terms('academia', array('fields'   => 'all', 'hide_empty' => false));
                           foreach($assoc as $term){
