@@ -1,6 +1,6 @@
 <?php
 
-error_reporting(1);
+// error_reporting(1);
 
     if(is_user_logged_in()){
 

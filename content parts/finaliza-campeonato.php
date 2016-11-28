@@ -86,7 +86,7 @@ $arr_sub_adulto = array('adulto', 'senior');
                               foreach($value as $item){
                                   echo get_weight($cat, $item, $sexo, $fetaria);
                                   echo sprintf('  <b>Arma:</b> %s<br>', array_filter($arma[$item]));
-                              }
+                              } 
                             } else {
                               echo get_weight($cat, $value, $sexo, $fetaria). ' Kg';
                             }
@@ -130,19 +130,32 @@ $arr_sub_adulto = array('adulto', 'senior');
                 <p>
                     Ao realizar o pagamento enviar o comprovante para o e-mail <a href="mailto:adriel@skigawk.com.br">adriel@skigawk.com.br</a>.
                 </p>
-              <form action="<?php echo get_template_directory_uri() . '/includes/cadastrar.php' ?>" method="post" class="form-inline">
-                <?php if($priceOption == 's') { ?>
-                  <input type="hidden" name="priceTotal" value="<?php echo $subscriberPrice; ?>"/>
-              <?php  } else { ?>
-                  <input type="hidden" name="priceTotal" value="0"/>
-              <?php  } ?>
-                <input type="hidden" name="post_id" value="<?php echo $_POST['camp_id']; ?>"/>
-                <input type="hidden" name="user_id" value="<?php echo $_POST['user_id']; ?>"/>
-                <?php if($type == 'campeonatos') { ?>
-                <input type="hidden" name="peso" value='<?php echo htmlspecialchars(json_encode($peso)); ?>'/>
-                <input type="hidden" name="groups" value='<?php echo htmlspecialchars(json_encode($groups)); ?>'/>
-                <input type="hidden" name="armas" value='<?php echo htmlspecialchars(json_encode($arma)); ?>'/>
-                <?php } ?>
-                <input type="hidden" name="insider" value="<?php echo ($insider) ? 's' : 'n'; ?>"/>
+              <form action="<?php echo admin_url('admin-post.php'); ?>" method="post" class="form-inline">
+                <input type="hidden" name="action" value="vhr_cadastrar_evento"/>
+                <?php wp_nonce_field('vhr_cadastrar_evento') ?>
+                <input type="hidden" name="info[post_id]" value="<?php echo $_POST['camp_id']; ?>"/>
+                <input type="hidden" name="info[tipo]" value="<?php echo $type; ?>"/>
+                <input type="hidden" name="info[valor]" value="<?php echo $subscriberPrice; ?>"/>
+                <input type="hidden" name="info[inscrito]" value="<?php echo ($insider) ? 's' : 'n'; ?>"/>
+                <input type="hidden" name="info[meio_pag]" id="meio_pag_input" value="deposito"/>
+                <?php foreach($peso as $cat => $value){
+                    if(is_array($value)){
+                      foreach($value as $item){
+                        echo sprintf('<input type="hidden" name="categorias[%s][id]" value="%s" />', $cat , $item );
+
+                        if(!empty($armas)){
+                          echo sprintf('<input type="hidden" name="categorias[%s][arma]" value="%s" />', $cat, $armas[$item]);
+                        } elseif (! empty(array_filter($groups))) {
+                          echo sprintf('<input type="hidden" name="categorias[%s][equipe][nome]" value="%s" />', $cat, $groups[$item]['nome'] );
+                          foreach (array_filter($groups) as $key => $vlx) {
+                            echo sprintf('<input type="hidden" name="categorias[%s][equipe][elementos][%d][nome]" value="%s" />', $cat, $key, $vlw['nome'] );
+                            echo sprintf('<input type="hidden" name="categorias[%s][equipe][elementos][%d][email]" value="%s" />', $cat, $key, $vlw['email'] );
+                          }
+                        }
+                      }
+                    } else {
+                      echo sprintf('<input type="hidden" name="categorias[%s][id]" value="%s" />', $cat , $value );
+                    }
+                  } ?>
                 <input type="submit" class="btn btn-primary fp-button" value="Finalizar"/>
               </form>
