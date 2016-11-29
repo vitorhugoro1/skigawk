@@ -94,7 +94,9 @@ $pages_id = pages_group_ids();
                                 </ul>
                                <?php
                              } else {
-                               echo sprintf('<b>%s</b> / %s Kg', $category->name, get_weight($cat_slug, $cat_data['peso'], $sexo, $fetaria) );
+                               $cat = (isset($cat_data[0])) ? $cat_data[0] : $cat_data;
+
+                               echo sprintf('<b>%s</b> / %s Kg', $category->name, get_weight($cat_slug, $cat['peso'], $sexo, $fetaria) );
                              }
                            echo '</li>';
                          }
@@ -105,24 +107,32 @@ $pages_id = pages_group_ids();
 	                      <ul class="list-inscrito">
 	                      	<?php
                         	foreach($value['categorias'] as $cat_slug => $cat_data){
-                            $id_pag = '';
+                            $id_pag = array();
                         		$category = get_term_by( 'slug', $cat_slug, 'categoria');
-                                echo '<li>';
-                                if($cat_slug == 'formaslivres' || $cat_slug == 'formasinternas' || $cat_slug == 'formastradicionais' || $cat_slug == 'formasolimpicas' || $cat_slug == 'tree'){
-                                    foreach($cat_data as $item){
-                                        $id_pag[] = $item['id_pagamento'];
-                                    }
-                                    $unique = array_unique($id_pag);
 
-                                    echo '<b>'.$category->name.'</b> - '.implode(', ', array_filter($unique));
+                            echo '<li>';
+                            switch ($cat_slug) {
+                              case 'formaslivres':
+                              case 'formasinternas':
+                              case 'formastradicionais':
+                              case 'formasolimpicas':
+                              case 'tree':
+                                  foreach($cat_data as $item){
+                                      $id_pag[] = $item['id_pagamento'];
+                                  }
+                                  $unique = array_unique($id_pag);
+                                  $ids = array_filter($unique);
+                                  $string_ids = implode(', ', $ids);
+                                  echo sprintf('<b>%s</b> - %s', $category->name, $string_ids );
+                                break
+                              default:
+                                  $cat = (isset($cat_data[0])) ? $cat_data[0] : $cat_data;
 
-                                } else {
-                                    $query = "SELECT id FROM `wp_payments` WHERE id = ".esc_sql($cat_data['id_pagamento']);
-                                    $results = ($wpdb->get_var($query) != '') ? $wpdb->get_var($query) : 'N/A';
+                                  echo sprintf('<b>%s</b> - %s', $category->name, $cat['id_pagamento'] );
+                                break;
+                            }
+                            echo '</li>';
 
-                                    echo sprintf('<b>%s</b> - %s', $category->name, $results );
-                                }
-                        		echo '</li>';
                         	}
                          ?>
 	                      </ul>

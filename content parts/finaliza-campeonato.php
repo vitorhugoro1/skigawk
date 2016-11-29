@@ -86,7 +86,7 @@ $arr_sub_adulto = array('adulto', 'senior');
                               foreach($value as $item){
                                   echo get_weight($cat, $item, $sexo, $fetaria);
                                   echo sprintf('  <b>Arma:</b> %s<br>', array_filter($arma[$item]));
-                              } 
+                              }
                             } else {
                               echo get_weight($cat, $value, $sexo, $fetaria). ' Kg';
                             }
@@ -143,9 +143,9 @@ $arr_sub_adulto = array('adulto', 'senior');
                       foreach($value as $item){
                         echo sprintf('<input type="hidden" name="categorias[%s][id]" value="%s" />', $cat , $item );
 
-                        if(!empty($armas)){
+                        if(isset($armas[$item])){
                           echo sprintf('<input type="hidden" name="categorias[%s][arma]" value="%s" />', $cat, $armas[$item]);
-                        } elseif (! empty(array_filter($groups))) {
+                        } elseif (isset(array_filter($groups)[$item])) {
                           echo sprintf('<input type="hidden" name="categorias[%s][equipe][nome]" value="%s" />', $cat, $groups[$item]['nome'] );
                           foreach (array_filter($groups) as $key => $vlx) {
                             echo sprintf('<input type="hidden" name="categorias[%s][equipe][elementos][%d][nome]" value="%s" />', $cat, $key, $vlw['nome'] );

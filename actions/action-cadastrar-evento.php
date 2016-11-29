@@ -1,21 +1,22 @@
 <?php
 
-add_action('admin_post_vhr_cadastrar_usuario', 'vhr_cadastrar_evento');
-add_action('admin_post_nopriv_vhr_cadastrar_usuario', 'vhr_cadastrar_evento' );
+add_action('admin_post_vhr_cadastrar_evento', 'vhr_cadastrar_evento');
+add_action('admin_post_nopriv_vhr_cadastrar_evento', 'vhr_cadastrar_evento' );
 
 function vhr_cadastrar_evento(){
 	global $wpdb;
 
-	if( ! is_user_logged_in() ){
-	    wp_die('Não pode realizar está ação');
-    }
+	if( ! is_user_logged_in()){
+		wp_die('Não tem permissão para realizar isto');
+	}
 
-    check_admin_referer('vhr_cadastrar_evento');
+  check_admin_referer('vhr_cadastrar_evento');
 
 	$user_id = get_current_user_id();
 	$pages_ids = pages_group_ids();
 	$infos = $_POST['info'];
 	$categorias = $_POST['categorias'];
+	$post_id = $infos['post_id'];
 	$inscricoes = get_the_author_meta('insiders', $user_id, true);
 	$data_inscricao = date('d/m/Y G:i');
 
@@ -31,6 +32,8 @@ function vhr_cadastrar_evento(){
         'status'        => 'v' // * , 'p' => pago, 'v' => à verificar
     );
 
+
+
 	if( 's' == $infos['inscrito'] ){
 		if( 'campeonatos' == $infos['tipo'] ){
 			$new = array();
@@ -39,11 +42,11 @@ function vhr_cadastrar_evento(){
 			foreach($categorias as $term => $term_value){
 				if(is_array($term_value)){
 					foreach($term_value as $item){
-					
+
 						if(!in_array($item['id'], $inscricoes[$post_id]['categorias'][$term])){
 
 							if(isset($item['equipe']) && !isset($item['arma'])){
-								$new[$term][] = array(
+														$new[$term][] = array(
 		                               'peso'  			=> $item['id'],
 		                               'groups' 		=> $item['equipe'],
 		                               'id_pagamento' 	=> $id_pagamento
@@ -55,7 +58,7 @@ function vhr_cadastrar_evento(){
 		                               'id_pagamento' 	=> $id_pagamento
 		                        );
 							} elseif(isset($item['arma']) && !isset($item['equipe'])){
-								$new[$term][] = array(
+														$new[$term][] = array(
 		                               'peso'  			=> $item['id'],
 		                               'arma' 			=> $item['arma'],
 		                               'id_pagamento' 	=> $id_pagamento
@@ -67,7 +70,7 @@ function vhr_cadastrar_evento(){
 		                               'id_pagamento' 	=> $id_pagamento
 		                        );
 							} else {
-								$new[$term][] = array(
+														$new[$term][] = array(
 		                               'peso'  			=> $item['id'],
 		                               'id_pagamento'	=> $id_pagamento
 		                        );
@@ -88,41 +91,58 @@ function vhr_cadastrar_evento(){
 			                    $new[$term] = array_merge($inscricoes[$post_id]['categorias'][$term],$new[$term]);
 		                    }
 						}
-					
+
 					}
 				} else {
-					if (!array_key_exists($term, $inscricoes[$post_id]['categorias'])) {
+							if (!array_key_exists($term, $inscricoes[$post_id]['categorias'])) {
 
-                        $new[$term] = array(
-                            'peso' 			=> $term_value,
-                            'id_pagamento' 	=> $id_pagamento,
-                        );
+                  $new[$term]['peso'] = $term_value['id'];
+									$new[$term]['id_pagamento'] = $id_pagamento;
 
-						$table[$term] = array(
-                            'peso' 			=> $term_value,
-                            'id_pagamento' 	=> $id_pagamento,
-                        );
+									if(isset($new[$term][0])){
+										$new[$term] = $new[$term][0];
+									}
 
-                    } else if(isset($inscricoes[$post_id]['categorias'][$term])) {
-                        $new[$term] = array(
-                            'peso' 			=> $term_value,
-                            'id_pagamento' 	=> $id_pagamento,
-                        );
+									$table[$term] = array(
+                      'peso' 			=> $term_value['id'],
+                      'id_pagamento' 	=> $id_pagamento,
+                  );
 
-                        $table[$term] = array(
-                            'peso' 			=> $term_value,
-                            'id_pagamento' 	=> $id_pagamento,
-                        );
-                    }
+              } else if(isset($inscricoes[$post_id]['categorias'][$term])) {
+                  $new[$term] = array(
+                      'peso' 			=> $term_value['id'],
+                      'id_pagamento' 	=> $id_pagamento,
+                  );
+
+									if(isset($new[$term][0])){
+										$new[$term] = $new[$term][0];
+									}
+
+                  $table[$term] = array(
+                      'peso' 			=> $term_value['id'],
+                      'id_pagamento' 	=> $id_pagamento,
+                  );
+              }
+
 				}
 			}
 
 			if( is_array($new) && ! empty($new) && ! is_null($new) ) {
-				$categorias = array_merge($inscricoes[$post_id]['categorias'], $new);
+								if(is_null($inscricoes[$post_id]['categorias'])){
+									$categorias = $new;
+								} else {
+									$categorias = array_merge($inscricoes[$post_id]['categorias'], $new);
+								}
+
+								if(is_null($inscricoes[$post_id]['data_inscricao'])){
+									$data_inscricao = array($data_inscricao);
+								} else {
+									$datas_inscricao = array_merge($inscricoes[$post_id]['data_inscricao'], array($data_inscricao));
+								}
+
                 $inscricoes[$post_id]['pagamento'][] = $pagamento;
                 $pagamentos = $inscricoes[$post_id]['pagamento'];
 
-                $datas_inscricao = array_merge($inscricoes[$post_id]['data_inscricao'], array($data_inscricao));
 
                 $save = array(
                     $post_id => array(
@@ -167,7 +187,7 @@ function vhr_cadastrar_evento(){
 			foreach($categorias as $term => $term_value ){
 				if(is_array($term_value)){
 						foreach($term_value as $item){
-							
+
 							if(isset($item['equipe']) && !isset($item['arma'])){
 								$new[$term][] = array(
 		                               'peso'  			=> $item['id'],
@@ -202,7 +222,7 @@ function vhr_cadastrar_evento(){
 		                               'peso'  			=> $item['id'],
 		                               'id_pagamento'	=> $id_pagamento
 		                        );
-							}						
+							}
 						}
 				} else {
 
@@ -215,7 +235,7 @@ function vhr_cadastrar_evento(){
                         'peso' 			=> $term_value,
                         'id_pagamento' 	=> $id_pagamento,
                     );
-				}	
+				}
 			}
 
 			$inscricoes[$post_id]['pagamento'][] = $pagamento;
