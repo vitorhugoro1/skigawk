@@ -182,7 +182,7 @@ if('campeonatos' == get_post_type( $post_id )){
       }
 }
 
-$data = $relatorio;
+$data = array_orderby($relatorio, 'sexo', SORT_DESC, 'experiencia', SORT_DESC);
 
 /*
  * Configurações para a classe PHPExcel

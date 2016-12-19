@@ -29,7 +29,7 @@ endif;
 
                                 <?php do_action( '__before_article' ) ?>
                                     <article <?php tc__f( '__article_selectors' ) ?>>
-                                        <?php get_template_part('content parts/content', 'inscricoes'); ?>
+                                        <?php get_template_part( 'content parts/content', 'inscricoes' ); ?>
                                     </article>
                                 <?php do_action( '__after_article' ) ?>
 

@@ -9,8 +9,9 @@ foreach($inscricao as $key => $info)
 				<label for="<?php echo $term->slug ?>"><?php echo $term->name; ?></label>
 			</th>
 			<td>
-				<?php if ($term->slug == 'formaslivres' || $term->slug == 'formasinternas' || $term->slug == 'formastradicionais' || $term->slug == 'formasolimpicas'){
-					
+				
+				<?php if ($term->slug == 'formaslivres' || $term->slug == 'formasinternas' || $term->slug == 'formastradicionais' || $term->slug == 'formasolimpicas' || $term->slug == 'tree'){
+
 					foreach($info as $item){
 						$selected[] = $item['peso'];
 					}

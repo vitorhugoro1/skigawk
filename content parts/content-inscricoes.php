@@ -106,34 +106,36 @@ $pages_id = pages_group_ids();
                       <td>
 	                      <ul class="list-inscrito">
 	                      	<?php
-                        	foreach($value['categorias'] as $cat_slug => $cat_data){
-                            $id_pag = array();
-                        		$category = get_term_by( 'slug', $cat_slug, 'categoria');
+                          foreach($value['categorias'] as $slug => $data){
+                            $term = get_term_by('slug', $slug, 'categoria' );
 
-                            echo '<li>';
-                            switch ($cat_slug) {
+                            switch($slug){
                               case 'formaslivres':
                               case 'formasinternas':
                               case 'formastradicionais':
                               case 'formasolimpicas':
                               case 'tree':
-                                  foreach($cat_data as $item){
-                                      $id_pag[] = $item['id_pagamento'];
+                                if(!empty($data)){
+                                  foreach($data as $item){
+                                    $pagamento = (isset($data['id_pagamento'])) ? $item['id_pagamento'] : $item[0]['id_pagamento'];
+                                    $id_pag[] = $pagamento;
                                   }
+
                                   $unique = array_unique($id_pag);
                                   $ids = array_filter($unique);
                                   $string_ids = implode(', ', $ids);
-                                  echo sprintf('<b>%s</b> - %s', $category->name, $string_ids );
-                                break
+                                  echo '<li>';
+                                  echo sprintf('<b>%s</b> - %s', $term->name, $string_ids );
+                                  echo '</li>';
+                                }
                               default:
-                                  $cat = (isset($cat_data[0])) ? $cat_data[0] : $cat_data;
-
-                                  echo sprintf('<b>%s</b> - %s', $category->name, $cat['id_pagamento'] );
-                                break;
+                                $pagamento = (isset($data['id_pagamento'])) ? $data['id_pagamento'] : $data[0]['id_pagamento'];
+                                echo '<li>';
+                                echo sprintf('<b>%s</b> - %s', $term->name, $pagamento );
+                                echo '</li>';
+                              break;
                             }
-                            echo '</li>';
-
-                        	}
+                          }
                          ?>
 	                      </ul>
                       </td>

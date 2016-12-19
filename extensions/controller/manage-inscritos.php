@@ -53,7 +53,7 @@ class Inscritos extends WP_List_Table
 
         if(!empty($_REQUEST['s'])){
             $args['search'] = '*'.esc_attr($_REQUEST['s']).'*';
-            $args['search_columns'] = array('user_nicename');
+            $args['search_columns'] = array('user_nicename', 'user_email', 'display_name');
         }
 
         if(!empty($_REQUEST['categoria'])){
