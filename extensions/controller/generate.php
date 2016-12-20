@@ -12,12 +12,6 @@ if(!current_user_can('manage_options')){
 $post_id = $_REQUEST['post_id'];
 $categoria = $_REQUEST['categoria'];
 
-$valida_item = array(
-  'formaslivres'        => array(8, 9, 12, 13),
-  'formasinternas'      => array(7, 8),
-  'formastradicionais'  => array(7,8,20,21)
-);
-
 $users = array();
 
 $list_ids = get_post_meta($post_id, 'user_subscribers', true);
@@ -63,9 +57,14 @@ if('campeonatos' == get_post_type( $post_id )){
         case 'formastradicionais':
             if(!is_wp_error($items) && is_array($items) || !is_null($items) && is_array($items)){
               foreach($items as $item){
-                $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+                if(! isset($item[0])) {
+                  $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+                  $equipe = (isset($item['groups'])) ? implode(", ", array_filter( $item['groups']) ) : 'Não definida';
+                } else {
+                  $modalidade = (! empty($item[0]['peso']) && ! is_null($item[0]['peso'])) ? get_weight($categoria, $item[0]['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+                  $equipe = (isset($item[0]['groups'])) ? implode(", ", array_filter( $item[0]['groups']) ) : 'Não definida';
+                }
 
-                $equipe = (isset($item['groups'])) ? implode(", ", array_filter( $item['groups']) ) : 'Não definida';
 
                 $relatorio[] = array(
                       'nome'              => $user->display_name,
@@ -80,7 +79,11 @@ if('campeonatos' == get_post_type( $post_id )){
               }
             } else {
               $modalidade = 'usuario não cadastrou';
-              $equipe = (isset($item['groups'])) ? implode(", ", array_filter( $item['groups']) ) : 'Não definida';
+              if(! isset($item[0])){
+                $equipe = (isset($item['groups'])) ? implode(", ", array_filter( $item['groups']) ) : 'Não definida';
+              } else {
+                $equipe = (isset($item[0]['groups'])) ? implode(", ", array_filter( $item[0]['groups']) ) : 'Não definida';
+              }
 
               $relatorio[] = array(
                     'nome'              => $user->display_name,
@@ -97,7 +100,11 @@ if('campeonatos' == get_post_type( $post_id )){
         case 'formasolimpicas':
           if(!is_wp_error($items) && is_array($items) || !is_null($items) && is_array($items)){
             foreach($items as $item){
-              $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+              if(! isset($item[0])) {
+                $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+              } else {
+                $modalidade = (! empty($item[0]['peso']) && ! is_null($item[0]['peso'])) ? get_weight($categoria, $item[0]['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+              }
 
               $relatorio[] = array(
                     'nome'              => $user->display_name,
@@ -126,9 +133,14 @@ if('campeonatos' == get_post_type( $post_id )){
         case 'tree':
           if(!is_wp_error($items) && is_array($items) || !is_null($items) && is_array($items)){
             foreach($items as $item){
-              $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+              if(! isset($item[0])) {
+                $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+                $arma = (isset($item['arma'])) ? implode(", ", array_filter( $item['arma']) ) : '';
+              } else {
+                $modalidade = (! empty($item[0]['peso']) && ! is_null($item[0]['peso'])) ? get_weight($categoria, $item[0]['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+                $arma = (isset($item[0]['arma'])) ? implode(", ", array_filter( $item[0]['arma']) ) : '';
+              }
 
-              $arma = (isset($item['arma'])) ? implode(", ", array_filter( $item['arma']) ) : '';
 
               $relatorio[] = array(
                     'nome'              => $user->display_name,
@@ -143,7 +155,12 @@ if('campeonatos' == get_post_type( $post_id )){
             }
           } else {
             $modalidade = 'usuario não cadastrou';
-            $arma = (isset($item['arma'])) ? implode(", ", array_filter( $item['arma']) ) : '';
+
+            if(! isset($item[0])) {
+              $arma = (isset($item['arma'])) ? implode(", ", array_filter( $item['arma']) ) : '';
+            } else {
+              $arma = (isset($item[0]['arma'])) ? implode(", ", array_filter( $item[0]['arma']) ) : '';
+            }
 
             $relatorio[] = array(
                   'nome'              => $user->display_name,
@@ -158,7 +175,11 @@ if('campeonatos' == get_post_type( $post_id )){
           }
           break;
         default:
-          $modalidade = (isset($items['peso'])) ? get_weight($categoria,$items['peso'],$sex, $fetaria) : 'Não cadastrado';
+          if(! isset($item[0])) {
+            $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+          } else {
+            $modalidade = (! empty($item[0]['peso']) && ! is_null($item[0]['peso'])) ? get_weight($categoria, $item[0]['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+          }
 
           $relatorio[] = array(
               'nome'              => $user->display_name,
@@ -182,7 +203,7 @@ if('campeonatos' == get_post_type( $post_id )){
       }
 }
 
-$data = array_orderby($relatorio, 'sexo', SORT_DESC, 'experiencia', SORT_DESC);
+$data = array_orderby($relatorio, 'modalidade', SORT_DESC, 'sexo', SORT_DESC, 'experiencia', SORT_DESC);
 
 /*
  * Configurações para a classe PHPExcel
