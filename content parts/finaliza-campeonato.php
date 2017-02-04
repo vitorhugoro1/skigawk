@@ -157,5 +157,5 @@ $arr_sub_adulto = array('adulto', 'senior');
                       echo sprintf('<input type="hidden" name="categorias[%s][id]" value="%s" />', $cat , $value );
                     }
                   } ?>
-                <input type="submit" class="btn btn-primary fp-button" value="Finalizar"/>
+                <input type="submit" class="btn btn-primary fp-button" value="Avançar"/>
               </form>
