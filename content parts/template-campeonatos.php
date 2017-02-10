@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 <?php
 
 $ordem_apresentar = array(
@@ -9,9 +9,6 @@ $ordem_apresentar = array(
 $arr_sub_adulto = array('adulto', 'senior');
 
  ?>
-
-=======
->>>>>>> f1b53ca4cb50f20b82ffd65afc15ee3ee3e9d26c
 Selecione o estilo que vai participar
 <div id="estilo">
     <ul>
@@ -102,20 +99,9 @@ Selecione o estilo que vai participar
     echo '<b>O valor total será mostrado na página seguinte</b><br>';
     } else { ?>
       <b>Campeonato Gratuito</b><br>
-<<<<<<< HEAD
   <?php    } ?>
 
 <?php
-=======
-  <?php    }
-$ordem_apresentar = array(
-  'combate' => array('guardas', 'cassetete', 'semi','submission-adulto', 'submission-infantil', 'shuai', 'kuolight', 'kuoleitai', 'wushu', 'sanda', 'muaythai-a', 'muaythai-p', 'cmma', 'mma' ),
-  'formas'  => array('formastradicionais', 'formasinternas', 'formasolimpicas', 'formaslivres', 'tree')
-);
-
-$arr_sub_adulto = array('adulto', 'senior');
-
->>>>>>> f1b53ca4cb50f20b82ffd65afc15ee3ee3e9d26c
 if($fetaria == 'mirim' || $fetaria ==  'infantil' || $fetaria == 'ijuvenil' || $fetaria == 'junior'){
     $file = get_post_meta($_POST['camp_id'], '_vhr_autorizacao_file_id');
     $parsed = parse_url( wp_get_attachment_url( $file) );
