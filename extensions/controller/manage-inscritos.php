@@ -206,19 +206,6 @@ class Inscritos extends WP_List_Table
             $term = get_term_by('slug', $_REQUEST['categoria'], 'categoria');
 
             switch($_REQUEST['categoria']){
-                case 'cassetete':
-                case 'guardas':
-                case 'semi':
-                case 'kuolight':
-                case 'kuoleitai':
-                case 'muaythai':
-                case 'guardas':
-                case 'wushu':
-                case 'mma':
-                case 'cmma':
-                case 'shuai':
-                    $items = $term->name.' - <b>'.get_weight($_REQUEST['categoria'],$items['peso'],$sex, $fetaria).' Kg </b>';
-                    break;
                 case 'formaslivres':
                 case 'formasinternas':
                 case 'formastradicionais':
@@ -227,16 +214,17 @@ class Inscritos extends WP_List_Table
 	                $mods = array();
 
                     foreach ($items as $key => $value) {
-                       if(in_array($value['peso'], $mods)){
+                        $id = (!isset($items['id'])) ? $value['peso'] : $value['id'];
+                       if(in_array($id, $mods)){
                        	continue;
                        }
 
                        $cadastros[] = array(
-                       		'modalidade' => get_weight($_REQUEST['categoria'],$value['peso'],$sex, $fetaria),
+                       		'modalidade' => get_weight($_REQUEST['categoria'],$id,$sex, $fetaria),
                        		'equipe'	 => ((isset($value['groups'])) ? implode(',', array_filter($value['groups'])) : ''),
                        );
 
-                       $mods[] = $value['peso'];
+                       $mods[] = $id;
                     }
 
                     $items = $term->name . " <ul> ";
@@ -259,16 +247,17 @@ class Inscritos extends WP_List_Table
 	                $mods = array();
 
                     foreach ($items as $key => $value) {
-                       if(in_array($value['peso'], $mods) || is_int($value['arma'])){
+                      $id = (!isset($items['id'])) ? $value['peso'] : $value['id'];
+                       if(in_array($id, $mods) || is_int($value['arma'])){
                        	continue;
                        }
 
                        $cadastros[] = array(
-                       		'modalidade' => get_weight($_REQUEST['categoria'],$value['peso'],$sex, $fetaria),
+                       		'modalidade' => get_weight($_REQUEST['categoria'],$id,$sex, $fetaria),
                        		'arma'		 => $value['arma']
                        );
 
-                       $mods[] = $value['peso'];
+                       $mods[] = $id;
                     }
                     $items = $term->name . " <ul> ";
                     foreach(array_filter($cadastros) as $cadastro){
@@ -282,8 +271,9 @@ class Inscritos extends WP_List_Table
 
                     break;
                 default:
-                    $items = $term->name.' - <b>'.get_weight($_REQUEST['categoria'],$items['peso'],$sex, $fetaria).' Kg </b>';
-                	break;
+                  $id = (!isset($items['id'])) ? $items['peso'] : $items['id'];
+                  $items = $term->name.' - <b>'.get_weight($_REQUEST['categoria'],$id,$sex, $fetaria).' Kg </b>';
+                  break;
             }
         } else {
             $inscricoes = get_the_author_meta('insiders', $item->ID);
