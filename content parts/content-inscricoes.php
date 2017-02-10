@@ -95,7 +95,7 @@ $pages_id = pages_group_ids();
                                <?php
                              } else {
                                $cat = (isset($cat_data[0])) ? $cat_data[0] : $cat_data;
-
+                               
                                echo sprintf('<b>%s</b> / %s Kg', $category->name, get_weight($cat_slug, $cat['peso'], $sexo, $fetaria) );
                              }
                            echo '</li>';

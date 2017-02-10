@@ -140,16 +140,16 @@ $arr_sub_adulto = array('adulto', 'senior');
                 <input type="hidden" name="info[meio_pag]" id="meio_pag_input" value="deposito"/>
                 <?php foreach($peso as $cat => $value){
                     if(is_array($value)){
-                      foreach($value as $item){
-                        echo sprintf('<input type="hidden" name="categorias[%s][id]" value="%s" />', $cat , $item );
+                      foreach($value as $k => $item){
+                        echo sprintf('<input type="hidden" name="categorias[%s][%d][id]" value="%s" />', $cat, $k , $item );
 
                         if(isset($armas[$item])){
-                          echo sprintf('<input type="hidden" name="categorias[%s][arma]" value="%s" />', $cat, $armas[$item]);
+                          echo sprintf('<input type="hidden" name="categorias[%s][%d][arma]" value="%s" />', $cat, $k,$armas[$item]);
                         } elseif (isset(array_filter($groups)[$item])) {
-                          echo sprintf('<input type="hidden" name="categorias[%s][equipe][nome]" value="%s" />', $cat, $groups[$item]['nome'] );
+                          echo sprintf('<input type="hidden" name="categorias[%s][%d][equipe][nome]" value="%s" />', $cat,$k, $groups[$item]['nome'] );
                           foreach (array_filter($groups) as $key => $vlx) {
-                            echo sprintf('<input type="hidden" name="categorias[%s][equipe][elementos][%d][nome]" value="%s" />', $cat, $key, $vlw['nome'] );
-                            echo sprintf('<input type="hidden" name="categorias[%s][equipe][elementos][%d][email]" value="%s" />', $cat, $key, $vlw['email'] );
+                            echo sprintf('<input type="hidden" name="categorias[%s][%d][equipe][elementos][%d][nome]" value="%s" />', $cat,$k, $key, $vlw['nome'] );
+                            echo sprintf('<input type="hidden" name="categorias[%s][%d][equipe][elementos][%d][email]" value="%s" />', $cat,$k, $key, $vlw['email'] );
                           }
                         }
                       }
@@ -157,5 +157,20 @@ $arr_sub_adulto = array('adulto', 'senior');
                       echo sprintf('<input type="hidden" name="categorias[%s][id]" value="%s" />', $cat , $value );
                     }
                   } ?>
-                <input type="submit" class="btn btn-primary fp-button" value="Avançar"/>
+                  <div class="row-fluid form-actions">
+                    <label for="feedback"><input type="checkbox" id="feedback" name="feedback" value="s"> Adicionar uma mensagem para o organizador?</label>
+                    <textarea name="feedback_msg" id="feedback_msg" style="display:none;" class="span8" placeholder="Mensagem"></textarea>
+                  </div>
+                  <input type="submit" class="btn btn-primary fp-button" value="Avançar"/>
               </form>
+              <script type="text/javascript">
+                jQuery(document).ready(function($) {
+                  $("#feedback").on('click', function(){
+                    if($(this).is(':checked')){
+                      $("#feedback_msg").show().attr('required', 'required');
+                    } else {
+                      $("#feedback_msg").hide().attr('required', false);
+                    }
+                  });
+                });
+              </script>

@@ -40,12 +40,12 @@ function vhr_cadastrar_evento(){
 			$table = array();
 
 			foreach($categorias as $term => $term_value){
-				if(is_array($term_value)){
+				if(is_array($term_value) && !isset($term_value['id'])){
 					foreach($term_value as $item){
 
 						if(!in_array($item['id'], $inscricoes[$post_id]['categorias'][$term])){
 
-							if(isset($item['equipe']) && !isset($item['arma'])){
+							if(isset($item['equipe'])){
 														$new[$term][] = array(
 		                               'peso'  			=> $item['id'],
 		                               'groups' 		=> $item['equipe'],
@@ -57,7 +57,7 @@ function vhr_cadastrar_evento(){
 		                               'groups' 		=> $item['equipe'],
 		                               'id_pagamento' 	=> $id_pagamento
 		                        );
-							} elseif(isset($item['arma']) && !isset($item['equipe'])){
+							} else if(isset($item['arma'])){
 														$new[$term][] = array(
 		                               'peso'  			=> $item['id'],
 		                               'arma' 			=> $item['arma'],
@@ -82,12 +82,10 @@ function vhr_cadastrar_evento(){
 							}
 
 
-							if(isset($inscricoes[$post_id]['categorias'][$term])){
-
+												if(isset($inscricoes[$post_id]['categorias'][$term])){
 			                    if( ! is_array($inscricoes[$post_id]['categorias'][$term])){
 			                      $inscricoes[$post_id]['categorias'][$term] = array();
 			                    }
-
 			                    $new[$term] = array_merge($inscricoes[$post_id]['categorias'][$term],$new[$term]);
 		                    }
 						}
@@ -556,6 +554,19 @@ function vhr_cadastrar_evento(){
 	    $url = get_permalink($pages_ids['inscricoes']);
 	} else {
 		$url = get_permalink($pages_ids['inscricoes']);
+	}
+
+	if(isset($_POST['feedback']) && $_POST['feedback'] == 's'){
+		$commentdata = array(
+			'comment_post_ID' => $post_id, // to which post the comment will show up
+			'comment_author' => get_the_author_meta('display_name', $user_id), //fixed value - can be dynamic
+			'comment_author_email' => get_the_author_email($user_id), //fixed value - can be dynamic
+			'comment_content' => $_POST['feedback_msg'], //fixed value - can be dynamic
+			'user_id' => $user_id, //passing current user ID or any predefined as per the demand
+		);
+
+		//Insert new comment and get the comment ID
+		wp_new_comment( $commentdata );
 	}
 
 	wp_redirect($url);
