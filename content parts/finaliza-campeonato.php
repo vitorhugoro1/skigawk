@@ -161,7 +161,7 @@ $arr_sub_adulto = array('adulto', 'senior');
                     <label for="feedback"><input type="checkbox" id="feedback" name="feedback" value="s"> Adicionar uma mensagem para o organizador?</label>
                     <textarea name="feedback_msg" id="feedback_msg" style="display:none;" class="span8" placeholder="Mensagem"></textarea>
                   </div>
-                  <input type="submit" class="btn btn-primary fp-button" value="Avançar"/>
+                  <input type="submit" class="btn btn-primary fp-button" value="Finalizar"/>
               </form>
               <script type="text/javascript">
                 jQuery(document).ready(function($) {
