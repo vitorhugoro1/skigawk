@@ -13,11 +13,15 @@ Selecione o estilo que vai participar
 <div id="estilo">
     <ul>
        <?php
-            $list = wp_get_post_terms( $_POST['camp_id'], 'categoria', array('fields' => 'all') );
+            $list = wp_get_object_terms( $_POST['camp_id'], 'categoria', array('fields' => 'slugs') );
             foreach($ordem_apresentar as $key => $modalidade){
               if('combate' == $key){
                 echo sprintf('<h4>%s</h4>', 'Modalidades de Combate');
                 foreach($modalidade as $term_slug){
+                  if( ! in_array($term_slug, $list) ){
+                    continue;
+                  }
+
                   $fetaria = get_the_author_meta('fEtaria', $user->ID);
 
                   if($term_slug == 'submission-adulto' && ! in_array($fetaria, $arr_sub_adulto) ){
@@ -57,6 +61,10 @@ Selecione o estilo que vai participar
               } else if('formas' == $key){
                 echo sprintf('<h4>%s</h4>', 'Modalidades de Formas Artísticas');
                 foreach($modalidade as $term_slug){
+                  if( ! in_array($term_slug, $list) ){
+                    continue;
+                  }
+
                   $term = get_term_by('slug', $term_slug, 'categoria');
                   $in = get_the_author_meta('insiders', $user->ID, true);
                   if(empty($in) || ! array_key_exists($_POST['camp_id'], $in)){
