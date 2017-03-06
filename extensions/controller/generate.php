@@ -27,7 +27,11 @@ if(!empty($categoria)){
                 'key'     => 'insiders',
                 'value'   => $meta_value,
                 'compare' => 'LIKE'
-            )
+              ),
+        'exp' => array(
+            'key' => 'exp',
+            'compare' => 'EXISTS'
+        )
     );
 }
 
@@ -55,11 +59,16 @@ if('campeonatos' == get_post_type( $post_id )){
         case 'formaslivres':
         case 'formasinternas':
         case 'formastradicionais':
-            if(!is_wp_error($items) && is_array($items) || !is_null($items) && is_array($items)){
+            if(!is_null($items)){
               foreach($items as $item){
                 if(! isset($item[0])) {
-                  $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
-                  $equipe = (isset($item['groups'])) ? implode(", ", array_filter( $item['groups']) ) : $academia;
+                  if(isset($item['id'])){
+                    $modalidade = (! empty($item['id']) && ! is_null($item['id'])) ? get_weight($categoria, $item['id'], $sex, $fetaria) : 'usuario não cadastrou';
+                    $equipe = (isset($item['groups'])) ? implode(", ", array_filter( $item['groups']) ) : $academia;
+                  } else {
+                    $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+                    $equipe = (isset($item['groups'])) ? implode(", ", array_filter( $item['groups']) ) : $academia;
+                  }
                 } else {
                   $modalidade = (! empty($item[0]['peso']) && ! is_null($item[0]['peso'])) ? get_weight($categoria, $item[0]['peso'], $sex, $fetaria) : 'usuario não cadastrou';
                   $equipe = (isset($item[0]['groups'])) ? implode(", ", array_filter( $item[0]['groups']) ) : $academia;
@@ -98,13 +107,18 @@ if('campeonatos' == get_post_type( $post_id )){
             }
           break;
         case 'formasolimpicas':
-          if(!is_wp_error($items) && is_array($items) || !is_null($items) && is_array($items)){
+          if(!is_null($items)){
             foreach($items as $item){
               if(! isset($item[0])) {
-                $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+                if(isset($item['id'])){
+                  $modalidade = (! empty($item['id']) && ! is_null($item['id'])) ? get_weight($categoria, $item['id'], $sex, $fetaria) : 'usuario não cadastrou';
+                } else {
+                  $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+                }
               } else {
                 $modalidade = (! empty($item[0]['peso']) && ! is_null($item[0]['peso'])) ? get_weight($categoria, $item[0]['peso'], $sex, $fetaria) : 'usuario não cadastrou';
               }
+
 
               $relatorio[] = array(
                     'nome'              => $user->display_name,
@@ -131,14 +145,19 @@ if('campeonatos' == get_post_type( $post_id )){
           }
           break;
         case 'tree':
-          if(!is_wp_error($items) && is_array($items) || !is_null($items) && is_array($items)){
+          if(!is_null($items)){
             foreach($items as $item){
               if(! isset($item[0])) {
-                $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
-                $arma = (isset($item['arma'])) ? implode(", ", array_filter( $item['arma']) ) : '';
+                if(isset($item['id'])){
+                  $modalidade = (! empty($item['id']) && ! is_null($item['id'])) ? get_weight($categoria, $item['id'], $sex, $fetaria) : 'usuario não cadastrou';
+                  $arma = (isset($item['arma'])) ? $item['arma'] : 'vazio';
+                } else {
+                  $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+                  $arma = (isset($item['arma'])) ? $item['arma'] : 'vazio';
+                }
               } else {
                 $modalidade = (! empty($item[0]['peso']) && ! is_null($item[0]['peso'])) ? get_weight($categoria, $item[0]['peso'], $sex, $fetaria) : 'usuario não cadastrou';
-                $arma = (isset($item[0]['arma'])) ? implode(", ", array_filter( $item[0]['arma']) ) : '';
+                $arma = (isset($item[0]['arma'])) ? $item[0]['arma'] : 'vazio';
               }
 
 
@@ -157,9 +176,9 @@ if('campeonatos' == get_post_type( $post_id )){
             $modalidade = 'usuario não cadastrou';
 
             if(! isset($item[0])) {
-              $arma = (isset($item['arma'])) ? implode(", ", array_filter( $item['arma']) ) : '';
+              $arma = (isset($item['arma'])) ? $item['arma'] : 'vazio';
             } else {
-              $arma = (isset($item[0]['arma'])) ? implode(", ", array_filter( $item[0]['arma']) ) : '';
+              $arma = (isset($item[0]['arma'])) ? $item[0]['arma'] : 'vazio';
             }
 
             $relatorio[] = array(
@@ -204,8 +223,8 @@ if('campeonatos' == get_post_type( $post_id )){
         );
       }
 }
-
-$data = array_orderby($relatorio, 'modalidade', SORT_ASC, 'sexo', SORT_DESC, 'experiencia', SORT_DESC);
+$order = array('avancado', 'intermediario', 'novato');
+$data = array_orderby($relatorio, 'nome', SORT_DESC, 'modalidade', SORT_ASC, 'sexo', SORT_DESC, 'experiencia', SORT_DESC);
 
 /*
  * Configurações para a classe PHPExcel

@@ -83,9 +83,9 @@ $arr_sub_adulto = array('adulto', 'senior');
                                     }
                                 }
                             } elseif ( $cat == 'tree') {
-                              foreach($value as $item){
+                              foreach($value as $k => $item){
                                   echo get_weight($cat, $item, $sexo, $fetaria);
-                                  echo sprintf('  <b>Arma:</b> %s<br>', array_filter($arma[$item]));
+                                  echo sprintf('  <b>Arma:</b> %s<br>', $arma[$item]);
                               }
                             } else {
                               echo get_weight($cat, $value, $sexo, $fetaria). ' Kg';
@@ -143,13 +143,15 @@ $arr_sub_adulto = array('adulto', 'senior');
                       foreach($value as $k => $item){
                         echo sprintf('<input type="hidden" name="categorias[%s][%d][id]" value="%s" />', $cat, $k , $item );
 
-                        if(isset($armas[$item])){
-                          echo sprintf('<input type="hidden" name="categorias[%s][%d][arma]" value="%s" />', $cat, $k,$armas[$item]);
-                        } elseif (isset(array_filter($groups)[$item])) {
-                          echo sprintf('<input type="hidden" name="categorias[%s][%d][equipe][nome]" value="%s" />', $cat,$k, $groups[$item]['nome'] );
-                          foreach (array_filter($groups) as $key => $vlx) {
-                            echo sprintf('<input type="hidden" name="categorias[%s][%d][equipe][elementos][%d][nome]" value="%s" />', $cat,$k, $key, $vlw['nome'] );
-                            echo sprintf('<input type="hidden" name="categorias[%s][%d][equipe][elementos][%d][email]" value="%s" />', $cat,$k, $key, $vlw['email'] );
+                        if(isset($arma[$item]) && $cat == 'tree'){
+                          echo sprintf('<input type="hidden" name="categorias[%s][%d][arma]" value="%s" />', $cat, $k,$arma[$item]);
+                        }
+
+                        if (isset($groups[$cat][$item]) && $cat != 'tree') {
+                          // echo sprintf('<input type="hidden" name="categorias[%s][%d][equipe][nome]" value="%s" />', $cat,$k, $groups[$item]['nome'] );
+                          foreach (array_filter($groups[$cat][$item]) as $key => $vlx) {
+                            echo sprintf('<input type="hidden" name="categorias[%s][%d][equipe][%d]" value="%s" />', $cat, $k , $key, $vlx );
+                            // echo sprintf('<input type="hidden" name="categorias[%s][%d][equipe][%d][email]" value="%s" />', $cat,$k, $key, $vlx['email'] );
                           }
                         }
                       }
