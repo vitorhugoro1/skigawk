@@ -343,12 +343,20 @@ function vhr_cadastrar_evento(){
 
 	} elseif( 'deposito' == $infos['meio_pag'] ){
 		$options = unserialize(get_option('deposito'));
+		$banco = get_post_meta($post_id, '_vhr_banco', true);
+		$beneficiario = get_post_meta($post_id, '_vhr_beneficiario', true);
+		$agencia = get_post_meta($post_id, '_vhr_agencia', true);
+		$conta = get_post_meta($post_id, '_vhr_conta', true);
 
+		if($banco == '' || $beneficiario == '' || $agencia == '' || $conta == ''){
+			$conta = sprintf('%s<br> %s<br>Agência: %s<br>Conta: %s', $options['banco'], $options['beneficiario'], $options['agencia'], $options['conta']);
+		} else {
+			$conta = sprintf('%s<br> %s<br>Agência: %s<br>Conta: %s', $banco, $beneficiario, $agencia, $conta);
+		}
 	    $home = home_url();
 	    $nome = get_the_author_meta('display_name', $user_id );
 	    $titulo = get_the_title($post_id);
 	    $tipo = (get_post_type($post_id) == 'campeonatos') ? 'Campeonato' : 'Evento';
-	    $conta = sprintf('%s<br> %s<br>Agência: %s<br>Conta: %s', $options['banco'], $options['beneficiario'], $options['agencia'], $options['conta']);
 
 	    $admin_email = get_option('admin_email');
 	    $sexo = get_the_author_meta( 'sex', $user_id );
@@ -446,7 +454,7 @@ function vhr_cadastrar_evento(){
 	  					</tr>
 	  					<tr>
 	  						<th scope='row'>Total</th>
-		  					<td class='total'>$ {$valor}</td>
+		  					<td class='total'>$ {$infos['valor']}</td>
 	  					</tr>
 	  				</tfoot>";
 	    $tab .= '</table>';

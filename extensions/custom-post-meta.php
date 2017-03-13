@@ -40,6 +40,39 @@ function evento_date()
     'type' => 'text_date_timestamp',
     'date_format' => 'd/m/Y',
   ));
+
+  $conta = new_cmb2_box(array(
+    'id' => $prefix . 'contas',
+    'title' => __('Conta de Pagamento'),
+    'object_types' => array('eventos', 'campeonatos'),
+    'context' => 'normal',
+    'priority' => 'high',
+    'show_names' => true,
+  ));
+
+  $conta->add_field(array(
+    'name' => 'Beneficiario',
+    'id' => $prefix.'beneficiario',
+    'type' => 'text',
+  ));
+
+  $conta->add_field(array(
+    'name' => 'Banco',
+    'id' => $prefix.'banco',
+    'type' => 'text',
+  ));
+
+  $conta->add_field(array(
+    'name' => 'Agência',
+    'id' => $prefix.'agencia',
+    'type' => 'text',
+  ));
+
+  $conta->add_field(array(
+    'name' => 'Conta',
+    'id' => $prefix.'conta',
+    'type' => 'text',
+  ));
 }
 
 function evento_local()

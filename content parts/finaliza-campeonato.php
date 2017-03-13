@@ -123,8 +123,16 @@ $arr_sub_adulto = array('adulto', 'senior');
                 <p>
                   <?php
                     $options = unserialize(get_option('deposito'));
+                    $banco = get_post_meta($_POST['camp_id'], '_vhr_banco', true);
+                    $beneficiario = get_post_meta($_POST['camp_id'], '_vhr_beneficiario', true);
+                    $agencia = get_post_meta($_POST['camp_id'], '_vhr_agencia', true);
+                    $conta = get_post_meta($_POST['camp_id'], '_vhr_conta', true);
 
-                    echo sprintf('%s<br> %s<br>Agência: %s<br>Conta: %s', $options['banco'], $options['beneficiario'], $options['agencia'], $options['conta']);
+                    if($banco == '' || $beneficiario == '' || $agencia == '' || $conta == ''){
+                      echo sprintf('%s<br> %s<br>Agência: %s<br>Conta: %s', $options['banco'], $options['beneficiario'], $options['agencia'], $options['conta']);
+                    } else {
+                      echo sprintf('%s<br> %s<br>Agência: %s<br>Conta: %s', $banco, $beneficiario, $agencia, $conta);
+                    }
                    ?>
                 </p>
                 <p>
