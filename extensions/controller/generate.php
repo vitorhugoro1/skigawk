@@ -1,9 +1,9 @@
 <?php
 require_once('Classes/PHPExcel.php');
 require '../../../../../wp-blog-header.php';
-error_reporting(E_ALL);
-ini_set('display_errors', TRUE);
-ini_set('display_startup_errors', TRUE);
+error_reporting(0);
+ini_set('display_errors', false);
+ini_set('display_startup_errors', false);
 
 if(!current_user_can('manage_options')){
     header('Location: '. home_url());
@@ -61,19 +61,18 @@ if('campeonatos' == get_post_type( $post_id )){
         case 'formastradicionais':
             if(!is_null($items)){
               foreach($items as $item){
-                if(! isset($item[0])) {
-                  if(isset($item['id'])){
-                    $modalidade = (! empty($item['id']) && ! is_null($item['id'])) ? get_weight($categoria, $item['id'], $sex, $fetaria) : 'usuario não cadastrou';
-                    $equipe = (isset($item['groups'])) ? implode(", ", array_filter( $item['groups']) ) : $academia;
-                  } else {
-                    $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
-                    $equipe = (isset($item['groups'])) ? implode(", ", array_filter( $item['groups']) ) : $academia;
-                  }
-                } else {
-                  $modalidade = (! empty($item[0]['peso']) && ! is_null($item[0]['peso'])) ? get_weight($categoria, $item[0]['peso'], $sex, $fetaria) : 'usuario não cadastrou';
-                  $equipe = (isset($item[0]['groups'])) ? implode(", ", array_filter( $item[0]['groups']) ) : $academia;
-                }
+	              if(! isset($item[0])) {
+		              $id = (!isset($item['id'])) ? $item['peso'] : $item['id'];
+		              $modalidade = (is_string($id)) ?
+			              get_weight($categoria, $id, $sex, $fetaria) : 'usuario não cadastrou';
+		              $equipe = (isset($item['groups'])) ? implode(", ", array_filter( $item['groups']) ) : $academia;
+	              } else {
+		              $id = (!isset($item[0]['id'])) ? $item[0]['peso'] : $item[0]['id'];
 
+		              $modalidade = (is_string($id)) ?
+			              get_weight($categoria, $id, $sex, $fetaria) : 'usuario não cadastrou';
+		              $equipe = (isset($item[0]['groups'])) ? implode(", ", array_filter( $item[0]['groups']) ) : $academia;
+	              }
 
                 $relatorio[] = array(
                       'nome'              => $user->display_name,
@@ -110,13 +109,15 @@ if('campeonatos' == get_post_type( $post_id )){
           if(!is_null($items)){
             foreach($items as $item){
               if(! isset($item[0])) {
-                if(isset($item['id'])){
-                  $modalidade = (! empty($item['id']) && ! is_null($item['id'])) ? get_weight($categoria, $item['id'], $sex, $fetaria) : 'usuario não cadastrou';
-                } else {
-                  $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
-                }
+	              $id = (!isset($item['id'])) ? $item['peso'] : $item['id'];
+
+	              $modalidade = $modalidade = (is_string($id)) ?
+		              get_weight($categoria, $item['id'], $sex, $fetaria) : 'usuario não cadastrou';
               } else {
-                $modalidade = (! empty($item[0]['peso']) && ! is_null($item[0]['peso'])) ? get_weight($categoria, $item[0]['peso'], $sex, $fetaria) : 'usuario não cadastrou';
+	              $id = (!isset($item[0]['id'])) ? $item[0]['peso'] : $item[0]['id'];
+
+	              $modalidade = (is_string($id)) ?
+		              get_weight($categoria, $item[0]['peso'], $sex, $fetaria) : 'usuario não cadastrou';
               }
 
 
@@ -144,34 +145,32 @@ if('campeonatos' == get_post_type( $post_id )){
               );
           }
           break;
-        case 'tree':
-          if(!is_null($items)){
-            foreach($items as $item){
-              if(! isset($item[0])) {
-                if(isset($item['id'])){
-                  $modalidade = (! empty($item['id']) && ! is_null($item['id'])) ? get_weight($categoria, $item['id'], $sex, $fetaria) : 'usuario não cadastrou';
-                  $arma = (isset($item['arma'])) ? $item['arma'] : 'vazio';
-                } else {
-                  $modalidade = (! empty($item['peso']) && ! is_null($item['peso'])) ? get_weight($categoria, $item['peso'], $sex, $fetaria) : 'usuario não cadastrou';
-                  $arma = (isset($item['arma'])) ? $item['arma'] : 'vazio';
-                }
-              } else {
-                $modalidade = (! empty($item[0]['peso']) && ! is_null($item[0]['peso'])) ? get_weight($categoria, $item[0]['peso'], $sex, $fetaria) : 'usuario não cadastrou';
-                $arma = (isset($item[0]['arma'])) ? $item[0]['arma'] : 'vazio';
-              }
+		case 'tree':
+		case 'desafio-bruce':
+	      if(!is_null($items)){
+	          if(! isset($items[0]) ) {
+		          $id = (!isset($items['id'])) ? $items['peso'] : $items['id'];
+		          $modalidade = (is_string($id)) ?
+			          get_weight($categoria, $id, $sex, $fetaria) : 'usuario não cadastrou';
+		          $arma = (isset($items['arma'])) ? $items['arma'] : 'vazio';
 
+	          } else {
+		          $id = (!isset($items[0]['id'])) ? $items[0]['peso'] : $items[0]['id'];
+		          $modalidade = (is_string($id)) ?
+			          get_weight($categoria, $id, $sex, $fetaria) : 'usuario não cadastrou';
+		          $arma = (isset($items[0]['arma'])) ? $items[0]['arma'] : 'vazio';
+	          }
 
-              $relatorio[] = array(
-                    'nome'              => $user->display_name,
-                    'sexo'              => $sex,
-                    'faixa-etaria'      => $fetaria,
-                    'categoria'         => $term->name,
-                    'modalidade'        => $modalidade,
-                    'arma'              => $arma,
-                    'experiencia'       => $exp,
-                    'academia'          => $academia
-              );
-            }
+	          $relatorio[] = array(
+		          'nome'              => $user->display_name,
+		          'sexo'              => $sex,
+		          'faixa-etaria'      => $fetaria,
+		          'categoria'         => $term->name,
+		          'modalidade'        => $modalidade,
+		          'arma'              => $arma,
+		          'experiencia'       => $exp,
+		          'academia'          => $academia
+	          );
           } else {
             $modalidade = 'usuario não cadastrou';
 
@@ -196,10 +195,12 @@ if('campeonatos' == get_post_type( $post_id )){
         default:
           if(! isset($items[0]) ) {
             $id = (!isset($items['id'])) ? $items['peso'] : $items['id'];
-            $modalidade = (! empty($id) && ! is_null($id)) ? get_weight($categoria, $id, $sex, $fetaria) : 'usuario não cadastrou';
+            $modalidade = ((!empty($id) && ! $id !== '0') && is_string($id)) ?
+	            get_weight($categoria, $id, $sex, $fetaria) : 'usuario não cadastrou';
           } else {
             $id = (!isset($items[0]['id'])) ? $items[0]['peso'] : $items[0]['id'];
-            $modalidade = (! empty($id) && ! is_null($id)) ? get_weight($categoria, $id, $sex, $fetaria) : 'usuario não cadastrou';
+            $modalidade = ((!empty($id) && ! $id !== '0') && is_string($id))
+	            ? get_weight($categoria, $id, $sex, $fetaria) : 'usuario não cadastrou';
           }
 
           $relatorio[] = array(
@@ -214,17 +215,20 @@ if('campeonatos' == get_post_type( $post_id )){
           break;
     }
   }
+
+	$order = array('avancado', 'intermediario', 'novato');
+	$data = array_orderby($relatorio, 'nome', SORT_DESC, 'modalidade', SORT_ASC, 'sexo', SORT_DESC, 'experiencia', SORT_DESC);
 } else {
-      foreach($users as $user){
-        $relatorio[] = array(
-          'nome'          => $user->display_name,
-          'faixa-etaria'  => get_the_author_meta('fEtaria', $user->ID),
-          'categoria'     => ucfirst($categoria)
-        );
-      }
+	foreach($users as $user){
+		$relatorio[] = array(
+		  'nome'          => $user->display_name,
+		  'faixa-etaria'  => get_the_author_meta('fEtaria', $user->ID),
+		  'categoria'     => ucfirst($categoria)
+		);
+	}
+
+	$data = $relatorio;
 }
-$order = array('avancado', 'intermediario', 'novato');
-$data = array_orderby($relatorio, 'nome', SORT_DESC, 'modalidade', SORT_ASC, 'sexo', SORT_DESC, 'experiencia', SORT_DESC);
 
 /*
  * Configurações para a classe PHPExcel
@@ -248,7 +252,7 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
 $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
 
-if ('campeonatos' == get_post_type($post_id)){
+if ('campeonatos' === get_post_type($post_id)){
     switch ($categoria) {
       case 'formaslivres':
       case 'formasinternas':
@@ -300,7 +304,8 @@ if ('campeonatos' == get_post_type($post_id)){
                 $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(6, $line, $value['academia']);
             }
             break;
-      case 'tree':
+		case 'tree':
+		case 'desafio-bruce':
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A1', 'Nome')
             ->setCellValue('B1', 'Sexo')

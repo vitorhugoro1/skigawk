@@ -440,7 +440,7 @@ VALUE			= VÆRDI				##	Konverterer et tekstargument til et tal
 =======
 ##
 ## PHPExcel
-##
+##
 ## Copyright (c) 2006 - 2013 PHPExcel
 ##
 ## This library is free software; you can redistribute it and/or

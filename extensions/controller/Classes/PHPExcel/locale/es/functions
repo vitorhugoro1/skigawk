@@ -440,7 +440,7 @@ VALUE			= VALOR					##	Convierte un argumento de texto en un número.
 =======
 ##
 ## PHPExcel
-##
+##
 ## Copyright (c) 2006 - 2013 PHPExcel
 ##
 ## This library is free software; you can redistribute it and/or

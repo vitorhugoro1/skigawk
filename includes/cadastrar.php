@@ -14,7 +14,7 @@ $user_id = $_POST['user_id'];
 $post_id = $_POST['post_id'];
 $price = $_POST['priceTotal'];
 $insider = $_POST['insider'];
-$inscricoes = get_the_author_meta('insiders', $user_id, true);
+$inscricoes = get_the_author_meta('insiders', $user_id);
 $data_inscricao = date('d/m/Y G:i');
 $pagamento = array();
 $type = get_post_type($post_id);
@@ -446,16 +446,14 @@ if (userInsider($user_id, $post_id)) { // Verifica se o usuario está inscrito
 
             if (empty($old_meta)) {
 
-                $new_meta[] = $user_id;
+                $new_meta = array((int) $user_id);
 
                 update_post_meta($post_id, 'user_subscribers', $new_meta);
 
             } else {
+	            $old_meta[] = (int) $user_id;
 
-                $new_meta = array_push($old_meta, $user_id);
-
-                update_post_meta($post_id, 'user_subscribers', $new_meta);
-
+                update_post_meta($post_id, 'user_subscribers', $old_meta);
             }
 
 

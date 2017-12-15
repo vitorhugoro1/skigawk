@@ -243,32 +243,12 @@ class Inscritos extends WP_List_Table
 
                     break;
                 case 'tree':
-	                array_filter($items);
-	                $mods = array();
-
-                    foreach ($items as $key => $value) {
-                      $id = (!isset($items['id'])) ? $value['peso'] : $value['id'];
-                       if(in_array($id, $mods) || is_int($value['arma'])){
-                       	continue;
-                       }
-
-                       $cadastros[] = array(
-                       		'modalidade' => get_weight($_REQUEST['categoria'],$id,$sex, $fetaria),
-                       		'arma'		 => $value['arma']
-                       );
-
-                       $mods[] = $id;
-                    }
-                    $items = $term->name . " <ul> ";
-                    foreach(array_filter($cadastros) as $cadastro){
-                    	if(is_null($cadastro['modalidade']) || is_null($cadastro['arma'])){
-                    		continue;
-                    	}
-
-                    	$items .= sprintf('<li> %s - %s </li>', $cadastro['modalidade'], $cadastro['arma']);
-                    }
-                    $items .= "</ul>";
-
+                    $id = (!isset($items['id'])) ? $items['peso'] : $items['id'];
+	                $items = $term->name.' - <b>'.get_weight($_REQUEST['categoria'],$id,$sex, $fetaria).' / '.$items['arma'].'</b>';
+	                break;
+                case 'desafio-bruce':
+	                $id = (!isset($items['id'])) ? $items['peso'] : $items['id'];
+	                $items = $term->name.' - <b>'.get_weight($_REQUEST['categoria'],$id,$sex, $fetaria).' / '.$items['arma'].'</b>';
                     break;
                 default:
                   $id = (!isset($items['id'])) ? $items['peso'] : $items['id'];
