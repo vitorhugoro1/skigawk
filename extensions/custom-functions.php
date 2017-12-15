@@ -425,54 +425,51 @@ function subscriberButton($user_id, $post_id, $typeEvent)
     $userInsider = userInsider($user_id, $post_id);
     $pages_ids = pages_group_ids();
 
-    if (get_current_user_role() == 'administrator') {
+    if (get_current_user_role() === 'administrator') {
+	    ob_start();
         ?>
 			<div>
 				<b>Acesse com uma conta não administradora</b>
 			</div>
 		<?php
-        return;
+	    return;
     }
 
     switch ($typeEvent) {
         case 'campeonatos':
+	        ob_start();
             if (in_array($userAge, $postAge)) { // Verifica se a faixa etária está disponivel
                 ?>
-				<form action="<?php echo get_permalink($pages_ids['inscrever']);
-                ?>" method="post">
-					<input type="hidden" name="camp_id" value="<?php echo $post_id;
-                ?>">
+				<form action="<?=get_permalink($pages_ids['inscrever'])?>" method="post">
+					<input type="hidden" name="camp_id" value="<?=$post_id?>">
 					<input type="submit" class="btn btn-primary fp-button" value="Inscrever-se">
 				</form>
 				<?php
-
             } else { // Se a faixa etária dele não estiver disponivel
                 ?>
 				<div class="">
 					<b>Faixa Etária não disponivel</b>
 				</div>
 		<?php
-            return;
             }
-        break;
+
+	        return;
+            break;
         case 'eventos':
             if ($userInsider) { // Se ele tiver inscrito, botão para realizar um nova inscrição
                 ?>
 				<b>Já está inscrito</b>
-	<?php
-            return;
+                <?php
             } else { // Se não tiver inscrito, botão para se inscrever pela primeira vez
                 ?>
-				<form action="<?php echo get_permalink($pages_ids['inscrever']);
-                ?>" method="post">
-						<input type="hidden" name="camp_id" value="<?php echo $post_id;
-                ?>">
-						<input type="submit" class="btn btn-primary fp-button" value="Inscrever-se">
+				<form action="<?=get_permalink($pages_ids['inscrever'])?>" method="post">
+                    <input type="hidden" name="camp_id" value="<?=$post_id?>">
+                    <input type="submit" class="btn btn-primary fp-button" value="Inscrever-se">
 				</form>
-	<?php
-            return;
+                <?php
             }
-        break;
+            return;
+	        break;
     }
 }
 
@@ -1006,7 +1003,11 @@ function get_weight($modalidade, $id_peso, $sexo, $fetaria)
       ),
     );
 
-    switch ($modalidade) {
+	$desafio = array(
+		'0'   => 'Desafio Bruce Lee'
+	);
+
+	switch ($modalidade) {
       case 'cassetete':
         if ($sexo == 'm') {
             $data = $cassetete['masculino'][$id_peso];
@@ -1160,6 +1161,9 @@ function get_weight($modalidade, $id_peso, $sexo, $fetaria)
                   $data = $submission['feminino'][$id_peso];
             }
             $array = $data;
+            break;
+        case 'desafio-bruce':
+            $array = $desafio[$id_peso];
             break;
     }
 

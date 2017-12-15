@@ -83,10 +83,11 @@ $arr_sub_adulto = array('adulto', 'senior');
                                     }
                                 }
                             } elseif ( $cat == 'tree') {
-                              foreach($value as $k => $item){
-                                  echo get_weight($cat, $item, $sexo, $fetaria);
-                                  echo sprintf('  <b>Arma:</b> %s<br>', $arma[$item]);
-                              }
+	                            echo get_weight($cat, $value, $sexo, $fetaria);
+	                            echo sprintf('  <b>Arma:</b> %s<br>', $arma[$value]);
+                            } elseif ($cat === 'desafio-bruce'){
+	                            echo get_weight($cat, $value, $sexo, $fetaria);
+	                            echo sprintf('  <b>Arma:</b> %s<br>', $desafio);
                             } else {
                               echo get_weight($cat, $value, $sexo, $fetaria). ' Kg';
                             }
@@ -150,21 +151,24 @@ $arr_sub_adulto = array('adulto', 'senior');
                     if(is_array($value)){
                       foreach($value as $k => $item){
                         echo sprintf('<input type="hidden" name="categorias[%s][%d][id]" value="%s" />', $cat, $k , $item );
-
-                        if(isset($arma[$item]) && $cat == 'tree'){
-                          echo sprintf('<input type="hidden" name="categorias[%s][%d][arma]" value="%s" />', $cat, $k,$arma[$item]);
-                        }
-
-                        if (isset($groups[$cat][$item]) && $cat != 'tree') {
-                          // echo sprintf('<input type="hidden" name="categorias[%s][%d][equipe][nome]" value="%s" />', $cat,$k, $groups[$item]['nome'] );
+                        if (isset($groups[$cat][$item])) {
                           foreach (array_filter($groups[$cat][$item]) as $key => $vlx) {
                             echo sprintf('<input type="hidden" name="categorias[%s][%d][equipe][%d]" value="%s" />', $cat, $k , $key, $vlx );
-                            // echo sprintf('<input type="hidden" name="categorias[%s][%d][equipe][%d][email]" value="%s" />', $cat,$k, $key, $vlx['email'] );
                           }
                         }
                       }
                     } else {
-                      echo sprintf('<input type="hidden" name="categorias[%s][id]" value="%s" />', $cat , $value );
+                        if($cat === 'desafio-bruce'){
+	                        echo sprintf('<input type="hidden" name="categorias[%s][id]" value="%s" />', $cat , '0' );
+	                        echo sprintf('<input type="hidden" name="desafio-bruce-arma" value="%s" />', $desafio );
+                            continue;
+                        } else if($cat === 'tree') {
+	                        echo sprintf('<input type="hidden" name="categorias[%s][id]" value="%s" />', $cat, $value );
+	                        echo sprintf('<input type="hidden" name="categorias[%s][arma]" value="%s" />', $cat, $arma[$value] );
+	                        continue;
+                        }
+
+	                    echo sprintf('<input type="hidden" name="categorias[%s][id]" value="%s" />', $cat , $value );
                     }
                   } ?>
                   <div class="row-fluid form-actions">

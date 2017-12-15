@@ -3,7 +3,7 @@
 
 $ordem_apresentar = array(
   'combate' => array('guardas', 'cassetete', 'semi','submission-adulto', 'submission-infantil', 'shuai', 'kuolight', 'kuoleitai', 'wushu', 'sanda', 'muaythai-a', 'muaythai-p', 'cmma', 'mma' ),
-  'formas'  => array('formastradicionais', 'formasinternas', 'formasolimpicas', 'formaslivres', 'tree')
+  'formas'  => array('formastradicionais', 'formasinternas', 'formasolimpicas', 'formaslivres', 'tree', 'desafio-bruce')
 );
 
 $arr_sub_adulto = array('adulto', 'senior');
@@ -15,23 +15,26 @@ Selecione o estilo que vai participar
        <?php
             $list = wp_get_object_terms( $_POST['camp_id'], 'categoria', array('fields' => 'slugs') );
             foreach($ordem_apresentar as $key => $modalidade){
-              if('combate' == $key){
-                echo sprintf('<h4>%s</h4>', 'Modalidades de Combate');
-                foreach($modalidade as $term_slug){
-                  if( ! in_array($term_slug, $list) ){
-                    continue;
-                  }
+              if('combate' === $key){
+	              if(count(array_intersect($modalidade, $list))){
+		              echo sprintf('<h4>%s</h4>', 'Modalidades de Combate');
+	              }
 
-                  $fetaria = get_the_author_meta('fEtaria', $user->ID);
+	              foreach($modalidade as $term_slug){
+                      if( ! in_array($term_slug, $list) ){
+                        continue;
+                      }
 
-                  if($term_slug == 'submission-adulto' && ! in_array($fetaria, $arr_sub_adulto) ){
-                    continue;
-                  } else if($term_slug == 'submission-infantil' && in_array($fetaria, $arr_sub_adulto)) {
-                    continue;
-                  }
+                    $fetaria = get_the_author_meta('fEtaria', $user->ID);
 
-                  $term = get_term_by('slug', $term_slug, 'categoria');
-                  $in = get_the_author_meta('insiders', $user->ID);
+                    if($term_slug == 'submission-adulto' && ! in_array($fetaria, $arr_sub_adulto) ){
+                        continue;
+                    } else if($term_slug == 'submission-infantil' && in_array($fetaria, $arr_sub_adulto)) {
+                        continue;
+                    }
+
+                    $term = get_term_by('slug', $term_slug, 'categoria');
+                    $in = get_the_author_meta('insiders', $user->ID);
                   if(empty($in) || ! array_key_exists($_POST['camp_id'], $in)){
                     echo '<li>';
                     echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;
@@ -59,14 +62,18 @@ Selecione o estilo que vai participar
                   }
                 }
               } else if('formas' == $key){
-                echo sprintf('<h4>%s</h4>', 'Modalidades de Formas Artísticas');
-                foreach($modalidade as $term_slug){
+
+                  if(count(array_intersect($modalidade, $list))){
+	                  echo sprintf('<h4>%s</h4>', 'Modalidades de Formas Artísticas');
+                  }
+
+	              foreach($modalidade as $term_slug){
                   if( ! in_array($term_slug, $list) ){
                     continue;
                   }
 
                   $term = get_term_by('slug', $term_slug, 'categoria');
-                  $in = get_the_author_meta('insiders', $user->ID, true);
+                  $in = get_the_author_meta('insiders', $user->ID);
                   if(empty($in) || ! array_key_exists($_POST['camp_id'], $in)){
                     echo '<li>';
                     echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;
@@ -75,7 +82,7 @@ Selecione o estilo que vai participar
                   } else {
                     foreach($in[$_POST['camp_id']] as $k => $i){
                       if($k == 'categorias'){
-                        if($term->slug == 'formaslivres' || $term->slug == 'formasinternas' || $term->slug == 'formastradicionais' || $term->slug == 'formasolimpicas' || $term->slug == 'tree'){
+                        if($term->slug == 'formaslivres' || $term->slug == 'formasinternas' || $term->slug == 'formastradicionais' || $term->slug == 'formasolimpicas'){
                           echo '<li>';
                           echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;
                           echo '<div id="'.$term->slug.'"></div>';

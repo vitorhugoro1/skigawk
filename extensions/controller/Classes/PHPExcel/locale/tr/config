@@ -49,7 +49,7 @@ NA	= #YOK
 =======
 ##
 ## PHPExcel
-##
+##
 ## Copyright (c) 2006 - 2013 PHPExcel
 ##
 ## This library is free software; you can redistribute it and/or
@@ -85,7 +85,7 @@ currencySymbol	= YTL
 
 
 ##
-##	Excel Error Codes	(For future use)
+##	Excel Error Codes	(For future use)
 ##
 NULL	= #BOŞ!
 DIV0	= #SAYI/0!

@@ -59,7 +59,7 @@ $pages_id = pages_group_ids();
                          foreach($value['categorias'] as $cat_slug => $cat_data){
                              $category = get_term_by( 'slug', $cat_slug, 'categoria');
                              echo '<li>';
-                             if($cat_slug == 'formaslivres' || $cat_slug == 'formasinternas' || $cat_slug == 'formastradicionais' || $cat_slug == 'formasolimpicas' || $cat_slug == 'tree'){
+                             if($cat_slug == 'formaslivres' || $cat_slug == 'formasinternas' || $cat_slug == 'formastradicionais' || $cat_slug == 'formasolimpicas'){
                                $count = count($cat_data);
                                $c = 0;
                                ?>
@@ -79,12 +79,6 @@ $pages_id = pages_group_ids();
                                              echo ' <i>' . implode(", ", array_filter( $item['groups']) ) . '</i>';
                                            }
                                          }
-                                       } else if($cat_slug == 'tree'){
-                                         if(isset($item['arma'])){
-                                           echo ' - ' . $item['arma'];
-                                         } else {
-                                           echo (empty($forma)) ? '' : ' - sem cadastro';
-                                         }
                                        }
 
                                       echo (empty($forma)) ? '' : (($c == $count) ? '.' : ', ');
@@ -96,7 +90,15 @@ $pages_id = pages_group_ids();
                              } else {
                                $cat = (isset($cat_data[0])) ? $cat_data[0] : $cat_data;
 
-                               echo sprintf('<b>%s</b> / %s Kg', $category->name, get_weight($cat_slug, $cat['peso'], $sexo, $fetaria) );
+                               if($cat_slug === 'tree'){
+                                  echo sprintf('<b>%s</b> / %s <b>Arma:</b> %s', $category->name, get_weight($cat_slug, $cat['peso'], $sexo, $fetaria), $cat['arma'] );
+                                   continue;
+                               } else if($cat_slug === 'desafio-bruce'){
+	                               echo sprintf('<b>%s</b> / %s <b>Arma:</b> %s', $category->name, get_weight($cat_slug, $cat['peso'], $sexo, $fetaria), $cat['arma'] );
+	                               continue;
+                               }
+
+	                             echo sprintf('<b>%s</b> / %s Kg', $category->name, get_weight($cat_slug, $cat['peso'], $sexo, $fetaria) );
                              }
                            echo '</li>';
                          }
@@ -114,7 +116,6 @@ $pages_id = pages_group_ids();
                               case 'formasinternas':
                               case 'formastradicionais':
                               case 'formasolimpicas':
-                              case 'tree':
                                 if(!empty($data)){
                                   foreach($data as $item){
                                     $pagamento = (isset($data['id_pagamento'])) ? $item['id_pagamento'] : $item[0]['id_pagamento'];
@@ -128,6 +129,7 @@ $pages_id = pages_group_ids();
                                   echo sprintf('<b>%s</b> - %s', $term->name, $string_ids );
                                   echo '</li>';
                                 }
+                                break;
                               default:
                                 $pagamento = (isset($data['id_pagamento'])) ? $data['id_pagamento'] : $data[0]['id_pagamento'];
                                 echo '<li>';

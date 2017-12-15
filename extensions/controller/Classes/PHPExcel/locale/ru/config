@@ -49,7 +49,7 @@ NA	= #Н/Д
 =======
 ##
 ## PHPExcel
-##
+##
 ## Copyright (c) 2006 - 2013 PHPExcel
 ##
 ## This library is free software; you can redistribute it and/or
@@ -85,7 +85,7 @@ currencySymbol	= р
 
 
 ##
-##	Excel Error Codes	(For future use)
+##	Excel Error Codes	(For future use)
 ##
 NULL	= #ПУСТО!
 DIV0	= #ДЕЛ/0!

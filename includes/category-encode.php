@@ -532,181 +532,177 @@ $submission = array(
   ),
 );
 
+$desafio = array(
+  '0'   => 'Desafio Bruce Lee'
+);
+
+$data = null;
+
 switch ($slug) {
 
-case 'cassetete':
-
-    if ($sexo == 'm') {
-        $data = $cassetete['masculino'];
-    } elseif ($sexo == 'f') {
-          $data = $cassetete['feminino'];
-      }
-
-    $array = $data;
-
-    break;
-
-case 'guardas':
-
-    if ($sexo == 'm') {
-        $data = $guardas['masculino'];
-    } elseif ($sexo == 'f') {
-          $data = $guardas['feminino'];
-      }
-
-    $array = $data;
-
-    break;
-
-case 'semi':
-
-    if ($sexo == 'm') {
-        $data = $semi['masculino'];
-    } elseif ($sexo == 'f') {
-          $data = $semi['feminino'];
-      }
-
-    $array = $data;
-
-    break;
-
-case 'kuolight':
-
-    if ($sexo == 'm') {
-        $data = $kuolight['masculino'];
-    } elseif ($sexo == 'f') {
-          $data = $kuolight['feminino'];
-      }
-
-    $array = $data;
-
-    break;
-
-case 'kuoleitai':
-
-    if ($sexo == 'm') {
-        $data = $kuoleitai['masculino'];
-    } elseif ($sexo == 'f') {
-          $data = $kuoleitai['feminino'];
-      }
-
-    $array = $data;
-
-    break;
-
-case 'guardas':
-
-    if ($sexo == 'm') {
-        $data = $guardas['masculino'];
-    } elseif ($sexo == 'f') {
-          $data = $guardas['feminino'];
-      }
-
-    $array = $data;
-
-    break;
-
-case 'wushu':
-case 'sanda':
-
-    if ($sexo == 'm') {
-        $data = $wushu['masculino'];
-    } elseif ($sexo == 'f') {
-          $data = $wushu['feminino'];
-      }
-
-    $array = $data;
-
-    break;
-
-    case 'muaythai-a':
-    case 'muaythai-p':
+    case 'cassetete':
 
         if ($sexo == 'm') {
-            $data = $muaythai['masculino'];
+            $data = $cassetete['masculino'];
         } elseif ($sexo == 'f') {
-            $data = $muaythai['feminino'];
+              $data = $cassetete['feminino'];
+          }
+
+        $array = $data;
+
+        break;
+
+    case 'guardas':
+
+        if ($sexo == 'm') {
+            $data = $guardas['masculino'];
+        } elseif ($sexo == 'f') {
+              $data = $guardas['feminino'];
+          }
+
+        $array = $data;
+
+        break;
+
+    case 'semi':
+
+        if ($sexo == 'm') {
+            $data = $semi['masculino'];
+        } elseif ($sexo == 'f') {
+              $data = $semi['feminino'];
+          }
+
+        $array = $data;
+
+        break;
+
+    case 'kuolight':
+
+        if ($sexo == 'm') {
+            $data = $kuolight['masculino'];
+        } elseif ($sexo == 'f') {
+              $data = $kuolight['feminino'];
+          }
+
+        $array = $data;
+
+        break;
+
+    case 'kuoleitai':
+
+        if ($sexo == 'm') {
+            $data = $kuoleitai['masculino'];
+        } elseif ($sexo == 'f') {
+              $data = $kuoleitai['feminino'];
+          }
+
+        $array = $data;
+
+        break;
+    case 'wushu':
+    case 'sanda':
+
+        if ($sexo == 'm') {
+            $data = $wushu['masculino'];
+        } elseif ($sexo == 'f') {
+              $data = $wushu['feminino'];
+          }
+
+        $array = $data;
+
+        break;
+
+        case 'muaythai-a':
+        case 'muaythai-p':
+
+            if ($sexo == 'm') {
+                $data = $muaythai['masculino'];
+            } elseif ($sexo == 'f') {
+                $data = $muaythai['feminino'];
+            }
+            $array = $data;
+            break;
+
+    case 'shuai':
+
+        switch ($fetaria) {
+        case 'mirim':
+        case 'infantil':
+        case 'junior':
+        case 'ijuvenil':
+
+            if ($sexo == 'm') {
+                $data = $shuai['infanto-juvenil']['masculino'];
+            } elseif ($sexo == 'f') {
+                  $data = $shuai['infanto-juvenil']['feminino'];
+              }
+            break;
+        case 'juvenil':
+
+            if ($sexo == 'm') {
+                $data = $shuai['juvenil']['masculino'];
+            } elseif ($sexo == 'f') {
+                  $data = $shuai['juvenil']['feminino'];
+              }
+
+            break;
+
+        case 'adulto':
+        case 'senior':
+          if ($sexo == 'm') {
+              $data = $shuai['adulto']['masculino'];
+          } elseif ($sexo == 'f') {
+                $data = $shuai['adulto']['feminino'];
+            }
+          }
+        $array = $data;
+        break;
+    case 'mma':
+        if ($sexo == 'm') {
+            $data = $mma['masculino'];
+        } elseif ($sexo == 'f') {
+              $data = $mma['feminino'];
+          }
+        $array = $data;
+        break;
+    case 'cmma':
+        if ($sexo == 'm') {
+            $data = $cmma['masculino'];
+        } elseif ($sexo == 'f') {
+              $data = $cmma['feminino'];
+          }
+        $array = $data;
+        break;
+    case 'formaslivres':
+        $array = $formaslivres;
+        break;
+    case 'formasinternas':
+        $array = $formasinternas;
+        break;
+    case 'formastradicionais':
+        $array = $formastradicionais;
+        break;
+    case 'formasolimpicas':
+        $array = $formasolimpicas;
+        break;
+    case 'tree':
+            $array = $tree;
+            break;
+    case 'submission-infantil':
+    case 'submission-adulto':
+        if ($sexo == 'm') {
+            $data = $submission['masculino'];
+        } elseif ($sexo == 'f') {
+              $data = $submission['feminino'];
         }
         $array = $data;
         break;
-
-case 'shuai':
-
-    switch ($fetaria) {
-    case 'mirim':
-    case 'infantil':
-    case 'junior':
-    case 'ijuvenil':
-
-        if ($sexo == 'm') {
-            $data = $shuai['infanto-juvenil']['masculino'];
-        } elseif ($sexo == 'f') {
-              $data = $shuai['infanto-juvenil']['feminino'];
-          }
+    case 'desafio-bruce':
+        $array = 'Desafio Bruce Lee';
         break;
-    case 'juvenil':
-
-        if ($sexo == 'm') {
-            $data = $shuai['juvenil']['masculino'];
-        } elseif ($sexo == 'f') {
-              $data = $shuai['juvenil']['feminino'];
-          }
-
-        break;
-
-    case 'adulto':
-    case 'senior':
-      if ($sexo == 'm') {
-          $data = $shuai['adulto']['masculino'];
-      } elseif ($sexo == 'f') {
-            $data = $shuai['adulto']['feminino'];
-        }
-      }
-    $array = $data;
-    break;
-case 'mma':
-    if ($sexo == 'm') {
-        $data = $mma['masculino'];
-    } elseif ($sexo == 'f') {
-          $data = $mma['feminino'];
-      }
-    $array = $data;
-    break;
-case 'cmma':
-    if ($sexo == 'm') {
-        $data = $cmma['masculino'];
-    } elseif ($sexo == 'f') {
-          $data = $cmma['feminino'];
-      }
-    $array = $data;
-    break;
-case 'formaslivres':
-    $array = $formaslivres;
-    break;
-case 'formasinternas':
-    $array = $formasinternas;
-    break;
-case 'formastradicionais':
-    $array = $formastradicionais;
-    break;
-case 'formasolimpicas':
-    $array = $formasolimpicas;
-    break;
-case 'tree':
-		$array = $tree;
-		break;
-case 'submission-infantil':
-case 'submission-adulto':
-    if ($sexo == 'm') {
-        $data = $submission['masculino'];
-    } elseif ($sexo == 'f') {
-          $data = $submission['feminino'];
-    }
-    $array = $data;
-    break;
 }
 
-if (empty($array)) {
+if (empty($array) && $slug !== 'desafio-bruce') {
     echo '<ul>';
 
     echo '<li>sem dados</li>';
@@ -721,7 +717,7 @@ foreach ($in[$post_id]['categorias'][$slug] as $item) {
     $peso[] = $item['peso'];
 }
 
-if ($slug == 'formaslivres' || $slug == 'formasinternas' || $slug == 'formastradicionais' || $slug == 'formasolimpicas' || $slug == 'tree') {
+if ($slug == 'formaslivres' || $slug == 'formasinternas' || $slug == 'formastradicionais' || $slug == 'formasolimpicas') {
     echo '<ul>';
     foreach ($array as $dado => $value) {
         if (!in_array($dado, $peso)) {
@@ -757,16 +753,6 @@ if ($slug == 'formaslivres' || $slug == 'formasinternas' || $slug == 'formastrad
           					</ul>
           				<?php
                 echo '</li>';
-            } else if($slug == 'tree') {
-              echo '<li>';
-              echo '<input type="checkbox" name="data-'.$slug.'[]" value="'.$dado.'">&nbsp;'.$value; ?>
-                      <ul id="groups-<?php echo $dado; ?>" class="groups">
-                        <li>
-                          <input type="text" name="tree-arma-<?php echo $slug.'['.$dado.']'; ?>" placeholder="Nome da arma"/>
-                        </li>
-                      </ul>
-                    <?php
-              echo '</li>';
             } else {
                 echo '<li>';
                 echo '<input type="checkbox" name="data-'.$slug.'[]" value="'.$dado.'">&nbsp;'.$value;
@@ -775,11 +761,38 @@ if ($slug == 'formaslivres' || $slug == 'formasinternas' || $slug == 'formastrad
         }
     }
     echo '</ul>';
+} elseif ($slug === 'desafio-bruce'){
+    ob_start();
+    ?>
+        <ul>
+            <li>
+                <input type="text" name="desafio-bruce-arma" placeholder="Nome da arma"/>
+            </li>
+        </ul>
+    <?php
+    $texto = ob_get_clean();
+
+    echo $texto;
 } else {
     echo '<ul>';
     $c = 0;
     foreach ($array as $dado => $value) {
         ++$c;
+
+        if($slug == 'tree') {
+		    echo '<li>';
+		    echo '<input type="radio" name="data-'.$slug.'" value="'.$dado.'">&nbsp;'.$value; ?>
+            <ul id="groups-<?php echo $dado; ?>" class="groups">
+                <li>
+                    <input type="text" name="tree-arma-<?php echo $slug.'['.$dado.']'; ?>" placeholder="Nome da arma"/>
+                </li>
+            </ul>
+		    <?php
+		    echo '</li>';
+
+		    continue;
+	    }
+
         echo '<li>';
         echo '<input type="radio" name="data-'.$slug.'" value="'.$dado.'"'.(($c == 1) ? 'required' : '').'>&nbsp;'.$value.' Kg';
         echo '</li>';

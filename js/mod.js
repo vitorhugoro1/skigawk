@@ -372,12 +372,15 @@ jQuery(document).ready(function($){
     }
   });
 
-  $('input[type=checkbox]#tree').parent().children("div#tree").unbind().on('click', 'input[type=checkbox]', function () {
+  $('input[type=checkbox]#tree').parent().children("div#tree").unbind().on('click', 'input[type=radio]', function () {
     var check = $(this).is(':checked');
-    if(check == true){
-      $(this).parent().children('.groups').show();
-    } else if(check == false) {
-      $(this).parent().children('.groups').hide();
+
+    if(check === true){
+        $(this).parents('ul').find('.groups').hide().find('input').val("");
+        $(this).parent().children('.groups').show();
+    } else if(check === false) {
+        $(this).parents('ul').find('.groups').hide().find('input').val("");
+        $(this).parent().children('.groups').hide();
     }
   });
 

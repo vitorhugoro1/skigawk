@@ -161,6 +161,7 @@ function register_terms(){
     wp_insert_term( 'Tree Star Formas Profissional', 'categoria', array('slug' => 'tree'));
     wp_insert_term( 'Submission Infantil', 'categoria', array('slug' => 'submission-infantil'));
     wp_insert_term( 'Submission Adulto', 'categoria', array('slug' => 'submission-adulto'));
+    wp_insert_term('Desafio Bruce Lee', 'categoria', array('slug' => 'desafio-bruce'));
 }
 
 function register_academias(){

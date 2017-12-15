@@ -14,7 +14,7 @@ switch($type){
     // Carrega os pesos
     foreach($categoria as $cat){
         $peso[$cat] = $_POST['data-'.$cat];
-        if ($cat == 'formaslivres' || $cat == 'formasinternas' || $cat == 'formastradicionais' || $cat == 'formasolimpicas' || $cat == 'tree'){
+        if ($cat == 'formaslivres' || $cat == 'formasinternas' || $cat == 'formastradicionais' || $cat == 'formasolimpicas'){
             $value -= 1;
             if(isset($_POST['data-'.$cat])){
                 foreach($_POST['data-'.$cat] as $item){
@@ -27,6 +27,7 @@ switch($type){
     $groups['formasinternas'] = $_POST['group-formasinternas'];
     $groups['formaslivres'] = $_POST['group-formaslivres'];
     $arma = $_POST['tree-arma-tree'];
+    $desafio = $_POST['desafio-bruce-arma'];
       // fim Carrega pesos
     $arr = array(7,8,20,21);
     $value += $extra;

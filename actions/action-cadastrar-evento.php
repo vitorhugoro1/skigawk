@@ -17,7 +17,7 @@ function vhr_cadastrar_evento(){
 	$infos = $_POST['info'];
 	$categorias = $_POST['categorias'];
 	$post_id = $infos['post_id'];
-	$inscricoes = get_the_author_meta('insiders', $user_id, true);
+	$inscricoes = get_the_author_meta('insiders', $user_id);
 	$data_inscricao = date('d/m/Y G:i');
 
 	$id_pagamento = add_pagamento($user_id, $infos['post_id'], $infos['valor'], $infos['meio_pag'] , array_keys($categorias) );
@@ -46,7 +46,7 @@ function vhr_cadastrar_evento(){
 						if(!in_array($item['id'], $inscricoes[$post_id]['categorias'][$term])){
 
 							if(isset($item['equipe'])){
-														$new[$term][] = array(
+								$new[$term][] = array(
 		                               'peso'  			=> $item['id'],
 		                               'groups' 		=> $item['equipe'],
 		                               'id_pagamento' 	=> $id_pagamento
@@ -82,7 +82,7 @@ function vhr_cadastrar_evento(){
 							}
 
 
-												if(isset($inscricoes[$post_id]['categorias'][$term])){
+							if(isset($inscricoes[$post_id]['categorias'][$term])){
 			                    if( ! is_array($inscricoes[$post_id]['categorias'][$term])){
 			                      $inscricoes[$post_id]['categorias'][$term] = array();
 			                    }
@@ -92,54 +92,62 @@ function vhr_cadastrar_evento(){
 
 					}
 				} else {
-							if (!array_key_exists($term, $inscricoes[$post_id]['categorias'])) {
 
-                  $new[$term]['peso'] = $term_value['id'];
-									$new[$term]['id_pagamento'] = $id_pagamento;
+				if (!array_key_exists($term, $inscricoes[$post_id]['categorias'])) {
 
-									if(isset($new[$term][0])){
-										$new[$term] = $new[$term][0];
-									}
+                        $new[$term]['peso'] = $term_value['id'];
+						$new[$term]['id_pagamento'] = $id_pagamento;
 
-									$table[$term] = array(
-                      'peso' 			=> $term_value['id'],
-                      'id_pagamento' 	=> $id_pagamento,
-                  );
+						if('desafio-bruce' === $term){
+							$new[$term]['arma'] = $_POST['desafio-bruce-arma'];
+						} else if('tree' === $term) {
+							$new[$term]['arma'] = $term_value['arma'];
+						}
 
-              } else if(isset($inscricoes[$post_id]['categorias'][$term])) {
-                  $new[$term] = array(
-                      'peso' 			=> $term_value['id'],
-                      'id_pagamento' 	=> $id_pagamento,
-                  );
+						if(isset($new[$term][0])){
+							$new[$term] = $new[$term][0];
+						}
 
-									if(isset($new[$term][0])){
-										$new[$term] = $new[$term][0];
-									}
+						$table[$term] = array(
+	                      'peso' 			=> $term_value['id'],
+	                      'id_pagamento' 	=> $id_pagamento,
+                        );
 
-                  $table[$term] = array(
-                      'peso' 			=> $term_value['id'],
-                      'id_pagamento' 	=> $id_pagamento,
-                  );
-              }
+		              } else if(isset($inscricoes[$post_id]['categorias'][$term])) {
+			              $new[$term] = array(
+			                  'peso' 			=> $term_value['id'],
+			                  'id_pagamento' 	=> $id_pagamento,
+			              );
+
+							if(isset($new[$term][0])){
+								$new[$term] = $new[$term][0];
+							}
+
+		                  $table[$term] = array(
+		                      'peso' 			=> $term_value['id'],
+		                      'id_pagamento' 	=> $id_pagamento,
+		                  );
+		              }
 
 				}
 			}
 
 			if( is_array($new) && ! empty($new) && ! is_null($new) ) {
-								if(is_null($inscricoes[$post_id]['categorias'])){
-									$categorias = $new;
-								} else {
-									$categorias = array_merge($inscricoes[$post_id]['categorias'], $new);
-								}
 
-								if(is_null($inscricoes[$post_id]['data_inscricao'])){
-									$data_inscricao = array($data_inscricao);
-								} else {
-									$datas_inscricao = array_merge($inscricoes[$post_id]['data_inscricao'], array($data_inscricao));
-								}
+				if(is_null($inscricoes[$post_id]['categorias'])){
+					$categorias = $new;
+				} else {
+					$categorias = array_merge($inscricoes[$post_id]['categorias'], $new);
+				}
 
-                $inscricoes[$post_id]['pagamento'][] = $pagamento;
+				if(is_null($inscricoes[$post_id]['data_inscricao'])){
+					$datas_inscricao = array($data_inscricao);
+				} else {
+					$datas_inscricao = array_merge($inscricoes[$post_id]['data_inscricao'], array($data_inscricao));
+				}
+
                 $pagamentos = $inscricoes[$post_id]['pagamento'];
+                $pagamentos[] = $pagamento;
 
 
                 $save = array(
@@ -183,7 +191,7 @@ function vhr_cadastrar_evento(){
 
 
 			foreach($categorias as $term => $term_value ){
-				if(is_array($term_value)){
+				if(!($term === 'tree') && !($term === 'desafio-bruce') && (is_array($term_value) AND array_key_exists(0, $term_value))){
 						foreach($term_value as $item){
 
 							if(isset($item['equipe']) && !isset($item['arma'])){
@@ -199,13 +207,13 @@ function vhr_cadastrar_evento(){
 		                               'id_pagamento' 	=> $id_pagamento
 		                        );
 							} elseif(isset($item['arma']) && !isset($item['equipe'])){
-								$new[$term][] = array(
+								$new[$term] = array(
 		                               'peso'  			=> $item['id'],
 		                               'arma' 			=> $item['arma'],
 		                               'id_pagamento' 	=> $id_pagamento
 		                        );
 
-		                        $table[$term][] = array(
+		                        $table[$term] = array(
 		                               'peso'  			=> $item['id'],
 		                               'arma' 			=> $item['arma'],
 		                               'id_pagamento' 	=> $id_pagamento
@@ -223,27 +231,47 @@ function vhr_cadastrar_evento(){
 							}
 						}
 				} else {
-
                     $new[$term] = array(
-                        'peso' 			=> $term_value,
+                        'peso' 			=> $term_value['id'],
                         'id_pagamento' 	=> $id_pagamento,
                     );
 
+					if('desafio-bruce' === $term){
+						$new[$term]['peso'] = $term_value['id'];
+						$new[$term]['arma'] = $_POST['desafio-bruce-arma'];
+					} else if('tree' === $term) {
+						$new[$term]['peso'] = $term_value['id'];
+						$new[$term]['arma'] = $term_value['arma'];
+					}
+
 					$table[$term] = array(
-                        'peso' 			=> $term_value,
+                        'peso' 			=> $$term_value['id'],
                         'id_pagamento' 	=> $id_pagamento,
                     );
 				}
 			}
 
-			$inscricoes[$post_id]['pagamento'][] = $pagamento;
+			if(empty($inscricoes[$post_id]['categorias'])){
+				$categorias = $new;
+			} else {
+				$categorias = array_merge($inscricoes[$post_id]['categorias'], $new);
+			}
+
+			if(empty($inscricoes[$post_id]['data_inscricao'])){
+				$data_inscricao = array($data_inscricao);
+			} else {
+				$data_inscricao = array_merge($inscricoes[$post_id]['data_inscricao'], array($data_inscricao));
+			}
+
+
             $pagamentos = $inscricoes[$post_id]['pagamento'];
+			$pagamentos[] = $pagamento;
 
             $save = array(
                 $post_id => array(
                     'categorias' 		=> $categorias,
                     'pagamento' 		=> $pagamentos,
-                    'data_inscricao' 	=> array($data_inscricao),
+                    'data_inscricao' 	=> $data_inscricao
                 ),
             );
 
@@ -263,17 +291,14 @@ function vhr_cadastrar_evento(){
 
 		} elseif ( 'eventos' == $infos['tipo'] ){
 
-			$meta = array();
 			$meta = get_post_meta($post_id, 'user_subscribers', true);
 
-            if (is_array($meta) && !empty($meta) && !is_null($meta)) {
+            if (is_array($meta) && !empty($meta)) {
                 array_push($meta, $user_id);
 
                 update_post_meta($post_id, 'user_subscribers', $meta);
-
             } else {
-                $meta = array();
-                array_push($meta, $user_id);
+                $meta = array($user_id);
 
                 update_post_meta($post_id, 'user_subscribers', $meta);
             }

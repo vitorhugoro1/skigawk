@@ -66,25 +66,12 @@ if(strtotime($dataInscricao) >= strtotime($now)):
 
     <?php
 
-    if(is_user_logged_in())
-
-      {
-
-        echo subscriberButton($user->ID, $post->ID, get_post_type());
-
-      }
-
-      else
-
-      {
-
-        $redirect = get_permalink($post->ID);
-
+    if(is_user_logged_in()){
+            echo subscriberButton($user->ID, $post->ID, get_post_type());
+      } else {
          ?>
-          <a class="btn" href="<?php echo get_permalink($pages_ids['login']); ?>?redirect=<?php echo $redirect; ?>">Logar</a>
-
+          <a class="btn" href="<?=get_permalink($pages_ids['login'])?>?redirect=<?=get_permalink()?>">Logar</a>
     <?php  } ?>
-
 </div>
 
 </section>
