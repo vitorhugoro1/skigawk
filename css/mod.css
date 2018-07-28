@@ -96,7 +96,7 @@ label[for=avatar] .avatar {
 .hentry div {
   font-size: 17px;
 }
-img.avatar {
+img.img-responsive.avatarr {
   width: 96px !important;
   margin: 1rem !important;
 }

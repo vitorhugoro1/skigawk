@@ -210,21 +210,20 @@ jQuery(document).ready(function($){
       $("input#district").prop('readonly', false);
       $("input#address").prop('readonly', false);
     } else {
-      $.get("http://apps.widenet.com.br/busca-cep/api/cep.json", {
-        code: cep_code
-      },
-      function(result) {
-        if (result.status != 1) {
-          alert(result.message || "Houve um erro desconhecido");
-          $("input#cep").val("");
-          return;
-        }
-        $("input#cep").val(result.code);
-        $("input#state").val(result.state);
-        $("input#city").val(result.city);
-        $("input#district").val(result.district);
-        $("input#address").val(result.address);
-      });
+        $.get(`https://viacep.com.br/ws/${cep_code}/json/`,
+        function(result) {
+            if (result.erro) {
+                alert("Cep não encontrado!");
+                $("input#cep").val("");
+                return;
+            }
+
+            $("input#cep").val(result.cep);
+            $("input#state").val(result.uf);
+            $("input#city").val(result.localidade);
+            $("input#district").val(result.bairro);
+            $("input#address").val(result.logradouro);
+        });
     }
   });
 
