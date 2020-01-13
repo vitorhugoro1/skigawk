@@ -1508,11 +1508,48 @@ function form_style_rules()
     ];
 }
 
+function allowed_subscribe_categories()
+{
+    $request = $_POST;
+    $categories = wp_get_post_terms($request['camp_id'], 'categoria', array('fields' => 'all'));
+    $oldAged = ['adulto', 'senior'];
+    $isAged = ['submission-adulto', 'submission-infantil'];
+    $in = get_the_author_meta('insiders', $request['user_id']);
+    $fetaria = get_the_author_meta('fEtaria', $request['user_id']);
+
+    foreach ($categories as $term) {
+        if ((!in_array($fetaria, $oldAged) && $term->slug === 'submission-adulto') ||
+            (in_array($fetaria, $oldAged) && $term->slug === 'submission-infantil')) {
+            continue;
+        }
+
+        if (empty($in)) {
+            echo sprintf(
+                '<li>%s</li>',
+                $term->name
+            );
+        }
+
+        if (!empty($in)) {
+            foreach ($in[$request['camp_id']] as $k => $i) {
+                if ($k === 'categorias') {
+                    if (!array_key_exists($term->slug, $i)) {
+                        echo sprintf(
+                            '<li>%s</li>',
+                            $term->name
+                        );
+                    }
+                }
+            }
+        }
+    }
+}
+
 function get_weight($modalidade, $id_peso, $sexo, $fetaria)
 {
     $data = weight_data();
 
-    if ($modalidade !== 'shuai' && in_array($modalidade, $data)) {
+    if ($modalidade !== 'shuai' && array_key_exists($modalidade, $data)) {
         if ($sexo === 'm') {
             return $data[$modalidade]['masculino'][$id_peso];
         }
@@ -1522,26 +1559,26 @@ function get_weight($modalidade, $id_peso, $sexo, $fetaria)
         }
     }
 
-    if (in_array($modalidade, $data) && in_array($modalidade, ['shuai'])) {
+    if (array_key_exists($modalidade, $data) && in_array($modalidade, ['shuai'])) {
         $nested = $data[$modalidade];
         $fetaria = $fetaria === 'ijuvenil' ? 'infanto-juvenil' : $fetaria;
 
-        if (in_array($fetaria, $nested)) {
+        if (array_key_exists($fetaria, $nested)) {
             if ($sexo === 'm') {
-                return $nested['masculino'][$id_peso];
+                return $nested[$fetaria]['masculino'][$id_peso];
             }
 
             if ($sexo === 'f') {
-                return $nested['feminino'][$id_peso];
+                return $nested[$fetaria]['feminino'][$id_peso];
             }
         }
     }
 
-    if (in_array($modalidade, $data) && in_array($modalidade, ['desafio-bruce'])) {
+    if (array_key_exists($modalidade, $data) && in_array($modalidade, ['desafio-bruce'])) {
         return $data[$modalidade][$id_peso];
     }
 
-    return [];
+    return '';
 }
 
 function template_modalities($echo = true)
