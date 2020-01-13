@@ -1,132 +1,101 @@
 <?php
-foreach($inscricao as $key => $info)
-{
-	$term = get_term_by('slug', $key, 'categoria');
-	$selected = $info['peso'];
-	?>
-		<tr>
-			<th>
-				<label for="<?php echo $term->slug ?>"><?php echo $term->name; ?></label>
-			</th>
-			<td>
-				
-				<?php if ($term->slug == 'formaslivres' || $term->slug == 'formasinternas' || $term->slug == 'formastradicionais' || $term->slug == 'formasolimpicas' || $term->slug == 'tree'){
 
-					foreach($info as $item){
-						$selected[] = $item['peso'];
-					}
-					?>
-					<select id="<?php echo $term->slug; ?>" name="categoria-<?php echo $term->slug; ?>[]" multiple>
-						<?php
-							switch ($term->slug){
-								default:
-									foreach($category[$term->slug] as $chave => $cat){
-										?>
-										<option value="<?php echo $chave; ?>" <?php echo (in_array($chave, $selected)) ? 'selected' : ''; ?>><?php echo $cat; ?></option>
-										<?php
-									}
-									break;
-							}
-						?>
-					</select>
-					<?php } else { ?>
-				<select id="<?php echo $term->slug; ?>" name="categoria-<?php echo $term->slug; ?>">
-					<?php
-						switch($term->slug)
-						{
-							case 'cassetete':
-							case 'guardas':
-							case 'semi':
-							case 'kuolight':
-							case 'kuoleitai':
-							case 'guardas':
-							case 'muaythai':
-							case 'wushu':
-							case 'mma':
-							case 'cmma':
-							    if($sexo == 'm'){
-							    	foreach($category[$term->slug]['masculino'] as $chave => $cat){
-										?>
-											<option value="<?php echo $chave; ?>" <?php selected( $selected, $chave); ?>><?php echo $cat; ?></option>
-										<?php
-									}
-							    } else if($sexo == 'f') {
-							      foreach($category[$term->slug]['feminino'] as $chave => $cat){
-										?>
-											<option value="<?php echo $chave; ?>" <?php selected( $selected, $chave); ?>><?php echo $cat; ?></option>
-										<?php
-									}
-							    }
-							  break;
-							case 'shuai':
-							    switch($fetaria){
-							      case 'mirim':
-							      case 'infantil':
-							      case 'junior':
-							        break;
-							      case 'ijuvenil':
-							        if($sexo == 'm'){
-							        	foreach($category[$term->slug]['infanto-juvenil']['masculino'] as $chave => $cat){
-											?>
-												<option value="<?php echo $chave; ?>" <?php selected( $selected, $chave); ?>><?php echo $cat; ?></option>
-											<?php
-										}
-							        } else if($sexo == 'f') {
-							        	foreach($category[$term->slug]['infanto-juvenil']['feminino'] as $chave => $cat){
-											?>
-												<option value="<?php echo $chave; ?>" <?php selected( $selected, $chave); ?>><?php echo $cat; ?></option>
-											<?php
-										}
-							        }
-							      break;
-							      case 'juvenil':
-							        if($sexo == 'm'){
-							        	foreach($category[$term->slug]['juvenil']['masculino'] as $chave => $cat){
-											?>
-												<option value="<?php echo $chave; ?>" <?php selected( $selected, $chave); ?>><?php echo $cat; ?></option>
-											<?php
-										}
-							        } else if($sexo == 'f') {
-							        	foreach($category[$term->slug]['juvenil']['feminino'] as $chave => $cat){
-											?>
-												<option value="<?php echo $chave; ?>" <?php selected( $selected, $chave); ?>><?php echo $cat; ?></option>
-											<?php
-										}
-							        }
-							      break;
-								  case 'senior':
-							      case 'adulto':
-							        if($sexo == 'm'){
-							        	foreach($category[$term->slug]['adulto']['masculino'] as $chave => $cat){
-											?>
-												<option value="<?php echo $chave; ?>" <?php selected( $selected, $chave); ?>><?php echo $cat; ?></option>
-											<?php
-										}
-							        } else if($sexo == 'f') {
-							        	foreach($category[$term->slug]['adulto']['feminino'] as $chave => $cat){
+$formas = [
+    'formaslivres',
+    'formasinternas',
+    'formastradicionais',
+    'formasolimpicas',
+    'tree',
+];
 
-											?>
-												<option value="<?php echo $chave; ?>" <?php selected( $selected, $chave); ?>><?php echo $cat; ?></option>
-											<?php
-										}
-							        }
-							      break;
-							    }
-							  break;
-							default:
-								foreach($category[$term->slug] as $chave => $cat){
-									?>
-										<option value="<?php echo $chave; ?>" <?php selected( $selected, $chave); ?>><?php echo $cat; ?></option>
-									<?php
-								}
-						}
+$lutas = [
+    'aged' => [
+        'shuai',
+    ],
+    'not-aged' => [
+        'cassetete',
+        'guardas',
+        'semi',
+        'kuolight',
+        'kuoleitai',
+        'guardas',
+        'muaythai',
+        'wushu',
+        'mma',
+        'cmma',
+        'sansou',
+        'jiu-jitsu',
+        'thay-boxing',
+        'low-kick',
+        'full-contact',
+        'light-contact',
+    ],
+];
 
-					 ?>
-				</select>
-				<?php } ?>
-				<input type="checkbox" name="delete[]" value="<?php echo $term->slug; ?>"/> Excluir?
-			</td>
-		</tr>
-	<?php
+foreach ($inscricao as $key => $info) {
+    $term = get_term_by('slug', $key, 'categoria');
+    $selected = $info['peso'];
+
+    echo sprintf('<tr><th><label for="%s">%s</label></th><td>', [$term->slug, $term->name]);
+
+    echo sprintf('<select id="%s" name="categoria-%s[]" multiple>', [$term->slug, $term->slug]);
+
+    if (in_array($term->slug, $formas)) {
+        foreach ($info as $item) {
+            $selected[] = $item['peso'];
+        }
+
+        foreach ($category[$term->slug] as $chave => $cat) {
+            $isSelected = in_array($chave, $selected) ? 'selected' : '';
+
+            echo sprintf('<option value="%s" %s>%s</option>', [$chave, $isSelected, $cat]);
+        }
+    }
+
+    if (in_array($term->slug, $lutas['not-aged']) || in_array($term->slug, $lutas['aged'])) {
+        if (in_array($term->slug, $lutas['not-aged'])) {
+            if ($sexo === 'm') {
+                foreach ($category[$term->slug]['masculino'] as $chave => $cat) {
+                    $isSelected = selected($selected, $chave, false);
+                    echo sprintf('<option value="%s" %s>%s</option>', [$chave, $isSelected, $cat]);
+                }
+            }
+
+            if ($sexo === 'f') {
+                foreach ($category[$term->slug]['feminino'] as $chave => $cat) {
+                    $isSelected = selected($selected, $chave, false);
+                    echo sprintf('<option value="%s" %s>%s</option>', [$chave, $isSelected, $cat]);
+                }
+            }
+        }
+
+        if (in_array($term->slug, $lutas['aged'])) {
+            if ($sexo === 'm') {
+                foreach ($category[$term->slug][$fetaria]['masculino'] as $chave => $cat) {
+                    $isSelected = selected($selected, $chave, false);
+                    echo sprintf('<option value="%s" %s>%s</option>', [$chave, $isSelected, $cat]);
+                }
+            }
+
+            if ($sexo === 'f') {
+                foreach ($category[$term->slug][$fetaria]['feminino'] as $chave => $cat) {
+                    $isSelected = selected($selected, $chave, false);
+                    echo sprintf('<option value="%s" %s>%s</option>', [$chave, $isSelected, $cat]);
+
+                }
+            }
+        }
+    }
+
+    if (in_array($term->slug, ['desafio-bruce'])) {
+        foreach ($category[$term->slug] as $chave => $cat) {
+            $isSelected = selected($selected, $chave, false);
+
+            echo sprintf('<option value="%s" %s>%s</option>', [$chave, $isSelected, $cat]);
+        }
+    }
+
+    echo '</select>';
+    echo sprintf('<input type="checkbox" name="delete[]" value="%s"/> Excluir?', [$term->slug]);
+    echo '</td></tr>';
 }
-?>
