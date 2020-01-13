@@ -5,7 +5,6 @@
 * Version: 3.4.16
 * Author: nikeo
 * Author URI: http://presscustomizr.com/
-* Template: skigawk
 * Template Version: 1.0.0
 * GitHub Theme URI: https://github.com/vitorhugoro1/skigawk
 * GitHub Branch: master
@@ -32,17 +31,14 @@
    for themselves. Background we set to 80% white with
    our animation centered, and no-repeating */
 .modal {
-    display:    none;
-    position:   fixed;
-    z-index:    9999999;
-    top:        0;
-    left:       0;
-    height:     100%;
-    width:      100%;
-    background: rgba( 255, 255, 255, .8 )
-                url('http://i.stack.imgur.com/FhHRx.gif')
-                50% 50%
-                no-repeat;
+    display: none;
+    position: fixed;
+    z-index: 9999999;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(255, 255, 255, .8) url('http://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
 }
 
 /* When the body has the loading class, we turn
