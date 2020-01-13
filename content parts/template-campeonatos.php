@@ -1,126 +1,32 @@
-
-<?php
-
-$ordem_apresentar = array(
-  'combate' => array('guardas', 'cassetete', 'semi','submission-adulto', 'submission-infantil', 'shuai', 'kuolight', 'kuoleitai', 'wushu', 'sanda', 'muaythai-a', 'muaythai-p', 'cmma', 'mma' ),
-  'formas'  => array('formastradicionais', 'formasinternas', 'formasolimpicas', 'formaslivres', 'tree', 'desafio-bruce')
-);
-
-$arr_sub_adulto = array('adulto', 'senior');
-
- ?>
 Selecione o estilo que vai participar
 <div id="estilo">
     <ul>
-       <?php
-            $list = wp_get_object_terms( $_POST['camp_id'], 'categoria', array('fields' => 'slugs') );
-            foreach($ordem_apresentar as $key => $modalidade){
-              if('combate' === $key){
-	              if(count(array_intersect($modalidade, $list))){
-		              echo sprintf('<h4>%s</h4>', 'Modalidades de Combate');
-	              }
-
-	              foreach($modalidade as $term_slug){
-                      if( ! in_array($term_slug, $list) ){
-                        continue;
-                      }
-
-                    $fetaria = get_the_author_meta('fEtaria', $user->ID);
-
-                    if($term_slug == 'submission-adulto' && ! in_array($fetaria, $arr_sub_adulto) ){
-                        continue;
-                    } else if($term_slug == 'submission-infantil' && in_array($fetaria, $arr_sub_adulto)) {
-                        continue;
-                    }
-
-                    $term = get_term_by('slug', $term_slug, 'categoria');
-                    $in = get_the_author_meta('insiders', $user->ID);
-                  if(empty($in) || ! array_key_exists($_POST['camp_id'], $in)){
-                    echo '<li>';
-                    echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;
-                    echo '<div id="'.$term->slug.'"></div>';
-                    echo '</li>';
-                  } else {
-                    foreach($in[$_POST['camp_id']] as $k => $i){
-                      if($k == 'categorias'){
-                        if($term->slug == 'formaslivres' || $term->slug == 'formasinternas' || $term->slug == 'formastradicionais' || $term->slug == 'formasolimpicas'){
-                          echo '<li>';
-                          echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;
-                          echo '<div id="'.$term->slug.'"></div>';
-                          echo '</li>';
-                        } else {
-                          if(!array_key_exists($term->slug, $i)){
-                            echo '<li>';
-                            echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;
-                            echo '<div id="'.$term->slug.'"></div>';
-                            echo '</li>';
-                          }
-                        }
-
-                      }
-                    }
-                  }
-                }
-              } else if('formas' == $key){
-
-                  if(count(array_intersect($modalidade, $list))){
-	                  echo sprintf('<h4>%s</h4>', 'Modalidades de Formas Artísticas');
-                  }
-
-	              foreach($modalidade as $term_slug){
-                  if( ! in_array($term_slug, $list) ){
-                    continue;
-                  }
-
-                  $term = get_term_by('slug', $term_slug, 'categoria');
-                  $in = get_the_author_meta('insiders', $user->ID);
-                  if(empty($in) || ! array_key_exists($_POST['camp_id'], $in)){
-                    echo '<li>';
-                    echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;
-                    echo '<div id="'.$term->slug.'"></div>';
-                    echo '</li>';
-                  } else {
-                    foreach($in[$_POST['camp_id']] as $k => $i){
-                      if($k == 'categorias'){
-                        if($term->slug == 'formaslivres' || $term->slug == 'formasinternas' || $term->slug == 'formastradicionais' || $term->slug == 'formasolimpicas'){
-                          echo '<li>';
-                          echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;
-                          echo '<div id="'.$term->slug.'"></div>';
-                          echo '</li>';
-                        } else {
-                          if(!array_key_exists($term->slug, $i)){
-                            echo '<li>';
-                            echo '<input type="checkbox" id="'.$term->slug.'" name="categoria[]" value="'.$term->slug.'" />  '.$term->name;
-                            echo '<div id="'.$term->slug.'"></div>';
-                            echo '</li>';
-                          }
-                        }
-
-                      }
-                    }
-                  }
-                }
-              }
-            }
-        ?>
+       <?php echo template_modalities(); ?>
     </ul>
 </div>
 
-<?php if(get_post_meta($_POST['camp_id'], '_vhr_price_option', true) == 's'){
-    echo sprintf('Valor da inscrição para o primeiro <b>Estilo</b>: <b>R$ %s </b><br>', get_post_meta($post_id, '_vhr_price', true));
-    if(get_post_meta($_POST['camp_id'], '_vhr_price_extra', true) !== '0.00'){
-      echo sprintf('Valor da inscrição para cada <b>Estilo</b> adicional: <b>R$ %s </b>', get_post_meta($post_id, '_vhr_price_extra', true));
-    }
-    echo '<b>O valor total será mostrado na página seguinte</b><br>';
-    } else { ?>
-      <b>Campeonato Gratuito</b><br>
-  <?php    } ?>
+<?php if (get_post_meta($_POST['camp_id'], '_vhr_price_option', true) == 's') {
+    echo sprintf(
+        'Valor da inscrição para o primeiro <b>Estilo</b>: <b>R$ %s </b><br>',
+        get_post_meta($post_id, '_vhr_price', true)
+    );
 
-<?php
-if($fetaria == 'mirim' || $fetaria ==  'infantil' || $fetaria == 'ijuvenil' || $fetaria == 'junior'){
+    if (get_post_meta($_POST['camp_id'], '_vhr_price_extra', true) !== '0.00') {
+        echo sprintf(
+            'Valor da inscrição para cada <b>Estilo</b> adicional: <b>R$ %s </b>',
+            get_post_meta($post_id, '_vhr_price_extra', true)
+        );
+    }
+
+    echo '<b>O valor total será mostrado na página seguinte</b><br>';
+} else {?>
+      <b>Campeonato Gratuito</b><br>
+  <?php }
+
+if ($fetaria == 'mirim' || $fetaria == 'infantil' || $fetaria == 'ijuvenil' || $fetaria == 'junior') {
     $file = get_post_meta($_POST['camp_id'], '_vhr_autorizacao_file_id');
-    $parsed = parse_url( wp_get_attachment_url( $file) );
-    $url    = dirname( $parsed [ 'path' ] ) . '/' . rawurlencode( basename( $parsed[ 'path' ] ) );
+    $parsed = parse_url(wp_get_attachment_url($file));
+    $url = dirname($parsed['path']) . '/' . rawurlencode(basename($parsed['path']));
     ?>
     <p>
         Autorização paulista para atleta menor de idade:
@@ -134,27 +40,27 @@ if($fetaria == 'mirim' || $fetaria ==  'infantil' || $fetaria == 'ijuvenil' || $
     Regras por estilo (Arquivo para Download de acordo com os estilos disponiveis)
     <ul>
         <?php
-        $list = wp_get_post_terms( $_POST['camp_id'], 'categoria', array('fields' => 'all') );
-        foreach($list as $term){
-            $in = get_the_author_meta('insiders', $user->ID);
-            if(empty($in) || ! array_key_exists($_POST['camp_id'], $in)){
-                echo '<li>';
-                echo '<a href="'.get_modalidade_file($term->slug).'">'.$term->name.'</a>';
-                echo '</li>';
-            } else {
-                foreach($in[$_POST['camp_id']] as $k => $i){
-                    if($k == 'categorias'){
-                        if(!array_key_exists($term->slug, $i)){
-                            echo '<li>';
-                            echo '<a href="'.get_modalidade_file($term->slug).'">'.$term->name.'</a>';
-                            echo '</li>';
-                        }
-                    }
+$list = wp_get_post_terms($_POST['camp_id'], 'categoria', array('fields' => 'all'));
+foreach ($list as $term) {
+    $in = get_the_author_meta('insiders', $user->ID);
+    if (empty($in) || !array_key_exists($_POST['camp_id'], $in)) {
+        echo '<li>';
+        echo '<a href="' . get_modalidade_file($term->slug) . '">' . $term->name . '</a>';
+        echo '</li>';
+    } else {
+        foreach ($in[$_POST['camp_id']] as $k => $i) {
+            if ($k == 'categorias') {
+                if (!array_key_exists($term->slug, $i)) {
+                    echo '<li>';
+                    echo '<a href="' . get_modalidade_file($term->slug) . '">' . $term->name . '</a>';
+                    echo '</li>';
                 }
             }
         }
+    }
+}
 
-        ?>
+?>
     </ul>
 </p>
 
