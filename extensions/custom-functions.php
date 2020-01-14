@@ -1548,8 +1548,9 @@ function allowed_subscribe_categories()
 function get_weight($modalidade, $id_peso, $sexo, $fetaria)
 {
     $data = weight_data();
+    $notWeight = array_merge(form_style_data(), ['shuai', 'desafio-bruce', 'tree']);
 
-    if ($modalidade !== 'shuai' && array_key_exists($modalidade, $data)) {
+    if (!in_array($modalidade, $notWeight) && array_key_exists($modalidade, $data)) {
         if ($sexo === 'm') {
             return $data[$modalidade]['masculino'][$id_peso];
         }
@@ -1559,7 +1560,7 @@ function get_weight($modalidade, $id_peso, $sexo, $fetaria)
         }
     }
 
-    if (array_key_exists($modalidade, $data) && in_array($modalidade, ['shuai'])) {
+    if (array_key_exists($modalidade, $data) && $modalidade === 'shuai') {
         $nested = $data[$modalidade];
         $fetaria = $fetaria === 'ijuvenil' ? 'infanto-juvenil' : $fetaria;
 
@@ -1574,7 +1575,7 @@ function get_weight($modalidade, $id_peso, $sexo, $fetaria)
         }
     }
 
-    if (array_key_exists($modalidade, $data) && in_array($modalidade, ['desafio-bruce'])) {
+    if (array_key_exists($modalidade, $data) || in_array($modalidade, ['desafio-bruce'])) {
         return $data[$modalidade][$id_peso];
     }
 

@@ -20,17 +20,17 @@ if (!in_array($slug, ['shuai', 'desafio-bruce']) && array_key_exists($slug, $cat
     }
 }
 
-if (in_array($slug, $categories) && in_array($slug, ['shuai'])) {
+if (array_key_exists($slug, $categories) && $slug === 'shuai') {
     $nested = $categories[$slug];
     $fetaria = $fetaria === 'ijuvenil' ? 'infanto-juvenil' : $fetaria;
 
-    if (in_array($fetaria, $nested)) {
+    if (array_key_exists($fetaria, $nested)) {
         if ($sexo === 'm') {
-            $data = $nested['masculino'];
+            $data = $nested[$fetaria]['masculino'];
         }
 
         if ($sexo === 'f') {
-            $data = $nested['feminino'];
+            $data = $nested[$fetaria]['feminino'];
         }
     }
 }
@@ -54,6 +54,7 @@ if (!empty($in) && array_key_exists($post_id, $in)) {
 }
 
 if (in_array($slug, $formas)) {
+    echo '<ul>';
     foreach ($data as $category => $internal) {
         if (in_array($category, $subscribed)) {
             continue;
@@ -62,7 +63,7 @@ if (in_array($slug, $formas)) {
         echo '<li>';
 
         echo sprintf(
-            '<input type="checkbox" name="data-%s" value="%s">&nbsp;%s',
+            '<input type="checkbox" name="data-%s[]" value="%s">&nbsp;%s',
             $slug,
             $category,
             $internal
@@ -96,6 +97,7 @@ if (in_array($slug, $formas)) {
 
         echo '</li>';
     }
+    echo '</ul>';
 }
 
 if ($slug === 'desafio-bruce') {

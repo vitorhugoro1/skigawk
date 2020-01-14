@@ -48,11 +48,21 @@ $group = [];
                     }
 
                     if (in_array($cat, $formas)) {
-                        foreach ($value as $item) {
-                            echo get_weight($cat, $item, $sexo, $fetaria) . '<br>';
+                        if (is_array($value)) {
+                            foreach ($value as $item) {
+                                echo get_weight($cat, $item, $sexo, $fetaria) . '<br>';
 
-                            if (in_array($item, $group)) {
-                                echo '<b>Equipe: </b>' . implode(', ', array_filter($groups[$cat][$item])) . '<br>';
+                                if (in_array($item, $group)) {
+                                    echo '<b>Equipe: </b>' . implode(', ', array_filter($groups[$cat][$item])) . '<br>';
+                                }
+                            }
+                        }
+
+                        if (is_string($value)) {
+                            echo get_weight($cat, $value, $sexo, $fetaria) . '<br>';
+
+                            if (in_array($value, $group)) {
+                                echo '<b>Equipe: </b>' . implode(', ', array_filter($groups[$cat][$value])) . '<br>';
                             }
                         }
                     }
@@ -65,7 +75,9 @@ $group = [];
                     if ($cat === 'desafio-bruce') {
                         echo get_weight($cat, $value, $sexo, $fetaria);
                         echo sprintf('  <b>Arma:</b> %s<br>', $desafio);
-                    } else {
+                    }
+
+                    if (!in_array($cat, array_merge($formas, ['desafio-bruce', 'tree']))) {
                         echo get_weight($cat, $value, $sexo, $fetaria) . ' Kg';
                     }
                 }
