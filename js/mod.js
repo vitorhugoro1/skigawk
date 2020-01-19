@@ -312,7 +312,7 @@ jQuery(document).ready(function($){
          post_id: $('#post_id').val()
        },
        function(data, status){
-          $(caminho).closest("li").children("div").html(data);
+          $(caminho).closest("li").children("div").html(data.data);
           $(caminho).addClass("active");
        }
      );

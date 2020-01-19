@@ -3,7 +3,7 @@ error_reporting(1);
 $post_id = esc_attr($_POST['camp_id']);
 $user = wp_get_current_user();
 $pages_ids = pages_group_ids();
-$category_url = get_template_directory_uri() . '/includes/category-encode.php';
+$category_url = get_rest_url(null, 'skigawk/v1/category-encode');
 $term_url = get_template_directory_uri() . '/includes/termo-responsabilidade.php?post_id=' . $post_id;
 $fetaria = get_the_author_meta('fEtaria', $user->ID);
 ?>
