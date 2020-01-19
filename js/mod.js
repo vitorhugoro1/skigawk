@@ -371,6 +371,22 @@ jQuery(document).ready(function($){
     }
   });
 
+  $('input[type=checkbox]#taekwondo-poomsae').parent().children("div#taekwondo-poomsae").unbind().on('click', 'input[type=checkbox]', function () {
+    var check = $(this).is(':checked');
+
+    switch ($(this).val()) {
+      case '3':
+      case '4':
+      case '6':
+        if(check == true){
+          $(this).parent().children('.groups').show();
+        } else if(check == false) {
+          $(this).parent().children('.groups').hide();
+        }
+        break;
+    }
+  });
+
   $('input[type=checkbox]#tree').parent().children("div#tree").unbind().on('click', 'input[type=radio]', function () {
     var check = $(this).is(':checked');
 
@@ -383,8 +399,23 @@ jQuery(document).ready(function($){
     }
   });
 
+  $(document).on('click', 'input[data-has-team]:checked', function (e) {
+    var isChecked = $(this).is(':checked');
+
+    if (isChecked) {
+      $(this).parents('ul').find('.groups').hide().find('input').val("");
+      $(this).parent().children('.groups').show();
+    }
+  });
+
   $('div').on('click', '.groups .add-member' ,function(e){
-    e.stopPropagation();
+    var max = parseInt($(this).attr('data-max') || 100);
+    var count = $(this).parents('.groups').children().length - 1;
+
+    if (count >= max) {
+      return;
+    }
+
     var li = document.createElement('LI');
     var ipt = document.createElement('INPUT');
     $(ipt).prop('name', $(this).data('name'));
@@ -394,15 +425,15 @@ jQuery(document).ready(function($){
     $(this).parents('.groups').children('li:last').before(li);
   });
 
-  $('div').on('click', '.groups .remove-member' ,function(e){
-    e.stopPropagation();
+  $(document).on('click', '.groups .remove-member', function(e) {
     var count = $(this).parents('.groups').children().length - 1;
-    console.log(count);
-    if(count <= 5){
+    var min = parseInt($(this).attr('data-min') || 5);
+
+    if(count <= min){
       return;
-    } else {
-      $(this).parents('.groups').children('li:last').prev().remove();
     }
+
+    $(this).parents('.groups').children('li:last').prev().remove();
   });
 
   $('#avatar').change(function() {

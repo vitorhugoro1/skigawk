@@ -136,10 +136,13 @@ function category_encode(WP_REST_Request $request)
 
         foreach ($data as $category => $option) {
             $echo .= '<li>';
+            $hasTeam = array_key_exists($slug, $rules['withCustomTeam']);
+
             $echo .= sprintf(
-                '<input type="radio" name="data-%s" value="%s" %s>&nbsp;%s %s',
+                '<input type="radio" name="data-%s" value="%s" %s %s>&nbsp;%s %s',
                 $slug,
                 $category,
+                $hasTeam ? 'data-has-team' : '',
                 $isFirst ? 'required' : '',
                 $option,
                 $slug === 'tree' ? '' : ' Kg'
@@ -158,6 +161,35 @@ function category_encode(WP_REST_Request $request)
                     $slug,
                     $category
                 );
+            }
+
+            if (array_key_exists($slug, $rules['withCustomTeam'])) {
+                $custom = $rules['withCustomTeam'][$slug];
+                $echo .= sprintf(
+                    '<ul id="group-%s" class="groups">',
+                    $category
+                );
+
+                foreach (range(1, $custom['size']) as $group) {
+                    $echo .= sprintf(
+                        '<li><input type="text" name="group-%s[%s][]" placeholder="Nome do integrante"/></li>',
+                        $slug,
+                        $category
+                    );
+                }
+
+                $echo .= sprintf(
+                    '<li>
+                        <button type="button" class="btn add-member" data-max="%s" data-name="group-%s[%s][]">Adicionar membro</button>
+                        <a href="javascript:void(0);" data-min="%s" class="btn btn-warning remove-member">Remover membro</a>
+                    </li>',
+                    $custom['max'],
+                    $slug,
+                    $category,
+                    $custom['min']
+                );
+
+                $echo .= "</ul>";
             }
 
             $echo .= '</li>';

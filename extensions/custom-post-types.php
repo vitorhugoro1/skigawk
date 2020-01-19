@@ -147,18 +147,6 @@ add_action('admin_init', 'register_terms');
 
 function register_terms()
 {
-    wp_insert_term('Guardas Esquivas', 'categoria', array('slug' => 'guardas'));
-    wp_insert_term('Cassetete', 'categoria', array('slug' => 'cassetete'));
-    wp_insert_term('Semi Contato', 'categoria', array('slug' => 'semi'));
-    wp_insert_term('Kuo Shu Light', 'categoria', array('slug' => 'kuolight'));
-    wp_insert_term('Kuo Shu Lei Tai', 'categoria', array('slug' => 'kuoleitai'));
-    wp_insert_term('Wushu', 'categoria', array('slug' => 'wushu'));
-    wp_insert_term('Sansou', 'categoria', array('slug' => 'sansou'));
-    wp_insert_term('Jiu-Jitsu', 'categoria', array('slug' => 'jiu-jitsu'));
-    wp_insert_term('Thay Boxing', 'categoria', array('slug' => 'thay-boxing'));
-    wp_insert_term('Low Kick', 'categoria', array('slug' => 'low-kick'));
-    wp_insert_term('Full Contact', 'categoria', array('slug' => 'full-contact'));
-    wp_insert_term('Light Contact', 'categoria', array('slug' => 'light-contact'));
     wp_insert_term('Sanda Profissional', 'categoria', array('slug' => 'sanda'));
     wp_insert_term('Shuai Jiao', 'categoria', array('slug' => 'shuai'));
     wp_insert_term('Muay Thai Amador', 'categoria', array('slug' => 'muaythai-a'));
@@ -173,6 +161,31 @@ function register_terms()
     wp_insert_term('Submission Infantil', 'categoria', array('slug' => 'submission-infantil'));
     wp_insert_term('Submission Adulto', 'categoria', array('slug' => 'submission-adulto'));
     wp_insert_term('Desafio Bruce Lee', 'categoria', array('slug' => 'desafio-bruce'));
+    wp_insert_term('Guardas Esquivas', 'categoria', array('slug' => 'guardas'));
+    wp_insert_term('Cassetete', 'categoria', array('slug' => 'cassetete'));
+    wp_insert_term('Semi Contato', 'categoria', array('slug' => 'semi'));
+    wp_insert_term('Kuo Shu Light', 'categoria', array('slug' => 'kuolight'));
+    wp_insert_term('Kuo Shu Lei Tai', 'categoria', array('slug' => 'kuoleitai'));
+
+    // Alterados no inicio de 2020
+    wp_insert_term('Wushu', 'categoria', array('slug' => 'wushu'));
+    wp_insert_term('Sansou', 'categoria', array('slug' => 'sansou'));
+
+    // Adicionados em janeiro de 2020
+    wp_insert_term('Jiu-Jitsu', 'categoria', array('slug' => 'jiu-jitsu'));
+    wp_insert_term('Thay Boxing', 'categoria', array('slug' => 'thay-boxing'));
+    wp_insert_term('Low Kick', 'categoria', array('slug' => 'low-kick'));
+    wp_insert_term('Full Contact', 'categoria', array('slug' => 'full-contact'));
+    wp_insert_term('Light Contact', 'categoria', array('slug' => 'light-contact'));
+
+    // Adicionados em janeiro de 2020 - segunda parte
+    // Combate
+    wp_insert_term('Taekwondo - Kyorugui', 'categoria', ['slug' => 'taekwondo-kyorugui']);
+    wp_insert_term('Taekwondo - Kyorugui (Dupla)', 'categoria', ['slug' => 'taekwondo-kyorugui-dupla']);
+    wp_insert_term('Karatê Kumite', 'categoria', ['slug' => 'karate-kumite']);
+    // Formas
+    wp_insert_term('Taekwondo - Poomsae', 'categoria', ['slug' => 'taekwondo-poomsae']);
+    wp_insert_term('Karatê Kata', 'categoria', ['slug' => 'karate-kata']);
 }
 
 function register_academias()
