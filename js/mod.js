@@ -387,6 +387,27 @@ jQuery(document).ready(function($){
     }
   });
 
+  $('input[type=checkbox]#karate-kata').parent().children("div#karate-kata").unbind().on('click', 'input[type=checkbox]', function () {
+    var check = $(this).is(':checked');
+
+    switch ($(this).val()) {
+      case '9':
+      case '10':
+      case '11':
+      case '12':
+      case '13':
+      case '14':
+      case '15':
+      case '16':
+        if(check == true){
+          $(this).parent().children('.groups').show();
+        } else if(check == false) {
+          $(this).parent().children('.groups').hide();
+        }
+        break;
+    }
+  });
+
   $('input[type=checkbox]#tree').parent().children("div#tree").unbind().on('click', 'input[type=radio]', function () {
     var check = $(this).is(':checked');
 
