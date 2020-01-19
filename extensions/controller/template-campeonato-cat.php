@@ -1,12 +1,6 @@
 <?php
 
-$formas = [
-    'formaslivres',
-    'formasinternas',
-    'formastradicionais',
-    'formasolimpicas',
-    'tree',
-];
+$formas = array_merge(form_style_data(), ['tree']);
 
 $lutas = [
     'aged' => [
@@ -29,6 +23,9 @@ $lutas = [
         'low-kick',
         'full-contact',
         'light-contact',
+        'taekwondo-kyorugui',
+        'taekwondo-kyorugui-dupla',
+        'karate-kumite',
     ],
 ];
 
@@ -40,7 +37,12 @@ foreach ($inscricao as $key => $info) {
 
     echo sprintf('<tr><th><label for="%s">%s</label></th><td>', $term->slug, $term->name);
 
-    echo sprintf('<select id="%s" name="categoria-%s[]" multiple>', $term->slug, $term->slug);
+    echo sprintf(
+        '<select id="%s" name="categoria-%s[]" %s>',
+        $term->slug,
+        $term->slug,
+        in_array($term->slug, $formas) ? 'multiple' : ''
+    );
 
     if (in_array($term->slug, $formas)) {
         foreach ($info as $item) {

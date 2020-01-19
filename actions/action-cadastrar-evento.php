@@ -104,7 +104,7 @@ function vhr_cadastrar_evento()
                     }
                 }
 
-                if (!is_array($term_value)) {
+                if (is_array($term_value) && isset($term_value['id'])) {
                     if (!array_key_exists($term, $inscricoes[$post_id]['categorias'])) {
                         $new[$term]['peso'] = $term_value['id'];
                         $new[$term]['id_pagamento'] = $id_pagamento;
@@ -125,6 +125,12 @@ function vhr_cadastrar_evento()
                             'peso' => $term_value['id'],
                             'id_pagamento' => $id_pagamento,
                         );
+
+                        if (array_key_exists('equipe', $term_value) &&
+                            !empty($term_value['equipe'])) {
+                            $table[$term]['equipe'] = $term_value['equipe'];
+                            $new[$term]['equipe'] = $term_value['equipe'];
+                        }
                     }
 
                     if (isset($inscricoes[$post_id]['categorias'][$term])) {
@@ -141,6 +147,12 @@ function vhr_cadastrar_evento()
                             'peso' => $term_value['id'],
                             'id_pagamento' => $id_pagamento,
                         );
+
+                        if (array_key_exists('equipe', $term_value) &&
+                            !empty($term_value['equipe'])) {
+                            $table[$term]['equipe'] = $term_value['equipe'];
+                            $new[$term]['equipe'] = $term_value['equipe'];
+                        }
                     }
                 }
             }
@@ -252,15 +264,23 @@ function vhr_cadastrar_evento()
                     if ('desafio-bruce' === $term) {
                         $new[$term]['peso'] = $term_value['id'];
                         $new[$term]['arma'] = $_POST['desafio-bruce-arma'];
-                    } else if ('tree' === $term) {
+                    }
+
+                    if ('tree' === $term) {
                         $new[$term]['peso'] = $term_value['id'];
                         $new[$term]['arma'] = $term_value['arma'];
                     }
 
                     $table[$term] = array(
-                        'peso' => $$term_value['id'],
+                        'peso' => $term_value['id'],
                         'id_pagamento' => $id_pagamento,
                     );
+
+                    if (array_key_exists('equipe', $term_value) &&
+                        !empty($term_value['equipe'])) {
+                        $table[$term]['equipe'] = $term_value['equipe'];
+                        $new[$term]['equipe'] = $term_value['equipe'];
+                    }
                 }
             }
 

@@ -23,9 +23,8 @@ switch ($type) {
                 }
             }
         }
-        $groups['formastradicionais'] = $_POST['group-formastradicionais'];
-        $groups['formasinternas'] = $_POST['group-formasinternas'];
-        $groups['formaslivres'] = $_POST['group-formaslivres'];
+
+        $groups = groups_from_request();
         $arma = $_POST['tree-arma-tree'];
         $desafio = $_POST['desafio-bruce-arma'];
         // fim Carrega pesos

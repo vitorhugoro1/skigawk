@@ -113,16 +113,16 @@ class Inscritos extends WP_List_Table
 
         if ($type == 'campeonatos') {
             $columns = array(
-
                 'cb' => '<input type="checkbox" />',
                 'display_name' => 'Nome',
                 'fetaria' => 'Faixa Etária',
                 'categoria' => 'Categoria',
                 'academia' => 'Academia',
             );
-        } elseif ($type == 'eventos') {
-            $columns = array(
+        }
 
+        if ($type == 'eventos') {
+            $columns = array(
                 'cb' => '<input type="checkbox" />',
                 'display_name' => 'Nome',
                 'fetaria' => 'Faixa Etária',
@@ -170,17 +170,10 @@ class Inscritos extends WP_List_Table
     public function column_default($item, $column_name)
     {
         switch ($column_name) {
-
-            // case 'id':
-
             case 'display_name':
-
                 return $item->$column_name;
-
             case 'fetaria':
-
                 return ucfirst(get_the_author_meta('fEtaria', $item->ID));
-
             case 'category':
                 $inscricoes = get_the_author_meta('insiders', $item->ID);
 
@@ -198,7 +191,6 @@ class Inscritos extends WP_List_Table
 
     public function column_categoria($item)
     {
-
         if (isset($_REQUEST['categoria'])) {
             $sex = get_the_author_meta('sex', $item->ID);
             $fetaria = get_the_author_meta('fEtaria', $item->ID);
@@ -293,27 +285,29 @@ class Inscritos extends WP_List_Table
                <select class="ewc-filter-ativo" name="ativo-filter">
                     <option value="">Categoria</option>
                     <?php
-$list = wp_get_post_terms($_REQUEST['post_id'], 'categoria', array('fields' => 'all'));
-                foreach ($list as $term) {
+                    $list = wp_get_post_terms($_REQUEST['post_id'], 'categoria', array('fields' => 'all'));
+                    foreach ($list as $term) {
+                        ?>
+                        <option value="<?php echo sprintf('&categoria=%s', esc_attr($term->slug)); ?>"
+                        <?php selected($_REQUEST['categoria'], $term->slug);?>>
+                            <?php echo $term->name; ?>
+                        </option>
+                        <?php
+                    }
                     ?>
-                          <option value="<?php echo sprintf('&categoria=%s', esc_attr($term->slug)); ?>" <?php selected($_REQUEST['categoria'], $term->slug);?>><?php echo $term->name; ?></option>
-
-                          <?php
-}
-                ?>
                </select>
              </div>
                 <?php
-if (isset($_GET['categoria'])) {
+                if (isset($_GET['categoria'])) {
                     ?>
                     <div class="alignleft actions bulkactions">
-                      <label for="button-exportar" class="screen-reader-text">Gerar</label>
-                      <a href="<?php echo get_stylesheet_directory_uri() . '/extensions/controller/generate.php?post_id=' . esc_attr($_GET['post_id']) . '&categoria=' . esc_attr($_GET['categoria']); ?>" id="button-exportar" class="button">Gerar Relatório</a>
+                    <label for="button-exportar" class="screen-reader-text">Gerar</label>
+                    <a href="<?php echo get_stylesheet_directory_uri() . '/extensions/controller/generate.php?post_id=' . esc_attr($_GET['post_id']) . '&categoria=' . esc_attr($_GET['categoria']); ?>" id="button-exportar" class="button">Gerar Relatório</a>
                     </div>
                     <?php
-}
+                }
             }
-        } else {
+            } else {
             if ($which == "top") {
                 echo '<script type="text/javascript">';
                 echo "jQuery('.ewc-filter-ativo').live('change', function(){

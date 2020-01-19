@@ -1677,6 +1677,21 @@ function form_style_rules()
     ];
 }
 
+function groups_from_request()
+{
+    $postBody = $_POST;
+    $groups = [];
+
+    foreach ($postBody as $key => $body) {
+        if (strpos($key, 'group-') !== false) {
+            $category = str_replace('group-', '', $key);
+            $groups[$category] = $body;
+        }
+    }
+
+    return $groups;
+}
+
 function allowed_subscribe_categories()
 {
     $request = $_POST;

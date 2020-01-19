@@ -47,6 +47,10 @@ $group = [];
                         $group = $rules['withGroup'][$cat];
                     }
 
+                    if (array_key_exists($cat, $rules['withCustomTeam'])) {
+                        $group = $rules['withCustomTeam'][$cat];
+                    }
+
                     if (in_array($cat, $formas)) {
                         if (is_array($value)) {
                             foreach ($value as $item) {
@@ -79,6 +83,10 @@ $group = [];
 
                     if (!in_array($cat, array_merge($formas, ['desafio-bruce', 'tree']))) {
                         echo get_weight($cat, $value, $sexo, $fetaria) . ' Kg';
+
+                        if (!empty($group)) {
+                            echo '<br><b>Equipe: </b>' . implode(', ', array_filter($groups[$cat][$value])) . '<br>';
+                        }
                     }
                 }
                 ?>
@@ -155,13 +163,26 @@ Ao realizar o pagamento enviar o comprovante para o e-mail <a href="mailto:adrie
                 echo sprintf('<input type="hidden" name="categorias[%s][id]" value="%s" />', $cat, '0');
                 echo sprintf('<input type="hidden" name="desafio-bruce-arma" value="%s" />', $desafio);
                 continue;
-            } else if ($cat === 'tree') {
+            }
+
+            if ($cat === 'tree') {
                 echo sprintf('<input type="hidden" name="categorias[%s][id]" value="%s" />', $cat, $value);
                 echo sprintf('<input type="hidden" name="categorias[%s][arma]" value="%s" />', $cat, $arma[$value]);
                 continue;
             }
 
             echo sprintf('<input type="hidden" name="categorias[%s][id]" value="%s" />', $cat, $value);
+
+            if (array_key_exists($cat, $rules['withCustomTeam'])) {
+                foreach (array_filter($groups[$cat][$value]) as $key => $vlx) {
+                    echo sprintf(
+                        '<input type="hidden" name="categorias[%s][equipe][%d]" value="%s" />',
+                        $cat,
+                        $key,
+                        $vlx
+                    );
+                }
+            }
         }
     }
     ?>
