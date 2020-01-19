@@ -1603,7 +1603,7 @@ function template_modalities($echo = true)
             'cmma',
             'mma',
             'sansou',
-            'jit-jitsu',
+            'jiu-jitsu',
             'thay-boxing',
             'low-kick',
             'full-contact',
