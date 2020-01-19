@@ -441,7 +441,7 @@ $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 ob_end_clean();
 header('Cache-Control: no-cache');
 header('Pragma: no-cache');
-header("Content-Disposition:attachment; filename='{$archive_name}'");
+header("Content-Disposition:attachment; filename={$archive_name}");
 ob_start();
 $objWriter->save('php://output');
 exit;
