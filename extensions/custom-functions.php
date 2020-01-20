@@ -1852,8 +1852,8 @@ function template_modalities($echo = true)
     $isAged = ['submission-adulto', 'submission-infantil'];
     $modalities = wp_get_object_terms($request['camp_id'], 'categoria', array('fields' => 'slugs'));
     $fetaria = get_the_author_meta('fEtaria', $user->ID);
+    $formas = form_style_data();
     $in = get_the_author_meta('insiders', $user->ID);
-
     if (!$echo) {
         ob_start();
     }
@@ -1883,7 +1883,8 @@ function template_modalities($echo = true)
 
             $term = get_term_by('slug', $modality, 'categoria');
 
-            if (empty($in) || is_array($in) && !array_key_exists($request['camp_id'], $in)) {
+            if (empty($in) || is_array($in) && !array_key_exists($request['camp_id'], $in) ||
+                !empty($in[$request['camp_id']]['categorias']) && !array_key_exists($term->slug, $in[$request['camp_id']]['categorias'])) {
                 echo sprintf(
                     '<li><input type="checkbox" id="%s" name="categoria[]" value="%s"/> %s<div id="%s"></div></li>',
                     $term->slug,
@@ -1893,10 +1894,10 @@ function template_modalities($echo = true)
                 );
             }
 
-            if (!empty($in) && is_array($in) && array_key_exists($request['camp_id'], $in)) {
-                if (is_array($in[$request['camp_id']])) {
-                    foreach ($in[$request['camp_id']] as $key => $subscribed) {
-                        if ($key === 'categorias' && !array_key_exists($term->slug, $subscribed)) {
+            if (!empty($in) && is_array($in) && array_key_exists($request['camp_id'], $in) && $type === 'formas') {
+                if (is_array($in[$request['camp_id']]['categorias'])) {
+                    foreach ($in[$request['camp_id']]['categorias'] as $key => $subscribed) {
+                        if (in_array($key, $formas) && $key === $term->slug) {
                             echo sprintf(
                                 '<li><input type="checkbox" id="%s" name="categoria[]" value="%s"/> %s<div id="%s"></div></li>',
                                 $term->slug,

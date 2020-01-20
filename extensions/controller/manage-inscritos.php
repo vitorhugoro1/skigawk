@@ -60,7 +60,7 @@ class Inscritos extends WP_List_Table
             $args['meta_query'] = array(
                 array(
                     'key' => 'insiders',
-                    'value' => $meta_value,
+                    'value' => sprintf(':"%s";', $meta_value),
                     'compare' => 'LIKE',
                 ),
             );
@@ -78,7 +78,9 @@ class Inscritos extends WP_List_Table
     public function admin_header()
     {
         $page = (isset($_REQUEST['page'])) ? esc_attr($_REQUEST['page']) : false;
-        if ('gerenciar_camp' != $page) {return;}
+        if ('gerenciar_camp' != $page) {
+            return;
+        }
 
         echo '<script type="text/javascript">';
         echo "jQuery('.ewc-filter-ativo').live('change', function(){
@@ -191,62 +193,57 @@ class Inscritos extends WP_List_Table
 
     public function column_categoria($item)
     {
-        if (isset($_REQUEST['categoria'])) {
+        $category = isset($_REQUEST['categoria']) ? $_REQUEST['categoria'] : null;
+
+        if (isset($category)) {
             $sex = get_the_author_meta('sex', $item->ID);
             $fetaria = get_the_author_meta('fEtaria', $item->ID);
             $inscricoes = get_the_author_meta('insiders', $item->ID);
-            $items = $inscricoes[$_REQUEST['post_id']]['categorias'][$_REQUEST['categoria']];
-            $term = get_term_by('slug', $_REQUEST['categoria'], 'categoria');
+            $items = $inscricoes[$_REQUEST['post_id']]['categorias'][$category];
+            $term = get_term_by('slug', $category, 'categoria');
+            $formas = form_style_data();
 
-            switch ($_REQUEST['categoria']) {
-                case 'formaslivres':
-                case 'formasinternas':
-                case 'formastradicionais':
-                case 'formasolimpicas':
-                    array_filter($items);
-                    $mods = array();
+            if (in_array($category, $formas)) {
+                array_filter($items);
+                $mods = array();
 
-                    foreach ($items as $key => $value) {
-                        $id = (!isset($items['id'])) ? $value['peso'] : $value['id'];
-                        if (in_array($id, $mods)) {
-                            continue;
-                        }
-
-                        $cadastros[] = array(
-                            'modalidade' => get_weight($_REQUEST['categoria'], $id, $sex, $fetaria),
-                            'equipe' => ((isset($value['groups'])) ? implode(',', array_filter($value['groups'])) : ''),
-                        );
-
-                        $mods[] = $id;
+                foreach ($items as $key => $value) {
+                    $id = (!isset($items['id'])) ? $value['peso'] : $value['id'];
+                    if (in_array($id, $mods)) {
+                        continue;
                     }
 
-                    $items = $term->name . " <ul> ";
-                    foreach (array_filter($cadastros) as $cadastro) {
-                        if (is_null($cadastro['modalidade'])) {
-                            continue;
-                        }
+                    $cadastros[] = array(
+                        'modalidade' => get_weight($category, $id, $sex, $fetaria),
+                        'equipe' => ((isset($value['groups'])) ? implode(',', array_filter($value['groups'])) : ''),
+                    );
 
-                        if ($cadastro['equipe'] == '') {
-                            $items .= sprintf('<li> %s </li>', $cadastro['modalidade']);
-                        } else {
-                            $items .= sprintf('<li> %s - %s </li>', $cadastro['modalidade'], $cadastro['equipe']);
-                        }
+                    $mods[] = $id;
+                }
+
+                $items = $term->name . " <ul> ";
+                foreach (array_filter($cadastros) as $cadastro) {
+                    if (is_null($cadastro['modalidade'])) {
+                        continue;
                     }
-                    $items .= "</ul>";
 
-                    break;
-                case 'tree':
-                    $id = (!isset($items['id'])) ? $items['peso'] : $items['id'];
-                    $items = $term->name . ' - <b>' . get_weight($_REQUEST['categoria'], $id, $sex, $fetaria) . ' / ' . $items['arma'] . '</b>';
-                    break;
-                case 'desafio-bruce':
-                    $id = (!isset($items['id'])) ? $items['peso'] : $items['id'];
-                    $items = $term->name . ' - <b>' . get_weight($_REQUEST['categoria'], $id, $sex, $fetaria) . ' / ' . $items['arma'] . '</b>';
-                    break;
-                default:
-                    $id = (!isset($items['id'])) ? $items['peso'] : $items['id'];
-                    $items = $term->name . ' - <b>' . get_weight($_REQUEST['categoria'], $id, $sex, $fetaria) . ' Kg </b>';
-                    break;
+                    if ($cadastro['equipe'] == '') {
+                        $items .= sprintf('<li> %s </li>', $cadastro['modalidade']);
+                    } else {
+                        $items .= sprintf('<li> %s - %s </li>', $cadastro['modalidade'], $cadastro['equipe']);
+                    }
+                }
+                $items .= "</ul>";
+            }
+
+            if (in_array($category, ['tree', 'desafio-bruce'])) {
+                $id = (!isset($items['id'])) ? $items['peso'] : $items['id'];
+                $items = $term->name . ' - <b>' . get_weight($category, $id, $sex, $fetaria) . ' / ' . $items['arma'] . '</b>';
+            }
+
+            if (!in_array($category, $formas) && !in_array($category, ['tree', 'desafio-bruce'])) {
+                $id = (!isset($items['id'])) ? $items['peso'] : $items['id'];
+                $items = $term->name . ' - <b>' . get_weight($category, $id, $sex, $fetaria) . ' Kg </b>';
             }
         } else {
             $inscricoes = get_the_author_meta('insiders', $item->ID);
