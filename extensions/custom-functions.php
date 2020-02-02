@@ -495,6 +495,11 @@ function children_autorization_file_text($echo = true)
     }
 
     $file = get_post_meta($postData['camp_id'], '_vhr_autorizacao_file_id');
+
+    if (empty($file)) {
+        return;
+    }
+
     $parsed = parse_url(wp_get_attachment_url($file));
     $url = dirname($parsed['path']) . '/' . rawurlencode(basename($parsed['path']));
 
