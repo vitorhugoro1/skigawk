@@ -474,6 +474,42 @@ return;
     }
 }
 
+function children_ageing()
+{
+    return [
+        'mirim',
+        'infantil',
+        'ijuvenil',
+        'junior'
+    ];
+}
+
+function children_autorization_file_text($echo = true)
+{
+    $postData = $_POST;
+    $user = wp_get_current_user();
+    $ageing = get_the_author_meta('fEtaria', $user->ID);
+
+    if (!in_array($ageing, children_ageing())) {
+        return;
+    }
+
+    $file = get_post_meta($postData['camp_id'], '_vhr_autorizacao_file_id');
+    $parsed = parse_url(wp_get_attachment_url($file));
+    $url = dirname($parsed['path']) . '/' . rawurlencode(basename($parsed['path']));
+
+    $text = "<p>";
+    $text .= "Autorização paulista para atleta menor de idade:";
+    $text .= sprintf('<a href="%s" target="_blank"> Autorização para Atleta Menor de Idade</a>', $url);
+    $text .= "</p>";
+
+    if (!$echo) {
+        return $text;
+    }
+
+    echo $text;
+}
+
 function show_modalities_rules_text($echo = true)
 {
     $postData = $_POST;

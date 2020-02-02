@@ -23,18 +23,7 @@ Selecione o estilo que vai participar
       <b>Campeonato Gratuito</b><br>
   <?php }
 
-if ($fetaria == 'mirim' || $fetaria == 'infantil' || $fetaria == 'ijuvenil' || $fetaria == 'junior') {
-    $file = get_post_meta($_POST['camp_id'], '_vhr_autorizacao_file_id');
-    $parsed = parse_url(wp_get_attachment_url($file));
-    $url = dirname($parsed['path']) . '/' . rawurlencode(basename($parsed['path']));
-    ?>
-    <p>
-        Autorização paulista para atleta menor de idade:
-
-        <a href="<?php echo $url; ?>" target="_blank"> Autorização para Atleta Menor de Idade</a>
-    </p>
-<?php
-}
+children_autorization_file_text();
 ?>
 
 <?php // show_modalities_rules_text(); ?>
