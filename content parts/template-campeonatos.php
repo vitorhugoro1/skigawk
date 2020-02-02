@@ -36,33 +36,8 @@ if ($fetaria == 'mirim' || $fetaria == 'infantil' || $fetaria == 'ijuvenil' || $
 <?php
 }
 ?>
-<p>
-    Regras por estilo (Arquivo para Download de acordo com os estilos disponiveis)
-    <ul>
-        <?php
-$list = wp_get_post_terms($_POST['camp_id'], 'categoria', array('fields' => 'all'));
-foreach ($list as $term) {
-    $in = get_the_author_meta('insiders', $user->ID);
-    if (empty($in) || !array_key_exists($_POST['camp_id'], $in)) {
-        echo '<li>';
-        echo '<a href="' . get_modalidade_file($term->slug) . '">' . $term->name . '</a>';
-        echo '</li>';
-    } else {
-        foreach ($in[$_POST['camp_id']] as $k => $i) {
-            if ($k == 'categorias') {
-                if (!array_key_exists($term->slug, $i)) {
-                    echo '<li>';
-                    echo '<a href="' . get_modalidade_file($term->slug) . '">' . $term->name . '</a>';
-                    echo '</li>';
-                }
-            }
-        }
-    }
-}
 
-?>
-    </ul>
-</p>
+<?php // show_modalities_rules_text(); ?>
 
 <b>Termo de Responsabilidade</b>
 <iframe id="frame" src="" width="100%" height="400px"></iframe>

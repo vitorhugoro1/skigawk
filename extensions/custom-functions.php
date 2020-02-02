@@ -474,6 +474,50 @@ return;
     }
 }
 
+function show_modalities_rules_text($echo = true)
+{
+    $postData = $_POST;
+    $user = wp_get_current_user();
+    $text = '';
+    $text .= "<p>";
+    $text .= "Regras por estilo (Arquivo para Download de acordo com os estilos disponiveis)";
+
+    $text .= "<ul>";
+
+    $list = wp_get_post_terms($postData['camp_id'], 'categoria', array('fields' => 'all'));
+    foreach ($list as $term) {
+        $in = get_the_author_meta('insiders', $user->ID);
+
+        if (empty($in) || !array_key_exists($postData['camp_id'], $in)) {
+            $text .= '<li>';
+            $text .= '<a href="' . get_modalidade_file($term->slug) . '">' . $term->name . '</a>';
+            $text .= '</li>';
+
+            continue;
+        }
+
+        foreach ($in[$postData['camp_id']] as $k => $i) {
+            if ($k === 'categorias') {
+                if (!array_key_exists($term->slug, $i)) {
+                    $text .= '<li>';
+                    $text .= '<a href="' . get_modalidade_file($term->slug) . '">' . $term->name . '</a>';
+                    $text .= '</li>';
+                }
+            }
+        }
+    }
+
+    $text .= "</ul>";
+
+    $text .= "</p>";
+
+    if (!$echo) {
+        return $text;
+    }
+
+    echo $text;
+}
+
 function weight_data()
 {
     return [
@@ -1719,9 +1763,9 @@ function form_style_rules()
             'taekwondo-kyorugui-dupla' => [
                 'size' => 1,
                 'min' => 1,
-                'max' => 1
-            ]
-        ]
+                'max' => 1,
+            ],
+        ],
     ];
 }
 
