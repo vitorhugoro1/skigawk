@@ -14,9 +14,11 @@
   font-weight: bold;
   text-align: center;
 }
+
 #confirm.error {
   background-color: #D32F2F;
 }
+
 #alerts.sucess {
   background-color: #388E3C;
   color: white;
@@ -24,40 +26,51 @@
   text-align: center;
   margin-bottom: 5px;
 }
+
 #categoria.categoria {
   display: none;
 }
+
 ul#categoria {
   margin: 0 0 10px 5px;
 }
+
 ul#categoria li {
   display: inline-block;
   margin: 0 10px 0 0;
 }
-ul#categoria li > input {
+
+ul#categoria li>input {
   margin: 2px;
 }
+
 ul.modalidade {
   margin: 0 0 10px 5px;
 }
+
 ul.modalidade li {
   list-style: none;
   /*display: inline-block;*/
   margin: 0 10px 0 0;
 }
-ul.modalidade li > input {
+
+ul.modalidade li>input {
   margin: 2px;
 }
+
 .margin-10 {
   margin: 0 0 0 10px;
 }
+
 span.red {
   color: red;
 }
-.label-mod > label {
+
+.label-mod>label {
   display: inline-table;
   padding: 0.3rem;
 }
+
 label[for=avatar] .avatar {
   width: 96px;
 }
@@ -67,7 +80,7 @@ label[for=avatar] .avatar {
  */
 
 .bar-top {
-  width: 100vw;
+  min-width: 100%;
   height: 25px;
   background-color: #f1c40f;
   position: fixed;
@@ -76,10 +89,12 @@ label[for=avatar] .avatar {
   left: 0;
   font-weight: bold;
 }
+
 .bar-top div {
   float: right;
   margin-right: 10px;
 }
+
 .bar-top div a {
   color: #adadad;
 }
@@ -93,9 +108,11 @@ label[for=avatar] .avatar {
   width: auto;
   border-bottom: 1px solid #adadad;
 }
+
 .hentry div {
   font-size: 17px;
 }
+
 img.img-responsive.avatarr {
   width: 96px !important;
   margin: 1rem !important;
@@ -108,6 +125,7 @@ img.img-responsive.avatarr {
 .list-inscrito {
   list-style-type: none;
 }
+
 .vizu-title {
   margin-left: 5px;
   line-height: 15px;
@@ -123,18 +141,22 @@ img.img-responsive.avatarr {
   right: 0;
   text-align: center;
 }
+
 .list-inscrito li ul li {
   cursor: pointer;
   display: inline;
 }
+
 .inscricoes .titleField {
   font-weight: bold;
   width: auto;
   border-bottom: 1px solid #adadad;
 }
+
 .hentry div {
   font-size: 17px;
 }
+
 .list-inscrito {
   list-style-type: none;
 }
@@ -143,43 +165,52 @@ img.img-responsive.avatarr {
  * Inscrever
  */
 
-.inscrever input[type=radio], input[type=checkbox] {
+.inscrever input[type=radio],
+input[type=checkbox] {
   margin: -2px 0 0;
 }
+
 #frame {
   border: 1px solid #eee;
 }
+
 .groups {
   display: none;
   list-style: none;
 }
-.groups > input[type="button"] {}
+
+.groups>input[type="button"] {}
 
 /**
  * Editar Usuário - ADMIN
  */
 
- .edit_user_form ul#categoria {
-   margin: 5px 0 0 0;
- }
- .edit_user_form ul#categoria li {
-   display:inline-block;
-   margin: 0 10px 0 0;
- }
- .edit_user_form ul#categoria li > input {
-   margin: 2px;
- }
- .edit_user_form ul.modalidade {
-   margin: 0 0 10px 0px;
- }
- .edit_user_form ul.modalidade li {
-   list-style: none;
-   margin: 0 10px 0 0;
- }
- .edit_user_form ul.modalidade li > input {
-   margin: 2px;
- }
+.edit_user_form ul#categoria {
+  margin: 5px 0 0 0;
+}
 
- .edit_user_form #responsavel {
-   display: none;
- }
+.edit_user_form ul#categoria li {
+  display: inline-block;
+  margin: 0 10px 0 0;
+}
+
+.edit_user_form ul#categoria li>input {
+  margin: 2px;
+}
+
+.edit_user_form ul.modalidade {
+  margin: 0 0 10px 0px;
+}
+
+.edit_user_form ul.modalidade li {
+  list-style: none;
+  margin: 0 10px 0 0;
+}
+
+.edit_user_form ul.modalidade li>input {
+  margin: 2px;
+}
+
+.edit_user_form #responsavel {
+  display: none;
+}
