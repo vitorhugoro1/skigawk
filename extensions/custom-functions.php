@@ -474,6 +474,285 @@ return;
     }
 }
 
+function get_bank_account_text($echo = false)
+{
+    $options = unserialize(get_option('deposito'));
+
+    $text = sprintf(
+        '%s<br> %s<br>Agência: %s<br>Conta: %s',
+        $options['banco'],
+        $options['beneficiario'],
+        $options['agencia'],
+        $options['conta']
+    );
+
+    if (!$echo) {
+        return $text;
+    }
+
+    echo $text;
+}
+
+function get_user_post_type_subscribes($userId)
+{
+    /** @var array */
+    $subscribes = get_the_author_meta('insiders', $userId);
+
+    $list = array();
+
+    $postIds = array_unique(array_keys($subscribes));
+
+    $list = array_map(function ($postID) {
+        return [
+            'type' => get_post_type($postID),
+            'id' => $postID
+        ];
+    }, $postIds);
+
+    sort($list);
+
+    return $list;
+}
+
+function get_user_subscribes($echo = false)
+{
+    $user = wp_get_current_user();
+    $gender = get_the_author_meta('sex', $user->ID);
+    $ageing = get_the_author_meta('fEtaria', $user->ID);
+    $subscribes = get_the_author_meta('insiders', $user->ID);
+    $rules = form_style_rules();
+    $pages_id = pages_group_ids();
+    $text = "";
+
+    // Se não houver inscrições
+    if (empty($subscribes)) {
+        $text .= "<p><b>Sem inscrições no momento.</b></p>";
+
+        $text .= "<p>Clique em um dos itens abaixo para acessar as páginas de postagens e realizar inscrições.</p>";
+
+        $text .= '<p class="aligncenter">';
+        $text .= sprintf('<a class="btn" href="%s">Campeonatos</a>', get_permalink($pages_id['campeonatos']));
+        $text .= sprintf('<a class="btn" href="%s">Eventos</a>', get_permalink($pages_id['eventos']));
+        $text .= "</p>";
+
+        if (!$echo) {
+            return $text;
+        }
+
+        echo $text;
+        return;
+    }
+
+    // Se tiver inscrições ativo
+    $posts = get_user_post_type_subscribes($user->ID);
+
+    $championships = array_filter($posts, function ($post) {
+        return $post['type'] === 'campeonatos';
+    });
+
+    $events = array_filter($posts, function ($post) {
+        return $post['type'] === 'eventos';
+    });
+
+    if (!empty($championships)) {
+        $table = '<table class="table-bordered table-striped">';
+
+        $table .= '<thead>
+                        <tr>
+                            <td class="text-center" colspan="3">
+                                <b>Inscrições</b>
+                            </td>
+                        </tr>
+                        <tr class="text-center">
+                            <td>
+                                <b>Campeonatos</b>
+                            </td>
+                            <td>
+                                <b>Categorias / Peso ou Forma(s)</b>
+                            </td>
+                            <td>
+                                <b>Pagamentos</b>
+                            </td>
+                        </tr>
+                    </thead>';
+
+        $table .= "<tbody>";
+
+        foreach ($championships as $championship) {
+            $tbody = '<tr class="text-center">';
+
+            // Link para visualizar outros inscritos
+            $link = sprintf("%s?post_id=%s", home_url('/visualiza-inscrito'), $championship['id']);
+            $tbody .= sprintf(
+                '<td><a href="%s" target="_blank">%s</a></td>',
+                $link,
+                get_the_title($championship['id'])
+            );
+
+            // Mostra informações da inscrição
+            // @TODO Alterar para página externa com detalhes
+            $value = $subscribes[$championship['id']];
+            $tbody .= '<td><ul class="list-inscrito">';
+            foreach ($value['categorias'] as $cat_slug => $cat_data) {
+                $category = get_term_by('slug', $cat_slug, 'categoria');
+                $tbody .= '<li>';
+                if (in_array($cat_slug, form_style_data())) {
+                    $count = count($cat_data);
+                    $c = 0;
+                    $tbody .= sprintf('<b>%s</b>', $category->name);
+                    $tbody .= '<ul>';
+
+                    foreach ($cat_data as $item) {
+                        $c++;
+                        $forma = get_weight($cat_slug, $item['peso'], $gender, $ageing);
+                        $tbody .= '<li>';
+                        $tbody .= $forma;
+
+                        if (array_key_exists($cat_slug, $rules['withGroup'])) {
+                            if (in_array($item['peso'], $rules['withGroup'][$cat_slug])) {
+                                if (isset($item['groups'])) {
+                                    $tbody .= ' <i>' . implode(", ", array_filter($item['groups'])) . '</i>';
+                                }
+                            }
+                        }
+
+                        $tbody .= (empty($forma)) ? '' : (($c == $count) ? '.' : ', ');
+                        $tbody .= '</li>';
+                    }
+
+                    $tbody .= '</ul>';
+                }
+
+                if (!in_array($cat_slug, form_style_data())) {
+                    $cat = (isset($cat_data[0])) ? $cat_data[0] : $cat_data;
+
+                    if (in_array($cat_slug, $rules['withWeapon'])) {
+                        $tbody .= sprintf(
+                            '<b>%s</b> / %s <b>Arma:</b> %s',
+                            $category->name,
+                            get_weight($cat_slug, $cat['peso'], $gender, $ageing),
+                            $cat['arma']
+                        );
+                    }
+
+                    // @todo Adicionar os custom teams
+                    if (!in_array($cat_slug, $rules['withWeapon'])) {
+                        $tbody .= sprintf(
+                            '<b>%s</b> / %s Kg',
+                            $category->name,
+                            get_weight($cat_slug, $cat['peso'], $gender, $ageing)
+                        );
+                    }
+                }
+
+                $tbody .= '</li>';
+            }
+            $tbody .= "</ul></td>";
+
+            // Mostra informações sobre o pagamento
+            $tbody .= '<td><ul class="list-inscrito">';
+
+            foreach ($value['categorias'] as $slug => $data) {
+                $term = get_term_by('slug', $slug, 'categoria');
+
+                if (in_array($slug, form_style_data())) {
+                    if (!empty($data)) {
+                        foreach ($data as $item) {
+                            $pagamento = (isset($data['id_pagamento'])) ? $item['id_pagamento'] : $item[0]['id_pagamento'];
+                            $id_pag[] = $pagamento;
+                        }
+
+                        $unique = array_unique($id_pag);
+                        $ids = array_filter($unique);
+                        $string_ids = implode(', ', $ids);
+                        $tbody .= '<li>';
+                        $tbody .= sprintf('<b>%s</b> - %s', $term->name, $string_ids);
+                        $tbody .= '</li>';
+                    }
+                }
+
+                if (!in_array($slug, form_style_data())) {
+                    $pagamento = (isset($data['id_pagamento'])) ? $data['id_pagamento'] : $data[0]['id_pagamento'];
+                    $tbody .= '<li>';
+                    $tbody .= sprintf('<b>%s</b> - %s', $term->name, $pagamento);
+                    $tbody .= '</li>';
+                }
+            }
+
+            $tbody .= "</ul></td>";
+
+            $tbody = "</tr>";
+
+            $table .= $tbody;
+        }
+
+        $table .= "</tbody>";
+        $table .= '<caption>Campeonatos</caption></table>';
+
+        $text .= $table;
+    }
+
+    if (!empty($events)) {
+        $table = "";
+
+        $table .= '<table class="table-bordered table-striped">';
+
+        $table .= '<thead>
+                    <tr>
+                      <td class="text-center" colspan="2">
+                        <b>Inscrições</b>
+                      </td>
+                    </tr>
+                    <tr class="text-center">
+                      <td>
+                        <b>Eventos</b>
+                      </td>
+                      <td>
+                        <b>Modalidades</b>
+                      </td>
+                    </tr>
+                </thead>';
+
+        $tbody = "<tbody>";
+
+        foreach ($events as $event) {
+            $tbody .= "<tr>";
+            $value = $subscribes[$event['id']];
+
+            // Visualiza o link do evento
+            $tbody .= sprintf(
+                '<td><a href="%s" target="_blank">%s</a></td>',
+                get_permalink($event['id']),
+                get_the_title($event['id'])
+            );
+
+            $paymentText = '';
+
+            foreach ($value as $key => $data) {
+                if ($key === 'pagamento') {
+                    $category = ucfirst($data['category']);
+                    $valor = (isset($data['valor'])) ? $data['valor'] : 'N/A';
+                    $paymentText .= sprintf('%s - R$%s', $category, $valor);
+                }
+            }
+
+            $tbody .= sprintf("<td>%s</td>", $paymentText);
+            $tbody .= "</tr>";
+        }
+
+        $tbody .= '</tbody>';
+        $table .= $tbody;
+        $table .= '<caption>Eventos</caption></table>';
+        $text .= $table;
+    }
+
+    if (!$echo) {
+        return $text;
+    }
+
+    echo $text;
+}
+
 function get_event_price_text($echo = true)
 {
     $postData = $_POST;
@@ -1832,6 +2111,7 @@ function form_style_rules()
         ],
         'withWeapon' => [
             'tree',
+            'desafio-bruce'
         ],
         'withCustomTeam' => [
             'taekwondo-kyorugui-dupla' => [
