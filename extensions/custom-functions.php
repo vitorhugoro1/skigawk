@@ -474,6 +474,39 @@ return;
     }
 }
 
+function get_event_price_text($echo = true)
+{
+    $postData = $_POST;
+    $isBilled = get_post_meta($postData['camp_id'], '_vhr_price_option', true);
+    $text = "";
+
+    if ($isBilled === 's') {
+        $text .= sprintf(
+            'Valor da inscrição para o primeiro <b>Estilo</b>: <b>R$ %s </b><br>',
+            get_post_meta($postData['camp_id'], '_vhr_price', true)
+        );
+
+        if (get_post_meta($postData['camp_id'], '_vhr_price_extra', true) !== '0.00') {
+            $text .= sprintf(
+                'Valor da inscrição para cada <b>Estilo</b> adicional: <b>R$ %s </b>',
+                get_post_meta($postData['camp_id'], '_vhr_price_extra', true)
+            );
+        }
+
+        $text .= '<b>O valor total será mostrado na página seguinte</b><br>';
+    }
+
+    if ($isBilled !== 's') {
+        $text .= "<b>Campeonato Gratuito</b><br>";
+    }
+
+    if (!$echo) {
+        return $text;
+    }
+
+    echo $text;
+}
+
 function children_ageing()
 {
     return [

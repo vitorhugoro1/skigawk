@@ -5,26 +5,9 @@ Selecione o estilo que vai participar
     </ul>
 </div>
 
-<?php if (get_post_meta($_POST['camp_id'], '_vhr_price_option', true) == 's') {
-    echo sprintf(
-        'Valor da inscrição para o primeiro <b>Estilo</b>: <b>R$ %s </b><br>',
-        get_post_meta($post_id, '_vhr_price', true)
-    );
+<?php echo get_event_price_text(false); ?>
 
-    if (get_post_meta($_POST['camp_id'], '_vhr_price_extra', true) !== '0.00') {
-        echo sprintf(
-            'Valor da inscrição para cada <b>Estilo</b> adicional: <b>R$ %s </b>',
-            get_post_meta($post_id, '_vhr_price_extra', true)
-        );
-    }
-
-    echo '<b>O valor total será mostrado na página seguinte</b><br>';
-} else {?>
-      <b>Campeonato Gratuito</b><br>
-  <?php }
-
-children_autorization_file_text();
-?>
+<?php echo children_autorization_file_text(false); ?>
 
 <?php // show_modalities_rules_text(); ?>
 
