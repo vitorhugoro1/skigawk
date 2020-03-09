@@ -681,7 +681,7 @@ function get_user_subscribes($echo = false)
 
             $tbody .= "</ul></td>";
 
-            $tbody = "</tr>";
+            $tbody .= "</tr>";
 
             $table .= $tbody;
         }
