@@ -186,6 +186,16 @@ function register_terms()
     // Formas
     wp_insert_term('Taekwondo - Poomsae', 'categoria', ['slug' => 'taekwondo-poomsae']);
     wp_insert_term('Karatê Kata', 'categoria', ['slug' => 'karate-kata']);
+
+    // Adicionados em março de 2020
+    wp_insert_term('Kick Boxing', 'categoria', ['slug' => 'kickboxing']);
+    wp_insert_term('Point Fighter', 'categoria', ['slug' => 'point-fighter']);
+    wp_insert_term('Kick Light', 'categoria', ['slug' => 'kicklight']);
+    wp_insert_term('K1 Ruler', 'categoria', ['slug' => 'k1-ruler']);
+    wp_insert_term('K1', 'categoria', ['slug' => 'k1']);
+    wp_insert_term('Boxe Amador', 'categoria', ['slug' => 'boxe-amador']);
+    wp_insert_term('Boxe Profissional', 'categoria', ['slug' => 'boxe-profissional']);
+    wp_insert_term('Judo', 'categoria', ['slug' => 'judo']);
 }
 
 function register_academias()

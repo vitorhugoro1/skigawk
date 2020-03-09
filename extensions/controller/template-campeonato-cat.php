@@ -26,6 +26,14 @@ $lutas = [
         'taekwondo-kyorugui',
         'taekwondo-kyorugui-dupla',
         'karate-kumite',
+        'kickboxing',
+        'point-fighter',
+        'kicklight',
+        'k1-ruler',
+        'k1',
+        'boxe-amador',
+        'boxe-profissional',
+        'judo',
     ],
 ];
 
