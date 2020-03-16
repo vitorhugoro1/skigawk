@@ -1,5 +1,7 @@
 <?php
 
+require get_template_directory() . '/extensions/subscribers/post-meta.php';
+
 function evento_date()
 {
     $prefix = '_vhr_';

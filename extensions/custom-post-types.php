@@ -51,6 +51,57 @@ function register_campeonatos()
     register_taxonomy('categoria', 'campeonatos', $arg);
 }
 
+add_action('init', 'register_subscribers');
+
+function register_subscribers()
+{
+    $singular_label = 'inscrição';
+    $labels = array(
+        'name' => __('Inscrições'),
+        'singular_name' => __($singular_label),
+        'add_new' => __('Adicionar novo'),
+        'add_new_item' => __('Adicionar novo') . ' ' . $singular_label,
+        'edit_item' => __('Editar') . ' ' . $singular_label,
+        'new_item' => __('Novo') . ' ' . $singular_label,
+        'view_item' => __('Ver') . ' ' . $singular_label,
+        'search_items' => __('Procurar') . ' ' . $singular_label,
+        'not_found' => __('Nada encontrado'),
+        'not_found_in_trash' => __('Nada encontrado no lixo'),
+    );
+
+    $args = array(
+        'labels' => $labels,
+        'public' => false,
+        'publicly_queryable' => false,
+        'show_ui' => true,
+        'query_var' => true,
+        'capability_type' => 'post',
+        'hierarchical' => true,
+        'menu_position' => 7,
+        'menu_icon' => 'dashicons-buddicons-buddypress-logo',
+        'has_archive' => false,
+        'exclude_from_search' => true,
+        'supports' => array('title'),
+    );
+
+    register_post_type('subscribers', $args);
+
+    $label = array(
+        'name' => 'Inscrições',
+        'singular_name' => 'Inscrição',
+    );
+
+    $arg = array(
+        'rewrite' => true,
+        'hierarchical' => true,
+        'labels' => $label,
+        'show_ui' => false,
+        'show_admin_column' => true
+    );
+
+    register_taxonomy('categoria', 'subscribers', $arg);
+}
+
 add_action('init', 'register_eventos');
 
 function register_eventos()
