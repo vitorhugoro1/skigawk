@@ -36,6 +36,9 @@ switch ($type) {
         $price = get_post_meta($post_id, '_vhr_price', true); // Carrrega o valor da inscrição principal
         $priceExtra = get_post_meta($post_id, '_vhr_price_extra', true); // Carrrega o valor da inscrição adicional
         $priceOption = get_post_meta($post_id, '_vhr_price_option', true);
+        $price = floatval(str_replace(',', '', $price));
+        $priceExtra = floatval(str_replace(',', '', $priceExtra));
+
         $subscriberPrice = ($priceExtra !== '0.00') ? $price + ($priceExtra * ($value - 1)) : $price * $value;
 
         break;

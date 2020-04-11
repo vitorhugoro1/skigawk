@@ -1,15 +1,12 @@
 <?php
 
-if(file_exists( __DIR__ . 'PagSeguroLibrary/PagSeguroLibrary.php')){
-	require __DIR__ . 'PagSeguroLibrary/PagSeguroLibrary.php';
-}
+function init_pagamentos()
+{
+    global $wpdb;
 
-function init_pagamentos(){
-  global $wpdb;
+    $tableName = $wpdb->prefix . 'payments';
 
-  $tableName = $wpdb->prefix.'payments';
-  $wpdb->query("
-          CREATE TABLE IF NOT EXISTS $tableName (
+    $wpdb->query("CREATE TABLE IF NOT EXISTS $tableName (
         `id` INT NOT NULL AUTO_INCREMENT,
         `user_id` BIGINT(20) NOT NULL,
         `post_id` BIGINT(20) NOT NULL,
@@ -17,48 +14,47 @@ function init_pagamentos(){
         `cat_inscricao` LONGTEXT NOT NULL,
         `meio_pag` VARCHAR(45) NOT NULL,
         `data_pag` DATE NOT NULL,
-        PRIMARY KEY (`id`));"
-      );
+        PRIMARY KEY (`id`));");
 
-  $pagseguro = array(
-    'nome'  => 'Vitor Hugo Rodrigues',
-    'email' => 'vitorhugo.ro10@gmail.com',
-    'token' => '0303FFE9CD2041AFB9251B194A45984F'
-  );
+    $pagseguro = array(
+        'nome' => 'Vitor Hugo Rodrigues',
+        'email' => 'vitorhugo.ro10@gmail.com',
+        'token' => '0303FFE9CD2041AFB9251B194A45984F',
+    );
 
-  if( ! get_option('pagseguro')){
-    add_option('pagseguro', serialize($pagseguro));
-  }
+    if (!get_option('pagseguro')) {
+        add_option('pagseguro', serialize($pagseguro));
+    }
 
-  $deposito = array(
-    'banco'   => 'Caixa Econômica',
-    'agencia' => '123456-5',
-    'conta'   => '32165-5',
-    'beneficiario'  => 'Vitor Hugo R Merencio'
-  );
+    $deposito = array(
+        'banco' => 'Caixa Econômica',
+        'agencia' => '123456-5',
+        'conta' => '32165-5',
+        'beneficiario' => 'Vitor Hugo R Merencio',
+    );
 
-  if( ! get_option('deposito')){
-    add_option('deposito', serialize($deposito));
-  }
-
-
+    if (!get_option('deposito')) {
+        add_option('deposito', serialize($deposito));
+    }
 }
 
 add_action('init', 'init_pagamentos');
 
-function pagamentos_menus(){
-  add_menu_page( "Configurações de Pagamento", "Configurações de Pagamento", 'manage_options', 'payments-general', 'payments_general','dashicons-cart' );
-  add_submenu_page( 'payments-general', 'Depositos', 'Depositos', 'manage_options', 'payments-deposito', 'payments_deposito' );
-  add_submenu_page( 'payments-general', 'PagSeguro', 'PagSeguro', 'manage_options', 'payments-pagseguro', 'payments_pagseguro' );
-  add_submenu_page( 'payments-general', 'Sobre', 'Sobre', 'manage_options', 'payments-about', 'payments_about' );
+function pagamentos_menus()
+{
+    add_menu_page("Configurações de Pagamento", "Configurações de Pagamento", 'manage_options', 'payments-general', 'payments_general', 'dashicons-cart');
+    add_submenu_page('payments-general', 'Depositos', 'Depositos', 'manage_options', 'payments-deposito', 'payments_deposito');
+    add_submenu_page('payments-general', 'PagSeguro', 'PagSeguro', 'manage_options', 'payments-pagseguro', 'payments_pagseguro');
+    add_submenu_page('payments-general', 'Sobre', 'Sobre', 'manage_options', 'payments-about', 'payments_about');
 }
 
-add_action( 'admin_menu', 'pagamentos_menus' );
+add_action('admin_menu', 'pagamentos_menus');
 
-function payments_general(){
-  $pagseguro = unserialize(get_option('pagseguro'));
-  $deposito = unserialize(get_option( 'deposito' ));
-  ?>
+function payments_general()
+{
+    $pagseguro = unserialize(get_option('pagseguro'));
+    $deposito = unserialize(get_option('deposito'));
+    ?>
   <div class="wrap">
     <h2><?php echo get_admin_page_title() ?></h2>
     <h2 class="nav-tab-wrapper">
@@ -139,8 +135,9 @@ function payments_general(){
   <?php
 }
 
-function payments_about(){
-  ?>
+function payments_about()
+{
+    ?>
     <div class="wrap">
       <h2><?php echo get_admin_page_title() ?></h2>
       <h2 class="nav-tab-wrapper">
@@ -157,18 +154,19 @@ function payments_about(){
   <?php
 }
 
-function payments_deposito(){
-  $deposito = unserialize(get_option('deposito'));
+function payments_deposito()
+{
+    $deposito = unserialize(get_option('deposito'));
 
-  if(isset($_POST['beneficiario']) && isset($_POST['banco']) && isset($_POST['agencia']) && isset($_POST['conta'])){
-    $deposito['beneficiario'] = strip_tags($_POST['beneficiario']);
-    $deposito['banco'] = strip_tags($_POST['banco']);
-    $deposito['agencia'] = strip_tags($_POST['agencia']);
-    $deposito['conta'] = strip_tags($_POST['conta']);
+    if (isset($_POST['beneficiario']) && isset($_POST['banco']) && isset($_POST['agencia']) && isset($_POST['conta'])) {
+        $deposito['beneficiario'] = strip_tags($_POST['beneficiario']);
+        $deposito['banco'] = strip_tags($_POST['banco']);
+        $deposito['agencia'] = strip_tags($_POST['agencia']);
+        $deposito['conta'] = strip_tags($_POST['conta']);
 
-    update_option( 'deposito', serialize($deposito) );
-  }
-  ?>
+        update_option('deposito', serialize($deposito));
+    }
+    ?>
   <div class="wrap">
     <h2><?php echo get_admin_page_title(); ?></h2>
 
@@ -215,23 +213,24 @@ function payments_deposito(){
           </tr>
         </tbody>
       </table>
-      <?php submit_button( __('Save') ); ?>
+      <?php submit_button(__('Save'));?>
     </form>
   </div>
   <?php
 }
 
-function payments_pagseguro(){
-  $pagseguro = unserialize(get_option('pagseguro'));
+function payments_pagseguro()
+{
+    $pagseguro = unserialize(get_option('pagseguro'));
 
-  if(isset($_POST['nome']) && isset($_POST['email']) && isset($_POST['token'])){
-    $pagseguro['nome'] = strip_tags($_POST['nome']);
-    $pagseguro['email'] = sanitize_email( $_POST['email'] );
-    $pagseguro['token'] = strip_tags($_POST['token']);
+    if (isset($_POST['nome']) && isset($_POST['email']) && isset($_POST['token'])) {
+        $pagseguro['nome'] = strip_tags($_POST['nome']);
+        $pagseguro['email'] = sanitize_email($_POST['email']);
+        $pagseguro['token'] = strip_tags($_POST['token']);
 
-    update_option( 'pagseguro', serialize($pagseguro) );
-  }
-  ?>
+        update_option('pagseguro', serialize($pagseguro));
+    }
+    ?>
   <div class="wrap">
     <h2><?php echo get_admin_page_title(); ?></h2>
 
@@ -270,7 +269,7 @@ function payments_pagseguro(){
           </tr>
         </tbody>
       </table>
-      <?php submit_button( __('Save') ); ?>
+      <?php submit_button(__('Save'));?>
     </form>
   </div>
   <?php
