@@ -139,14 +139,13 @@ if ($banco == '' || $beneficiario == '' || $agencia == '' || $conta == '') {
 <p>
 Ao realizar o pagamento enviar o comprovante para o e-mail <a href="mailto:adriel@skigawk.com.br">adriel@skigawk.com.br</a>.
 </p>
-<form action="<?php echo admin_url('admin-post.php'); ?>" method="post" class="form-inline">
-    <input type="hidden" name="action" value="vhr_cadastrar_evento"/>
-    <?php wp_nonce_field('vhr_cadastrar_evento')?>
+<form action="https://improved-enigma.test/subscription-event" method="POST" class="form-inline">
     <input type="hidden" name="info[post_id]" value="<?php echo $_POST['camp_id']; ?>"/>
+    <input type="hidden" name="info[redirectUrl]" value="<?php echo home_url('/inscricoes'); ?>"/>
+    <input type="hidden" name="info[user_id]" value="<?php echo get_current_user_id(); ?>"/>
     <input type="hidden" name="info[tipo]" value="<?php echo $type; ?>"/>
     <input type="hidden" name="info[valor]" value="<?php echo $subscriberPrice; ?>"/>
     <input type="hidden" name="info[inscrito]" value="<?php echo ($insider) ? 's' : 'n'; ?>"/>
-    <input type="hidden" name="info[meio_pag]" id="meio_pag_input" value="deposito"/>
     <?php
     foreach ($peso as $cat => $value) {
         if (is_array($value)) {
@@ -186,6 +185,14 @@ Ao realizar o pagamento enviar o comprovante para o e-mail <a href="mailto:adrie
         }
     }
     ?>
+    <div class="row-fluid">
+        <label>
+            <input type="radio" name="info[meio_pag]" value="pag_seguro"> PagSeguro
+        </label>
+        <label>
+            <input type="radio" name="info[meio_pag]" value="deposito"> Deposito
+        </label>
+    </div>
     <div class="row-fluid form-actions">
         <label for="feedback">
             <input type="checkbox" id="feedback" name="feedback" value="s"> Adicionar uma mensagem para o organizador?

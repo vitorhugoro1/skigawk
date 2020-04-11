@@ -1,4 +1,7 @@
 <?php
+if (file_exists(get_template_directory() . '/extensions/admin-config/PagSeguroLibrary/PagSeguroLibrary.php')) {
+    require get_template_directory() . '/extensions/admin-config/PagSeguroLibrary/PagSeguroLibrary.php';
+}
 
 add_action('admin_post_vhr_cadastrar_evento', 'vhr_cadastrar_evento');
 add_action('admin_post_nopriv_vhr_cadastrar_evento', 'vhr_cadastrar_evento');

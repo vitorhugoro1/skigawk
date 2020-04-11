@@ -32,7 +32,7 @@
 	<tr valign="top" class="alternate">
 		<td class="row-title">
             <label for="tablecell">
-                Peso
+                Peso / Forma
 			</label>
 		</td>
 		<td>
