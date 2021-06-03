@@ -25,8 +25,6 @@ class Inscritos extends WP_List_Table
 
             // We won't support Ajax for this table
         ));
-
-        add_action('admin_head', array(&$this, 'admin_header'));
     }
 
     /**
@@ -75,22 +73,6 @@ class Inscritos extends WP_List_Table
         return $data;
     }
 
-    public function admin_header()
-    {
-        $page = (isset($_REQUEST['page'])) ? esc_attr($_REQUEST['page']) : false;
-        if ('gerenciar_camp' != $page) {
-            return;
-        }
-
-        echo '<script type="text/javascript">';
-        echo "jQuery('.ewc-filter-ativo').live('change', function(){
-                var activeFilter = jQuery(this).val();
-                //alert(activeFilter);
-                //document.location.href = 'edit.php?post_type=" . esc_attr($_REQUEST['post_type']) . "&page=" . esc_attr($_REQUEST['page']) . "&post_id=" . esc_attr($_REQUEST['post_id']) . "'+activeFilter;
-            });";
-        echo '</script>';
-    }
-
     /**
      * @return array
      */
@@ -137,12 +119,16 @@ class Inscritos extends WP_List_Table
 
     /**
      * [column_cb description]
-     * @param  [type] $item [description]
+     * @param  object $item [description]
      * @return [type]       [description]
      */
     public function column_cb($item)
     {
-        return sprintf('<input type="checkbox" name="bulk-delete[]" value="%s" />', $item->ID);
+        return sprintf(
+            '<input type="checkbox" name="bulk-delete[]" title="%s" value="%s" />',
+            $item->display_name,
+            $item->ID
+        );
     }
 
     public function column_display_name($item)
@@ -163,12 +149,11 @@ class Inscritos extends WP_List_Table
     /**
      * Define what data to show on each column of the table.
      *
-     * @param array  $item        Data
+     * @param object  $item        Data
      * @param string $column_name - Current column name
      *
      * @return mixed
      */
-
     public function column_default($item, $column_name)
     {
         switch ($column_name) {
@@ -193,156 +178,197 @@ class Inscritos extends WP_List_Table
 
     public function column_categoria($item)
     {
-        $category = isset($_REQUEST['categoria']) ? $_REQUEST['categoria'] : null;
+        $category = $_REQUEST['categoria'] ?? null;
 
-        if (isset($category)) {
-            $sex = get_the_author_meta('sex', $item->ID);
-            $fetaria = get_the_author_meta('fEtaria', $item->ID);
-            $inscricoes = get_the_author_meta('insiders', $item->ID);
-            $items = $inscricoes[$_REQUEST['post_id']]['categorias'][$category];
-            $term = get_term_by('slug', $category, 'categoria');
-            $formas = form_style_data();
-
-            if (in_array($category, $formas)) {
-                array_filter($items);
-                $mods = array();
-
-                foreach ($items as $key => $value) {
-                    $id = (!isset($items['id'])) ? $value['peso'] : $value['id'];
-                    if (in_array($id, $mods)) {
-                        continue;
-                    }
-
-                    $cadastros[] = array(
-                        'modalidade' => get_weight($category, $id, $sex, $fetaria),
-                        'equipe' => ((isset($value['groups'])) ? implode(',', array_filter($value['groups'])) : ''),
-                    );
-
-                    $mods[] = $id;
-                }
-
-                $items = $term->name . " <ul> ";
-                foreach (array_filter($cadastros) as $cadastro) {
-                    if (is_null($cadastro['modalidade'])) {
-                        continue;
-                    }
-
-                    if ($cadastro['equipe'] == '') {
-                        $items .= sprintf('<li> %s </li>', $cadastro['modalidade']);
-                    } else {
-                        $items .= sprintf('<li> %s - %s </li>', $cadastro['modalidade'], $cadastro['equipe']);
-                    }
-                }
-                $items .= "</ul>";
-            }
-
-            if (in_array($category, ['tree', 'desafio-bruce'])) {
-                $id = (!isset($items['id'])) ? $items['peso'] : $items['id'];
-                $items = $term->name . ' - <b>' . get_weight($category, $id, $sex, $fetaria) . ' / ' . $items['arma'] . '</b>';
-            }
-
-            if (!in_array($category, $formas) && !in_array($category, ['tree', 'desafio-bruce'])) {
-                $id = (!isset($items['id'])) ? $items['peso'] : $items['id'];
-                $items = $term->name . ' - <b>' . get_weight($category, $id, $sex, $fetaria) . ' Kg </b>';
-            }
-        } else {
-            $inscricoes = get_the_author_meta('insiders', $item->ID);
-            $items = $inscricoes[$_REQUEST['post_id']]['categorias'];
-            $extra = 0;
-            $items = array_keys($items);
-            $value = count($items);
-            foreach ($items as $key => $item) {
-                if ($key == 'formaslivres' || $key == 'formasinternas' || $key == 'formastradicionais' || $key == 'formasolimpicas' || $key == 'tree') {
-                    $value--;
-                    $extra += count($item);
-                }
-            }
-            $items = $value + $extra;
+        if ($category) {
+            return print_r($this->getCategoryCountOnCategory($_REQUEST['post_id'], $item->ID, $category), true);
         }
 
-        return print_r($items, true);
+        return print_r($this->getCategoryCount($_REQUEST['post_id'], $item->ID), true);
+    }
+
+    protected function getCategoryCount($postID, $userID)
+    {
+        $inscricoes = get_the_author_meta('insiders', $userID);
+
+        $items = $inscricoes[$postID]['categorias'] ?? [];
+        $extra = 0;
+
+        $value = count(array_keys($items));
+        foreach ($items as $key => $item) {
+            if (!in_array($key, form_style_data())) {
+                continue;
+            }
+
+            $value--;
+            $extra += count($item);
+        }
+
+        return $value + $extra;
+    }
+
+    protected function getCategoryCountOnCategory($postID, $userID, $category)
+    {
+        $sex = get_the_author_meta('sex', $userID);
+        $fetaria = get_the_author_meta('fEtaria', $userID);
+        $inscricoes = get_the_author_meta('insiders', $userID);
+        $categoryItems = $inscricoes[$postID]['categorias'][$category] ?? [];
+        $term = get_term_by('slug', $category, 'categoria');
+        $formas = form_style_data();
+        $response = "";
+
+        if (in_array($category, $formas)) {
+            array_filter($categoryItems);
+            $notRepeatedID = array();
+
+            foreach ($categoryItems as $value) {
+                $id = (!isset($categoryItems['id'])) ? $value['peso'] : $value['id'];
+                if (in_array($id, $notRepeatedID)) {
+                    continue;
+                }
+
+                $cadastros[] = array(
+                    'modalidade' => get_weight($category, $id, $sex, $fetaria),
+                    'equipe' => ((isset($value['groups'])) ? implode(',', array_filter($value['groups'])) : ''),
+                );
+
+                $notRepeatedID[] = $id;
+            }
+
+            $response = $term->name . " <ul> ";
+            foreach (array_filter($cadastros) as $cadastro) {
+                if (is_null($cadastro['modalidade'])) {
+                    continue;
+                }
+
+                if ($cadastro['equipe'] == '') {
+                    $response .= sprintf('<li> %s </li>', $cadastro['modalidade']);
+                    continue;
+                }
+
+                $response .= sprintf('<li> %s - %s </li>', $cadastro['modalidade'], $cadastro['equipe']);
+            }
+
+            $response .= "</ul>";
+        }
+
+        if (in_array($category, ['tree', 'desafio-bruce'])) {
+            $id = $categoryItems['id'] ?? $categoryItems['peso'];
+
+            $response = sprintf(
+                "%s - <b>%s / %s</b>",
+                $term->name,
+                get_weight($category, $id, $sex, $fetaria),
+                $categoryItems['arma']
+            );
+        }
+
+        if (!in_array($category, $formas) && !in_array($category, ['tree', 'desafio-bruce'])) {
+            $id = $categoryItems['id'] ?? $categoryItems['peso'];
+
+            $response = sprintf(
+                '%s - <b>%s Kg</b>',
+                $term->name,
+                get_weight($category, $id, $sex, $fetaria)
+            );
+        }
+
+        return $response;
     }
 
     public function extra_tablenav($which)
     {
         global $wpdb;
-        if ($_REQUEST['post_type'] == 'campeonatos') {
-            if ($which == "top") {
-                echo '<script type="text/javascript">';
-                echo "jQuery('.ewc-filter-ativo').live('change', function(){
-                        var activeFilter = jQuery(this).val();
-                        //alert(activeFilter);
-                        document.location.href = 'edit.php?post_type=" . esc_attr($_REQUEST['post_type']) . "&page=" . esc_attr($_REQUEST['page']) . "&post_id=" . esc_attr($_REQUEST['post_id']) . "'+activeFilter;
-                    });";
-                echo "jQuery()";
-                echo '</script>';
-                ?>
-             <div class="alignleft actions bulkactions">
-               <label for="bulk-action-ativo" class="screen-reader-text">Categoria</label>
-               <select class="ewc-filter-ativo" name="ativo-filter">
+        $locationHref = $this->getLocationHref();
+        $postType = $_REQUEST['post_type'];
+
+        if ($which !== "top") {
+            return;
+        }
+
+        if ($postType === 'campeonatos') { ?>
+            <script type="text/javascript">
+                jQuery(document).on('change', '.ewc-filter-ativo', function() {
+                    var activeFilter = jQuery(this).val();
+                    //alert(activeFilter);
+                    document.location.href = '<?= $locationHref ?>' + activeFilter;
+                });
+            </script>
+
+            <div class="alignleft actions bulkactions">
+                <label for="bulk-action-ativo" class="screen-reader-text">Categoria</label>
+                <select class="ewc-filter-ativo" name="ativo-filter" title="Categoria">
                     <option value="">Categoria</option>
                     <?php
                     $list = wp_get_post_terms($_REQUEST['post_id'], 'categoria', array('fields' => 'all'));
                     foreach ($list as $term) {
-                        ?>
-                        <option value="<?php echo sprintf('&categoria=%s', esc_attr($term->slug)); ?>"
-                        <?php selected($_REQUEST['categoria'], $term->slug);?>>
+                    ?>
+                        <option value="<?php echo sprintf('&categoria=%s', esc_attr($term->slug)); ?>" <?php selected($_REQUEST['categoria'], $term->slug); ?>>
                             <?php echo $term->name; ?>
                         </option>
-                        <?php
+                    <?php
                     }
                     ?>
-               </select>
-             </div>
-                <?php
-                if (isset($_GET['categoria'])) {
-                    ?>
-                    <div class="alignleft actions bulkactions">
+                </select>
+            </div>
+            <?php if (isset($_GET['categoria'])) : ?>
+                <div class="alignleft actions bulkactions">
                     <label for="button-exportar" class="screen-reader-text">Gerar</label>
-                    <a href="<?php echo get_stylesheet_directory_uri() . '/extensions/controller/generate.php?post_id=' . esc_attr($_GET['post_id']) . '&categoria=' . esc_attr($_GET['categoria']); ?>" id="button-exportar" class="button">Gerar Relatório</a>
-                    </div>
+                    <a href="<?php echo $this->exportUrl() ?>" target="_blank" id="button-exportar" class="button">Gerar Relatório</a>
+                </div>
+            <?php
+            endif;
+        } else {
+            ?>
+            <script type="text/javascript">
+                jQuery('.ewc-filter-ativo').on('change', function() {
+                    var activeFilter = jQuery(this).val();
+                    //alert(activeFilter);
+                    document.location.href = '<?= $locationHref ?>"' + activeFilter;
+                });
+            </script>
+            <div class="alignleft actions bulkactions">
+                <label for="bulk-action-ativo" class="screen-reader-text">Categoria</label>
+                <select class="ewc-filter-ativo" name="ativo-filter">
+                    <option value="">Categoria</option>
                     <?php
-                }
-            }
-            } else {
-            if ($which == "top") {
-                echo '<script type="text/javascript">';
-                echo "jQuery('.ewc-filter-ativo').live('change', function(){
-                        var activeFilter = jQuery(this).val();
-                        //alert(activeFilter);
-                        document.location.href = 'edit.php?post_type=" . esc_attr($_REQUEST['post_type']) . "&page=" . esc_attr($_REQUEST['page']) . "&post_id=" . esc_attr($_REQUEST['post_id']) . "'+activeFilter;
-                    });";
-                echo '</script>';
+                    $niveis = get_post_meta($_REQUEST['post_id'], 'category_insider_group', true);
 
-                ?>
-                 <div class="alignleft actions bulkactions">
-                   <label for="bulk-action-ativo" class="screen-reader-text">Categoria</label>
-                   <select class="ewc-filter-ativo" name="ativo-filter">
-                        <option value="">Categoria</option>
-                        <?php
-$niveis = get_post_meta($_REQUEST['post_id'], 'category_insider_group', true);
-
-                if (!empty($niveis)) {
-                    foreach ((array) $niveis as $tkey => $tentry) {
-                        ?>
-                                            <option value="<?php echo sprintf('&categoria=%s', sanitize_title($tentry['name'])); ?>" <?php selected($_REQUEST['categoria'], sanitize_title($tentry['name']));?>><?php echo $tentry['name']; ?></option>
-                                        <?php
-}
-                }
-                ?>
-                   </select>
-                 </div>
-                <?php
-if (isset($_GET['categoria'])) {
-                    ?>
-                    <div class="alignleft actions bulkactions">
-                        <label for="button-exportar" class="screen-reader-text">Gerar</label>
-                        <a href="<?php echo get_stylesheet_directory_uri() . '/extensions/controller/generate.php?post_id=' . esc_attr($_GET['post_id']) . '&categoria=' . esc_attr($_GET['categoria']); ?>" id="button-exportar" class="button">Gerar Relatório</a>
-                    </div>
-                    <?php
-}
-            }
+                    if (!empty($niveis)) {
+                        foreach ((array) $niveis as $tkey => $tentry) { ?>
+                            <option value="<?php echo sprintf('&categoria=%s', sanitize_title($tentry['name'])); ?>" <?php selected($_REQUEST['categoria'], sanitize_title($tentry['name'])); ?>><?php echo $tentry['name']; ?></option>
+                        <?php }
+                    } ?>
+                </select>
+            </div>
+            <?php if (isset($_GET['categoria'])) { ?>
+                <div class="alignleft actions bulkactions">
+                    <label for="button-exportar" class="screen-reader-text">Gerar</label>
+                    <a href="<?php echo $this->exportUrl() ?>" target="_blank" id="button-exportar" class="button">Gerar Relatório</a>
+                </div>
+            <?php }
         }
+    }
+
+    private function exportUrl()
+    {
+        return sprintf(
+            "%s?action=%s&post_id=%s&categoria=%s",
+            admin_url('admin-post.php'),
+            'vhr_generate_export',
+            $_GET['post_id'],
+            $_GET['categoria']
+        );
+    }
+
+    private function getLocationHref()
+    {
+        return sprintf(
+            "edit.php?post_type=%s&page=%s&post_id=%s",
+            esc_attr($_REQUEST['post_type']),
+            esc_attr($_REQUEST['page']),
+            esc_attr($_REQUEST['post_id'])
+        );
     }
 
     public function no_items()
