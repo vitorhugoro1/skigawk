@@ -8,7 +8,7 @@ Template Name: Campeonatos
 
     <?php do_action( '__before_main_container' ); ##hook of the featured page (priority 10) and breadcrumb (priority 20)...and whatever you need! ?>
 
-    <div class="container" role="main">
+    <div class="container" role="main" style="display: flex;">
         <div class="<?php echo implode(' ', apply_filters( 'tc_column_content_wrapper_classes' , array('row' ,'column-content-wrapper') ) ) ?>">
 
             <?php do_action( '__before_article_container' ); ##hook of left sidebar?>
