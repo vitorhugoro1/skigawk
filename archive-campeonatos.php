@@ -18,11 +18,10 @@ Template Name: Campeonatos
                     <?php do_action( '__before_loop' );##hooks the header of the list of post : archive, search... ?>
 
                         <?php
-                        $page = (get_query_var('paged')) ? get_query_var('paged') : 1;
                         $args = array(
                             'post_type'     => 'campeonatos',
                             'post_status'   => 'publish',
-                            'paged' => $page
+                            'paged' => (get_query_var('paged')) ? get_query_var('paged') : 1
                         );
 
                         query_posts($args);

@@ -186,7 +186,7 @@ function get_etaria_user($birth)
  * @param string $fieldName Qual o nome do campo
  * @param string $type      Seta o tipo do retorno da função
  *
- * @return array||string Retorna um array ou uma string dependendo do $type escolhido
+ * @return array|string|null Retorna um array ou uma string dependendo do $type escolhido
  */
 function fieldCampeonato($post_id, $fieldName, $type)
 {
