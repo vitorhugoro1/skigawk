@@ -39,6 +39,6 @@ $niveis = get_post_meta($post_id, 'category_insider_group', true);
 <br>
 <input type="hidden" name="user_id" value="<?php echo $user->ID; ?>">
 <input type="hidden" name="camp_id" value="<?php echo $post_id; ?>">
-<button type="submit" class="btn btn-primary fp-button">
+<button type="submit" class="btn btn-primary fp-button mt-10">
     Avançar
 </button>

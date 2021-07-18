@@ -19,7 +19,7 @@
 <div>
     <input type="hidden" name="user_id" value="<?php echo $user->ID; ?>">
     <input type="hidden" name="camp_id" value="<?php echo $_POST['camp_id']; ?>">
-    <button type="submit" class="btn btn-primary fp-button">
+    <button type="submit" class="btn btn-primary fp-button mt-10">
         Avançar
     </button>
 </div>
