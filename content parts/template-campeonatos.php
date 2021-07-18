@@ -1,7 +1,7 @@
-Selecione o estilo que vai participar
+<p>Selecione o estilo que vai participar</p>
 <div id="estilo">
     <ul>
-       <?php echo template_modalities(); ?>
+        <?php echo template_modalities(); ?>
     </ul>
 </div>
 
@@ -9,14 +9,17 @@ Selecione o estilo que vai participar
 
 <?php echo children_autorization_file_text(false); ?>
 
-<?php // show_modalities_rules_text(); ?>
-
-<b>Termo de Responsabilidade</b>
-<iframe id="frame" src="" width="100%" height="400px"></iframe>
 <div>
-<input type="checkbox" id="accept" value="true"/> Eu concordo com o <strong>Termo de Responsabilidade</strong>
+    <h3>Termo de Responsabilidade</h3>
+    <iframe id="frame" src="<?= sprintf("%s?action=%s&post_id=%s", admin_url('admin-post.php'), 'vhr_event_user_term', $_POST['camp_id']) ?>" width="100%" height="400px"></iframe>
+    <div>
+        <input type="checkbox" id="accept" value="true" /> Eu concordo com o <strong>Termo de Responsabilidade</strong>
+    </div>
 </div>
-<br>
-<input type="hidden" name="user_id" value="<?php echo $user->ID; ?>">
-<input type="hidden" name="camp_id" value="<?php echo $_POST['camp_id']; ?>">
-<input type="submit" class="btn btn-primary fp-button" disabled value="Avançar">
+<div>
+    <input type="hidden" name="user_id" value="<?php echo $user->ID; ?>">
+    <input type="hidden" name="camp_id" value="<?php echo $_POST['camp_id']; ?>">
+    <button type="submit" class="btn btn-primary fp-button" disabled>
+        Avançar
+    </button>
+</div>

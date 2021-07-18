@@ -31,7 +31,7 @@ $niveis = get_post_meta($post_id, 'category_insider_group', true);
 </div>
 <div>
     <b>Termo de Responsabilidade</b>
-    <iframe id="frame" src="" width="100%" height="400px"></iframe>
+    <iframe id="frame" src="<?= sprintf("%s?action=%s&post_id=%s", admin_url('admin-post.php'), 'vhr_event_user_term', $_POST['camp_id']) ?>" width="100%" height="400px"></iframe>
     <div>
         <input type="checkbox" id="accept" value="true" /> Eu concordo com o <strong>Termo de Responsabilidade</strong>
     </div>
@@ -39,4 +39,6 @@ $niveis = get_post_meta($post_id, 'category_insider_group', true);
 <br>
 <input type="hidden" name="user_id" value="<?php echo $user->ID; ?>">
 <input type="hidden" name="camp_id" value="<?php echo $post_id; ?>">
-<input type="submit" class="btn btn-primary fp-button" disabled value="Avançar">
+<button type="submit" class="btn btn-primary fp-button" disabled>
+    Avançar
+</button>

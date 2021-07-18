@@ -4,8 +4,12 @@ const Subscribe = {
     hasFilledGroups: () => {
         return Array.from(jQuery('.groups:visible input:text')).filter((elem) => jQuery(elem).val() !== '').length > 0
     },
-    canAcceptTerms: () => {
+    canSubscribe: () => {
         if (Subscribe.hasChampionshipGroups() && !Subscribe.hasFilledGroups()) {
+            return false;
+        }
+
+        if (Subscribe.selectedOptionsCount() === 0) {
             return false;
         }
 

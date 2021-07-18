@@ -158,12 +158,6 @@ function readURL(input) {
   }
 }
 
-function loadTermo () {
-  var term = jQuery("#term_url");
-
-  jQuery("#frame").attr('src', term.val());
-}
-
 jQuery(document).ready(function ($) {
   $.ajaxSetup({
     beforeSend: function () {
@@ -173,7 +167,6 @@ jQuery(document).ready(function ($) {
       $("body").removeClass("loading");
     }
   });
-  loadTermo();
   userMaskLoad();
   nacionalLoad($('#nacionalidade'));
 
@@ -286,32 +279,30 @@ jQuery(document).ready(function ($) {
     }
   });
 
-  $("#accept").click(function () {
-    if (!Subscribe.canAcceptTerms()) {
-      let errorMessage = 'Selecione pelo menos uma modalidade';
+  $('#inscrever').submit(function (e) {
+    e.preventDefault(e);
 
-      if (Subscribe.hasChampionshipGroups() && !Subscribe.hasFilledGroups()) {
-        errorMessage = 'Preencha todas os grupos';
-      }
-
-      alert(errorMessage);
-      $(this).removeClass("accept");
-      $(".btn:submit").prop("disabled", true);
+    // Aceitou os termos
+    if ($("#accept:not(:checked)")) {
+      alert('Obrigatório aceitar os termos.');
 
       return false;
     }
 
-    if (!$(this).hasClass("accept")) {
-      $(".btn:submit").prop("disabled", false);
-      $(this).addClass("accept");
+    // Preencheu os todos os campos
+    if (!Subscribe.canSubscribe()) {
+      if (Subscribe.hasChampionshipGroups() && !Subscribe.hasFilledGroups()) {
+        alert('Preencha todos os grupos');
+      }
 
-      return;
+      if (!Subscribe.hasChampionshipGroups()) {
+        alert('Selecione pelo menos uma modalidade');
+      }
+
+      return false;
     }
 
-    if ($(this).hasClass("accept")) {
-      $(this).removeClass("accept");
-      $(".btn:submit").prop("disabled", true);
-    }
+    return true;
   });
 
   $('#estilo ul li input').click(function () {

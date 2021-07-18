@@ -11,7 +11,7 @@ $fetaria = get_the_author_meta('fEtaria', $user->ID);
     <?php do_action('__before_content'); ?>
     <div class="entry-content">
         <div class="hentry">
-            <form action="<?php echo get_permalink($pages_ids['save-inscrito']); ?>" class="inscrever" method="post">
+            <form action="<?php echo get_permalink($pages_ids['save-inscrito']); ?>" id="inscrever" class="inscrever" method="post">
                 <input type="hidden" id="term_url" value="<?php echo $term_url; ?>" />
                 <input type="hidden" id="category_url" value="<?php echo $category_url; ?>" />
                 <input type="hidden" id="sex" value="<?php echo get_the_author_meta('sex', $user->ID); ?>" />
