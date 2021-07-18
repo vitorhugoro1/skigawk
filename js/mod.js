@@ -304,6 +304,8 @@ jQuery(document).ready(function ($) {
     if (!$(this).hasClass("accept")) {
       $(".btn:submit").prop("disabled", false);
       $(this).addClass("accept");
+
+      return;
     }
 
     if ($(this).hasClass("accept")) {
