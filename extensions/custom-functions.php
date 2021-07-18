@@ -58,16 +58,6 @@ if (!version_compare(phpversion(), '5.2.17', '<=')) {
     }
 }
 
-function vhr_tc_reset_margin_top_after_sticky_header()
-{
-    echo apply_filters(
-        'tc_reset_margin_top_after_sticky_header',
-        '<div id="tc-reset-margin-top" class="container-fluid"></div>'
-    );
-}
-
-add_filter('tc_reset_margin_top_after_sticky_header', 'vhr_tc_reset_margin_top_after_sticky_header', 10, 2);
-
 function array_orderby()
 {
     $args = func_get_args();
