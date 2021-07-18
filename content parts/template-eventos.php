@@ -33,7 +33,10 @@ $niveis = get_post_meta($post_id, 'category_insider_group', true);
     <b>Termo de Responsabilidade</b>
     <iframe id="frame" src="<?= sprintf("%s?action=%s&post_id=%s", admin_url('admin-post.php'), 'vhr_event_user_term', $_POST['camp_id']) ?>" width="100%" height="400px"></iframe>
     <div>
-        <input type="checkbox" id="accept" value="true" /> Eu concordo com o <strong>Termo de Responsabilidade</strong>
+        <label for="accept" aria-label="Eu concordo com o Termo de Responsabilidade">
+            <input type="checkbox" id="accept" value="true" />
+            <span>Eu concordo com o <strong>Termo de Responsabilidade</strong></span>
+        </label>
     </div>
 </div>
 <br>

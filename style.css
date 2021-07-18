@@ -46,6 +46,18 @@ body.loading>.modal {
     background: rgba(255, 255, 255, .8) url('https://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
 }
 
+@media (min-width: 992px) {
+    #tc-reset-margin-top {
+        margin-top: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    #tc-reset-margin-top {
+        margin-top: 280px;
+    }
+}
+
 .mt-10 {
     margin-top: 1rem;
 }
