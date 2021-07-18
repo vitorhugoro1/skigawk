@@ -280,8 +280,6 @@ jQuery(document).ready(function ($) {
   });
 
   $('#inscrever').submit(function (e) {
-    e.preventDefault(e);
-
     // Aceitou os termos
     if ($("#accept:not(:checked)").length > 0) {
       alert('Obrigatório aceitar os termos.');
