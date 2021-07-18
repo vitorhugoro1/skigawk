@@ -283,7 +283,7 @@ jQuery(document).ready(function ($) {
     e.preventDefault(e);
 
     // Aceitou os termos
-    if ($("#accept:not(:checked)")) {
+    if ($("#accept:not(:checked)").length > 0) {
       alert('Obrigatório aceitar os termos.');
 
       return false;

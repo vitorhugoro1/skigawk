@@ -46,6 +46,10 @@ body.loading>.modal {
     background: rgba(255, 255, 255, .8) url('https://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
 }
 
+.mt-10 {
+    margin-top: 1rem;
+}
+
 /* When the body has the loading class, we turn
    the scrollbar off with overflow:hidden */
 body.loading {

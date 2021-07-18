@@ -758,35 +758,34 @@ function get_user_subscribes($echo = false)
 
 function get_event_price_text($echo = true)
 {
-    $postData = $_POST;
-    $isBilled = get_post_meta($postData['camp_id'], '_vhr_price_option', true);
-    $text = "";
+    $isBilled = get_post_meta($_POST['camp_id'], '_vhr_price_option', true);
+    $response = "";
 
     if ($isBilled === 's') {
-        $text .= sprintf(
+        $response .= sprintf(
             'Valor da inscrição para o primeiro <b>Estilo</b>: <b>R$ %s </b><br>',
-            get_post_meta($postData['camp_id'], '_vhr_price', true)
+            get_post_meta($_POST['camp_id'], '_vhr_price', true)
         );
 
-        if (get_post_meta($postData['camp_id'], '_vhr_price_extra', true) !== '0.00') {
-            $text .= sprintf(
+        if (get_post_meta($_POST['camp_id'], '_vhr_price_extra', true) !== '0.00') {
+            $response .= sprintf(
                 'Valor da inscrição para cada <b>Estilo</b> adicional: <b>R$ %s </b>',
-                get_post_meta($postData['camp_id'], '_vhr_price_extra', true)
+                get_post_meta($_POST['camp_id'], '_vhr_price_extra', true)
             );
         }
 
-        $text .= '<b>O valor total será mostrado na página seguinte</b><br>';
+        $response .= '<div class="text-bold mt-10">O valor total será mostrado na página seguinte</div>';
     }
 
     if ($isBilled !== 's') {
-        $text .= "<b>Campeonato Gratuito</b><br>";
+        $response .= '<div class="text-bold mt-10">Campeonato Gratuito</div>';
     }
 
     if (!$echo) {
-        return $text;
+        return $response;
     }
 
-    echo $text;
+    echo $response;
 }
 
 function children_ageing()

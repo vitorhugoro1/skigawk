@@ -22,7 +22,7 @@ const Subscribe = {
             count += jQuery('#estilo ul li input:checkbox.active').length;
         }
 
-        if (jQuery("#seleciona")) {
+        if (jQuery("#seleciona").length > 0) {
             count += jQuery('#seleciona input:radio').length;
         }
 
