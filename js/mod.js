@@ -298,7 +298,7 @@ jQuery(document).ready(function ($) {
       $(this).removeClass("accept");
       $(".btn:submit").prop("disabled", true);
 
-      return;
+      return false;
     }
 
     if (!$(this).hasClass("accept")) {

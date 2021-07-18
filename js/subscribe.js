@@ -2,7 +2,7 @@ const Subscribe = {
     hasChampionshipOptions: () => jQuery('#estilo ul li').length > 0,
     hasChampionshipGroups: () => Array.from(jQuery('.groups:visible input:text')).length > 0,
     hasFilledGroups: () => {
-        return Array.from(jQuery('.groups:visible input:text')).filter((elem) => jQuery(elem).val() === '').length > 0
+        return Array.from(jQuery('.groups:visible input:text')).filter((elem) => jQuery(elem).val() !== '').length > 0
     },
     canAcceptTerms: () => {
         if (Subscribe.hasChampionshipGroups() && !Subscribe.hasFilledGroups()) {
