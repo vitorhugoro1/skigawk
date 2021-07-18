@@ -4,9 +4,7 @@ function vhr_event_user_term()
 {
     if (!is_user_logged_in() || empty($_GET['post_id'])) {
         wp_die('Não tem permissão para realizar isto');
-    }
-
-    check_admin_referer('vhr_event_user_term'); ?>
+    } ?>
     <style media="screen">
         body {
             font-family: serif;
