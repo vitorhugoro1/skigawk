@@ -302,7 +302,7 @@ jQuery(document).ready(function ($) {
       return false;
     }
 
-    return true;
+    return;
   });
 
   $('#estilo ul li input').click(function () {
