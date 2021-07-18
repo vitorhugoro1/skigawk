@@ -4,6 +4,15 @@ require_once __DIR__ . '/../extensions/controller/Classes/PHPExcel.php';
 
 add_action('admin_post_vhr_generate_export', 'vhr_generate_export');
 
+function user_experience_export($user)
+{
+    if (empty(get_the_author_meta('exp', $user->ID))) {
+        return 'Não disponível';
+    }
+
+    return get_the_author_meta('exp', $user->ID);
+}
+
 function vhr_generate_export()
 {
     if (!current_user_can('manage_options')) {
@@ -51,9 +60,10 @@ function vhr_generate_export()
         foreach ($users as $user) {
             $sex = get_the_author_meta('sex', $user->ID);
             $fetaria = get_the_author_meta('fEtaria', $user->ID);
-            $exp = (!empty(get_the_author_meta('exp', $user->ID))) ? get_the_author_meta('exp', $user->ID) : 'Não disponível';
+            $exp = user_experience_export($user);
 
             $inscricoes = get_the_author_meta('insiders', $user->ID);
+            /** @var array $items */
             $items = $inscricoes[$post_id]['categorias'][$categoria];
 
             $term = get_term_by('slug', $categoria, 'categoria');
@@ -272,7 +282,17 @@ function vhr_generate_export()
         }
 
         $order = array('avancado', 'intermediario', 'novato');
-        $data = array_orderby($relatorio, 'nome', SORT_DESC, 'modalidade', SORT_ASC, 'sexo', SORT_DESC, 'experiencia', SORT_DESC);
+        $data = array_orderby(
+            $relatorio,
+            'nome',
+            SORT_DESC,
+            'modalidade',
+            SORT_ASC,
+            'sexo',
+            SORT_DESC,
+            'experiencia',
+            SORT_DESC
+        );
     } else {
         foreach ($users as $user) {
             $relatorio[] = array(
@@ -361,7 +381,11 @@ function vhr_generate_export()
 
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(0, $line, $value['nome']);
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(1, $line, $gender);
-                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(2, $line, ucfirst($value['faixa-etaria']));
+                    $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(
+                        2,
+                        $line,
+                        ucfirst($value['faixa-etaria'])
+                    );
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(3, $line, $value['categoria']);
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(4, $line, $value['modalidade']);
                     $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow(5, $line, $value['equipe']);
