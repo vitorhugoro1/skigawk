@@ -11,6 +11,7 @@ include get_template_directory() . '/actions/action-editar-perfil.php';
 include get_template_directory() . '/actions/action-cadastrar-usuario.php';
 include get_template_directory() . '/actions/action-cadastrar-evento.php';
 include get_template_directory() . '/actions/action-generate.php';
+include get_template_directory() . '/actions/action-user-terms.php';
 
 add_action('admin_enqueue_scripts', 'admin_functions');
 function admin_functions()
