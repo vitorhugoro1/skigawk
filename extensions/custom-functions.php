@@ -32,6 +32,14 @@ function enqueue_scripts_and_styles()
     wp_enqueue_style('modcss', get_template_directory_uri() . '/css/mod.css');
 }
 
+add_action('after_setup_theme', 'remove_admin_bar');
+function remove_admin_bar()
+{
+    if (!current_user_can('administrator') && !is_admin()) {
+        show_admin_bar(false);
+    }
+}
+
 add_action('init', 'controller_init', 9999);
 function controller_init()
 {
