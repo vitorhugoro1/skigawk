@@ -489,8 +489,11 @@ function vhr_cadastrar_evento()
     
     echo "AQUI" . PHP_EOL . $url;
 
-    wp_redirect($url);
-    exit;
+    if (wp_redirect($url)) {
+        exit;
+    }
+    
+    echo "ERRO";
 }
 
 function get_email_confirmation_text(array $table, string $sexo, string $fetaria)
