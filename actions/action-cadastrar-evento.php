@@ -487,7 +487,7 @@ function vhr_cadastrar_evento()
         wp_new_comment($commentdata);
     }
     
-    echo "AQUI";
+    echo "AQUI" . PHP_EOL . $url;
 
     wp_redirect($url);
     exit;
