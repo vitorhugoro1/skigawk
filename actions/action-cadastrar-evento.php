@@ -489,7 +489,7 @@ function vhr_cadastrar_evento()
     
     echo "AQUI" . PHP_EOL . $url;
 
-    if (wp_redirect($url)) {
+    if (wp_safe_redirect($url)) {
         exit;
     }
     
