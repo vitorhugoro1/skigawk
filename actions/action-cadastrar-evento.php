@@ -469,8 +469,6 @@ function vhr_cadastrar_evento()
 
         wp_mail($to, $subject, $message, $headers);
 
-        echo "AQUI";
-
         $url = get_permalink($pages_ids['inscricoes']);
     } else {
         $url = get_permalink($pages_ids['inscricoes']);
@@ -488,6 +486,8 @@ function vhr_cadastrar_evento()
         //Insert new comment and get the comment ID
         wp_new_comment($commentdata);
     }
+    
+    echo "AQUI";
 
     wp_redirect($url);
     exit;
