@@ -31,18 +31,23 @@ function vhr_cadastrar_evento()
         $infos['post_id'],
         $infos['valor'],
         $infos['meio_pag'],
-        array_keys($categorias)
+        $infos['tipo'] === 'campeonatos' ? array_keys($categorias) : $_POST['category'],
+        $infos['tipo'],
     );
 
     if (!$id_pagamento) {
         wp_die('Erro ao salvar o pagamento, contate o administrador.');
     }
 
-    $pagamento = array(
+    $pagamento = [
         'id_pagamento' => $id_pagamento,
         'valor' => $infos['valor'], // *
         'status' => 'v', // * , 'p' => pago, 'v' => à verificar
-    );
+    ];
+
+    if ($infos['tipo'] === 'eventos') {
+        $pagamento['category'] = $_POST['category'];
+    }
 
     if ('s' === $infos['inscrito']) {
         if ('campeonatos' === $infos['tipo']) {
@@ -126,8 +131,10 @@ function vhr_cadastrar_evento()
                             'id_pagamento' => $id_pagamento,
                         );
 
-                        if (array_key_exists('equipe', $term_value) &&
-                            !empty($term_value['equipe'])) {
+                        if (
+                            array_key_exists('equipe', $term_value) &&
+                            !empty($term_value['equipe'])
+                        ) {
                             $table[$term]['equipe'] = $term_value['equipe'];
                             $new[$term]['equipe'] = $term_value['equipe'];
                         }
@@ -148,8 +155,10 @@ function vhr_cadastrar_evento()
                             'id_pagamento' => $id_pagamento,
                         );
 
-                        if (array_key_exists('equipe', $term_value) &&
-                            !empty($term_value['equipe'])) {
+                        if (
+                            array_key_exists('equipe', $term_value) &&
+                            !empty($term_value['equipe'])
+                        ) {
                             $table[$term]['equipe'] = $term_value['equipe'];
                             $new[$term]['equipe'] = $term_value['equipe'];
                         }
@@ -276,8 +285,10 @@ function vhr_cadastrar_evento()
                         'id_pagamento' => $id_pagamento,
                     );
 
-                    if (array_key_exists('equipe', $term_value) &&
-                        !empty($term_value['equipe'])) {
+                    if (
+                        array_key_exists('equipe', $term_value) &&
+                        !empty($term_value['equipe'])
+                    ) {
                         $table[$term]['equipe'] = $term_value['equipe'];
                         $new[$term]['equipe'] = $term_value['equipe'];
                     }
@@ -320,7 +331,9 @@ function vhr_cadastrar_evento()
             } else {
                 update_user_meta($user_id, 'insiders', $save);
             }
-        } elseif ('eventos' == $infos['tipo']) {
+        }
+
+        if ('eventos' === $infos['tipo']) {
             $meta = get_post_meta($post_id, 'user_subscribers', true);
 
             if (is_array($meta) && !empty($meta)) {
@@ -328,23 +341,23 @@ function vhr_cadastrar_evento()
 
                 update_post_meta($post_id, 'user_subscribers', $meta);
             } else {
-                $meta = array($user_id);
+                $meta = [$user_id];
 
                 update_post_meta($post_id, 'user_subscribers', $meta);
             }
 
-            $save = array(
-                $post_id => array(
+            $save = [
+                $post_id => [
                     'pagamento' => $pagamento,
-                    'data_inscricao' => array($data_inscricao),
-                ),
-            );
+                    'data_inscricao' => [$data_inscricao],
+                ],
+            ];
 
             if (!empty($inscricoes)) {
-                $inscricoes[$post_id] = array(
+                $inscricoes[$post_id] = [
                     'pagamento' => $pagamento,
-                    'data_inscricao' => array($data_inscricao),
-                );
+                    'data_inscricao' => [$data_inscricao],
+                ];
 
                 $new_meta = $inscricoes;
 
@@ -352,11 +365,10 @@ function vhr_cadastrar_evento()
             } else {
                 update_user_meta($user_id, 'insiders', $save);
             }
-
         }
     }
 
-    if ('pag_seguro' == $infos['meio_pag']) {
+    if ('pag_seguro' === $infos['meio_pag']) {
         $paymentRequest = new PagSeguroPaymentRequest();
 
         $paymentRequest->addItem($id_pagamento, get_the_title($post_id), 1, $infos['valor']);
@@ -368,7 +380,7 @@ function vhr_cadastrar_evento()
 
         $paymentRequest->setSender(
             get_the_author_meta('display_name', $user_id),
-            get_the_author_email($user_id),
+            get_the_author_meta('user_email', $user_id),
             $ddd,
             $number
         );
@@ -395,22 +407,10 @@ function vhr_cadastrar_evento()
         } catch (Exception $e) {
             wp_die($e->getMessage());
         }
-    } elseif ('deposito' == $infos['meio_pag']) {
-        $options = unserialize(get_option('deposito'));
-        $banco = get_post_meta($post_id, '_vhr_banco', true);
-        $beneficiario = get_post_meta($post_id, '_vhr_beneficiario', true);
-        $agencia = get_post_meta($post_id, '_vhr_agencia', true);
-        $conta = get_post_meta($post_id, '_vhr_conta', true);
+    }
 
-        if ($banco == '' || $beneficiario == '' || $agencia == '' || $conta == '') {
-            $conta = sprintf('%s<br> %s<br>Agência: %s<br>Conta: %s', $options['banco'], $options['beneficiario'], $options['agencia'], $options['conta']);
-        } else {
-            $conta = sprintf('%s<br> %s<br>Agência: %s<br>Conta: %s', $banco, $beneficiario, $agencia, $conta);
-        }
-        $home = home_url();
-        $nome = get_the_author_meta('display_name', $user_id);
-        $titulo = get_the_title($post_id);
-        $tipo = (get_post_type($post_id) == 'campeonatos') ? 'Campeonato' : 'Evento';
+    if ('deposito' === $infos['meio_pag']) {
+        $tipo = ($infos['tipo'] == 'campeonatos') ? 'Campeonato' : 'Evento';
 
         $admin_email = get_option('admin_email');
         $sexo = get_the_author_meta('sex', $user_id);
@@ -419,191 +419,47 @@ function vhr_cadastrar_evento()
 
         $subject = sprintf("Inscrição no %s da Skigawk", $tipo);
 
-        $tab = "<table class='modalidade'>";
-        $tab .= "<thead>
-	            <th>Modalidade</th>
-	  					<th>Peso ou Forma</th></thead>";
-        $tab .= "<tbody>";
-        foreach ($table as $key => $value) {
-            switch ($key) {
-                case 'formaslivres':
-                case 'formastradicionais':
-                case 'formasinternas':
-                    if ($key == 'formastradicionais') {
-                        $valida_item = array(7, 8, 20, 21);
-                    } else if ($key == 'formaslivres') {
-                        $valida_item = array(8, 9, 12, 13);
-                    } else if ($key == 'formasinternas') {
-                        $valida_item = array(7, 8);
-                    }
+        $categorySubscribedTable = "<table class='modalidade'>";
+        $categorySubscribedTable .= "<thead>
+                <th>Modalidade</th>";
 
-                    $term = get_term_by('slug', $key, 'categoria');
-
-                    $tab .= '<tr>';
-                    $tab .= "<th>{$term->name}</th>";
-                    $tab .= '<td>';
-                    $tab .= '<ul class="modalidade">';
-                    foreach ($value as $item) {
-                        $tab .= "<li>";
-                        if (in_array($item, $valida_item)) {
-                            $g = (!empty($item['groups'])) ? implode(', ', array_filter($item['groups'])) : '';
-                            $tab .= sprintf('%s (Equipe: %s)', get_weight($key, $item['peso'], $sexo, $fetaria), $g);
-                        } else {
-                            $tab .= get_weight($key, $item['peso'], $sexo, $fetaria);
-                        }
-                        $tab .= "</li>";
-                    }
-                    $tab .= '</ul>';
-                    $tab .= '</td>';
-                    $tab .= '</tr>';
-
-                    break;
-                case 'formasolimpicas':
-                    $term = get_term_by('slug', $key, 'categoria');
-                    $tab .= '<tr>';
-                    $tab .= "<th>{$term->name}</th>";
-                    $tab .= '<td>';
-                    $tab .= '<ul class="modalidade">';
-                    foreach ($value as $item) {
-                        $tab .= "<li>";
-                        $tab .= get_weight($key, $item['peso'], $sexo, $fetaria);
-                        $tab .= "</li>";
-                    }
-                    $tab .= '</ul>';
-                    $tab .= '</td>';
-                    $tab .= '</tr>';
-                    break;
-                case 'tree':
-                    $term = get_term_by('slug', $key, 'categoria');
-                    $tab .= '<tr>';
-                    $tab .= "<th>{$term->name}</th>";
-                    $tab .= '<td>';
-                    $tab .= '<ul class="modalidade">';
-                    foreach ($value as $item) {
-                        $tab .= "<li>";
-                        $w = (!empty($item['arma'])) ? implode(', ', array_filter($item['arma'])) : '';
-                        $tab .= sprintf('%s (Arma: %s)', get_weight($key, $item['peso'], $sexo, $fetaria), $w);
-                        $tab .= "</li>";
-                    }
-                    $tab .= '</ul>';
-                    $tab .= '</td>';
-                    $tab .= '</tr>';
-                    break;
-                default:
-                    $term = get_term_by('slug', $key, 'categoria');
-                    $tab .= '<tr>';
-                    $tab .= "<th>{$term->name}</th>";
-                    $tab .= '<td>';
-                    $tab .= get_weight($key, $value['peso'], $sexo, $fetaria) . ' Kg';
-                    $tab .= '</td>';
-                    $tab .= '</tr>';
-                    break;
-            }
+        if ($infos['tipo'] === 'campeonatos') {
+            $categorySubscribedTable .= "<th>Peso ou Forma</th>";
         }
-        $tab .= "</tbody>";
-        $tab .= "<tfoot>
-	  					<tr>
-	  						<th>&nbsp;</th>
-	  						<td>&nbsp;</td>
-	  					</tr>
-	  					<tr>
-	  						<th scope='row'>Total</th>
-		  					<td class='total'>$ {$infos['valor']}</td>
-	  					</tr>
-	  				</tfoot>";
-        $tab .= '</table>';
 
-        $message = "<style type='text/css'>
-			.full {
-				width: 100%;
-				height: 100%;
-				margin: 0;
-				padding: 0;
-				background-color: #f5f5f5;
-				font-family: 'Roboto', sans-serif;
-			}
+        if ($infos['tipo'] === 'eventos') {
+            $categorySubscribedTable .= "<th>Categoria</th>";
+        }
 
-			.content {
-				padding:10px;
-			}
+        $categorySubscribedTable .= "</thead><tbody>";
 
-			header {
-				width: auto;
-				display: flex;
-				background-color: #f1c40f;
-			}
+        if ($infos['tipo'] === 'campeonatos') {
+            $categorySubscribedTable .= get_email_confirmation_text($table, $sexo, $fetaria);
+        }
 
-			header a {
-				margin: 0 auto;
-			}
+        if ($infos['tipo'] === 'eventos') {
+            $categorySubscribedTable .= "<tr><th>{$pagamento['category']}</th><td>&nbsp;</td></tr>";
+        }
 
-			.modalidade {
-				box-sizing: border-box;
-				width: 100%;
-				margin: 0 auto;
-			}
+        $categorySubscribedTable .= "</tbody>";
+        $categorySubscribedTable .= "<tfoot>
+                          <tr>
+                              <th>&nbsp;</th>
+                              <td>&nbsp;</td>
+                          </tr>
+                          <tr>
+                              <th scope='row'>Total</th>
+                              <td class='total'>$ {$infos['valor']}</td>
+                          </tr>
+                      </tfoot>";
+        $categorySubscribedTable .= '</table>';
 
-			.modalidade th, .modalidade td  {
-				border: 1px solid rgb(0,0,0);
-				margin: 0;
-				padding: 0;
-			}
-
-			.modalidade th {
-				width: 200px;
-			}
-
-			.formas {
-				margin: 0;
-				list-style: none;
-				padding: 0;
-			}
-
-			.total {
-				text-align: right;
-				background-color: red;
-				color: rgb(255,255,255);
-			}
-
-			footer {
-				font-size: 11px;
-			}
-		</style>
-		<div class=full>
-			<div class='content'>
-				<header>
-					<a href='{$home}'>
-
-		  			<img src='http://skigawk.com.br/testes/wordpress/wp-content/uploads/2016/07/logo-home2.png' alt='SKIGAWK' title='Skigawk' />
-		  			</a>
-				</header>
-				<div>
-
-	  			<p>Olá, <b>{$nome}</b> sua inscrição para o <b>{$titulo}</b> foi realizada com sucesso.</p>
-
-	        {$tab}
-
-	  			<p>&nbsp;&nbsp;Para darmos continuidade ao processo de validação, por favor realize o pagamento para os dados abaixo: </p>
-
-	  			<p class='conta'>
-
-	  				{$conta}
-
-	  			</p>
-
-	  			<p>&nbsp;Ao realizar o pagamento, envie o seu <b>nome completo</b> e o <b>comprovante</b> para <a href='mailto:adriel@skigawk.com.br'>adriel@skigawk.com.br</a>.</p>
-
-
-
-	  		</div>
-
-		  		<footer>
-		  			<p>
-		  				<i>Se o e-mail não foi para você, desconsidere este e-mail e avise o administrador do sistema em <a href='mailto:{$admin_email}'>{$admin_email}</a>.</i>
-		  			</p>
-		  		</footer>
-			</div>
-	  	</div>";
+        $message = get_email_confirmation_template(
+            get_the_author_meta('display_name', $user_id),
+            get_the_title($post_id),
+            get_email_confirmation_bank_account($post_id),
+            $categorySubscribedTable
+        );
 
         $headers[] = "From: Skigawk <{$admin_email}>" . "\r\n";
 
@@ -622,7 +478,7 @@ function vhr_cadastrar_evento()
         $commentdata = array(
             'comment_post_ID' => $post_id, // to which post the comment will show up
             'comment_author' => get_the_author_meta('display_name', $user_id), //fixed value - can be dynamic
-            'comment_author_email' => get_the_author_email($user_id), //fixed value - can be dynamic
+            'comment_author_email' => get_the_author_meta('user_email', $user_id), //fixed value - can be dynamic
             'comment_content' => $_POST['feedback_msg'], //fixed value - can be dynamic
             'user_id' => $user_id, //passing current user ID or any predefined as per the demand
         );
@@ -635,11 +491,95 @@ function vhr_cadastrar_evento()
     exit;
 }
 
-function add_pagamento($user_id, $post_id, $valor, $meio_pag, $categorias)
+function get_email_confirmation_text(array $table, string $sexo, string $fetaria)
+{
+    $tab = '';
+
+    foreach ($table as $key => $value) {
+        switch ($key) {
+            case 'formaslivres':
+            case 'formastradicionais':
+            case 'formasinternas':
+                if ($key == 'formastradicionais') {
+                    $valida_item = array(7, 8, 20, 21);
+                } elseif ($key == 'formaslivres') {
+                    $valida_item = array(8, 9, 12, 13);
+                } elseif ($key == 'formasinternas') {
+                    $valida_item = array(7, 8);
+                }
+
+                $term = get_term_by('slug', $key, 'categoria');
+
+                $tab .= '<tr>';
+                $tab .= "<th>{$term->name}</th>";
+                $tab .= '<td>';
+                $tab .= '<ul class="modalidade">';
+                foreach ($value as $item) {
+                    $tab .= "<li>";
+                    if (in_array($item, $valida_item)) {
+                        $g = (!empty($item['groups'])) ? implode(', ', array_filter($item['groups'])) : '';
+                        $tab .= sprintf('%s (Equipe: %s)', get_weight($key, $item['peso'], $sexo, $fetaria), $g);
+                    } else {
+                        $tab .= get_weight($key, $item['peso'], $sexo, $fetaria);
+                    }
+                    $tab .= "</li>";
+                }
+                $tab .= '</ul>';
+                $tab .= '</td>';
+                $tab .= '</tr>';
+
+                break;
+            case 'formasolimpicas':
+                $term = get_term_by('slug', $key, 'categoria');
+                $tab .= '<tr>';
+                $tab .= "<th>{$term->name}</th>";
+                $tab .= '<td>';
+                $tab .= '<ul class="modalidade">';
+                foreach ($value as $item) {
+                    $tab .= "<li>";
+                    $tab .= get_weight($key, $item['peso'], $sexo, $fetaria);
+                    $tab .= "</li>";
+                }
+                $tab .= '</ul>';
+                $tab .= '</td>';
+                $tab .= '</tr>';
+                break;
+            case 'tree':
+                $term = get_term_by('slug', $key, 'categoria');
+                $tab .= '<tr>';
+                $tab .= "<th>{$term->name}</th>";
+                $tab .= '<td>';
+                $tab .= '<ul class="modalidade">';
+                foreach ($value as $item) {
+                    $tab .= "<li>";
+                    $w = (!empty($item['arma'])) ? implode(', ', array_filter($item['arma'])) : '';
+                    $tab .= sprintf('%s (Arma: %s)', get_weight($key, $item['peso'], $sexo, $fetaria), $w);
+                    $tab .= "</li>";
+                }
+                $tab .= '</ul>';
+                $tab .= '</td>';
+                $tab .= '</tr>';
+                break;
+            default:
+                $term = get_term_by('slug', $key, 'categoria');
+                $tab .= '<tr>';
+                $tab .= "<th>{$term->name}</th>";
+                $tab .= '<td>';
+                $tab .= get_weight($key, $value['peso'], $sexo, $fetaria) . ' Kg';
+                $tab .= '</td>';
+                $tab .= '</tr>';
+                break;
+        }
+    }
+
+    return $tab;
+}
+
+function add_pagamento($user_id, $post_id, $valor, $meio_pag, $categorias, $eventType = 'campeonatos')
 {
     global $wpdb;
 
-    if (!is_serialized($categorias)) {
+    if (!is_serialized($categorias) && $eventType === 'campeonatos') {
         if (is_array($categorias)) {
             $categorias = serialize($categorias);
         } else {
@@ -651,21 +591,137 @@ function add_pagamento($user_id, $post_id, $valor, $meio_pag, $categorias)
 
     $wpdb->insert(
         $table,
-        array(
+        [
             'user_id' => $user_id,
             'post_id' => $post_id,
             'valor' => $valor,
             'cat_inscricao' => $categorias,
             'meio_pag' => $meio_pag,
-        ),
-        array(
+        ],
+        [
             '%d',
             '%d',
             '%s',
             '%s',
             '%s',
-        )
+        ]
     );
 
     return ($wpdb->insert_id) ? $wpdb->insert_id : false;
+}
+
+function get_email_confirmation_template(
+    string $name,
+    string $eventName,
+    string $bankAccount,
+    string $categorySubscribed
+) {
+    $home = home_url();
+    $admin_email = get_option('admin_email');
+
+    return "<style type='text/css'>
+        .full {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .content {
+            padding:10px;
+        }
+
+        header {
+            width: auto;
+            display: flex;
+            background-color: #f1c40f;
+        }
+
+        header a {
+            margin: 0 auto;
+        }
+
+        .modalidade {
+            box-sizing: border-box;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .modalidade th, .modalidade td  {
+            border: 1px solid rgb(0,0,0);
+            margin: 0;
+            padding: 0;
+        }
+
+        .modalidade th {
+            width: 200px;
+        }
+
+        .formas {
+            margin: 0;
+            list-style: none;
+            padding: 0;
+        }
+
+        .total {
+            text-align: right;
+            background-color: red;
+            color: rgb(255,255,255);
+        }
+
+        footer {
+            font-size: 11px;
+        }
+    </style>
+    <div class=full>
+        <div class='content'>
+            <header>
+                <a href='{$home}'>
+                <img
+                    src='https://eventos.skigawk.com.br/wp-content/uploads/2016/07/logo-home2.png'
+                    alt='SKIGAWK' title='Skigawk' />
+                </a>
+            </header>
+            <div>
+                <p>Olá, <b>{$name}</b> sua inscrição para o <b>{$eventName}</b> foi realizada com sucesso.</p>
+                {$categorySubscribed}
+                <p>&nbsp;&nbsp;Para darmos continuidade ao processo de validação,
+                    por favor realize o pagamento para os dados abaixo: </p>
+                <p class='conta'>
+                    {$bankAccount}
+                </p>
+                <p>&nbsp;Ao realizar o pagamento, envie o seu <b>nome completo</b> e o <b>comprovante</b> para <a href='mailto:adriel@skigawk.com.br'>adriel@skigawk.com.br</a>.</p>
+            </div>
+            <footer>
+                <p>
+                    <i>Se o e-mail não foi para você,
+                        desconsidere este e-mail e avise o
+                         administrador do sistema em <a href='mailto:{$admin_email}'>{$admin_email}</a>.</i>
+                </p>
+            </footer>
+        </div>
+  </div>";
+}
+
+function get_email_confirmation_bank_account(int $postID)
+{
+    $options = unserialize(get_option('deposito'));
+    $banco = get_post_meta($postID, '_vhr_banco', true);
+    $beneficiario = get_post_meta($postID, '_vhr_beneficiario', true);
+    $agencia = get_post_meta($postID, '_vhr_agencia', true);
+    $conta = get_post_meta($postID, '_vhr_conta', true);
+
+    if ($banco == '' || $beneficiario == '' || $agencia == '' || $conta == '') {
+        return sprintf(
+            '%s<br> %s<br>Agência: %s<br>Conta: %s',
+            $options['banco'],
+            $options['beneficiario'],
+            $options['agencia'],
+            $options['conta']
+        );
+    }
+
+    return sprintf('%s<br> %s<br>Agência: %s<br>Conta: %s', $banco, $beneficiario, $agencia, $conta);
 }

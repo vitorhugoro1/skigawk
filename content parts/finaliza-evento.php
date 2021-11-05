@@ -45,7 +45,13 @@
             $conta = get_post_meta($_POST['camp_id'], '_vhr_conta', true);
 
             if ($banco == '' || $beneficiario == '' || $agencia == '' || $conta == '') {
-                echo sprintf('%s<br> %s<br>Agência: %s<br>Conta: %s', $options['banco'], $options['beneficiario'], $options['agencia'], $options['conta']);
+                echo sprintf(
+                    '%s<br> %s<br>Agência: %s<br>Conta: %s',
+                    $options['banco'],
+                    $options['beneficiario'],
+                    $options['agencia'],
+                    $options['conta']
+                );
             } else {
                 echo sprintf('%s<br> %s<br>Agência: %s<br>Conta: %s', $banco, $beneficiario, $agencia, $conta);
             }
@@ -61,11 +67,12 @@
     <form action="<?php echo admin_url('admin-post.php'); ?>" method="post" class="form-inline">
         <input type="hidden" name="action" value="vhr_cadastrar_evento" />
         <?php wp_nonce_field('vhr_cadastrar_evento') ?>
-        <input type="hidden" name="priceTotal" value="<?php echo ($priceOption == 's') ? $subscriberPrice : '0'; ?>">
+        <input type="hidden" name="info[tipo]" value="eventos">
+        <input type="hidden" name="info[meio_pag]" value="deposito">
+        <input type="hidden" name="info[valor]" value="<?php echo ($priceOption == 's') ? $subscriberPrice : '0'; ?>">
+        <input type="hidden" name="info[post_id]" value="<?= $post_id ?>">
         <input type="hidden" name="category" value="<?= $category ?>">
         <input type="hidden" name="pay" value="<?= $priceOption ?>">
-        <input type="hidden" name="post_id" value="<?= $post_id ?>">
-        <input type="hidden" name="user_id" value="<?= $user_id ?>">
         <input type="hidden" name="insider" value="<?php echo ($insider) ? 's' : 'n'; ?>">
         <input type="submit" class="btn btn-primary fp-button" value="Finalizar" />
         <a href="javascript:history.back()" class="btn fp-button">Voltar</a>

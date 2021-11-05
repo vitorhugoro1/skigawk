@@ -728,6 +728,7 @@ function get_user_subscribes($echo = false)
 
         foreach ($events as $event) {
             $tbody .= "<tr>";
+            /** @var array */
             $value = $subscribes[$event['id']];
 
             // Visualiza o link do evento
