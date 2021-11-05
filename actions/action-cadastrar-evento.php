@@ -486,14 +486,10 @@ function vhr_cadastrar_evento()
         //Insert new comment and get the comment ID
         wp_new_comment($commentdata);
     }
-    
-    echo "AQUI" . PHP_EOL . $url;
 
     if (wp_safe_redirect($url)) {
         exit;
     }
-    
-    echo "ERRO";
 }
 
 function get_email_confirmation_text(array $table, string $sexo, string $fetaria)
