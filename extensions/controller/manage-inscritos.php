@@ -321,10 +321,10 @@ class Inscritos extends WP_List_Table
         } else {
             ?>
             <script type="text/javascript">
-                jQuery('.ewc-filter-ativo').on('change', function() {
+                jQuery(document).on('change', '.ewc-filter-ativo', function() {
                     var activeFilter = jQuery(this).val();
                     //alert(activeFilter);
-                    document.location.href = '<?= $locationHref ?>"' + activeFilter;
+                    document.location.href = '<?= $locationHref ?>' + activeFilter;
                 });
             </script>
             <div class="alignleft actions bulkactions">
