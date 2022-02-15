@@ -1,6 +1,6 @@
 <?php
-if (file_exists(__DIR__ . '/admin-config/admin-pagamentos.php')) {
-    require __DIR__ . '/admin-config/admin-pagamentos.php';
+if (file_exists(get_template_directory() . '/admin-config/admin-pagamentos.php')) {
+    require get_template_directory() . '/admin-config/admin-pagamentos.php';
 }
 
 if (!function_exists('wp_handle_upload')) {
@@ -50,10 +50,10 @@ if (!version_compare(phpversion(), '5.2.17', '<=')) {
     /*
      * Get the bootstrap!
      */
-    if (file_exists(__DIR__ . '/cmb2/init.php')) {
-        require_once __DIR__ . '/cmb2/init.php';
-    } elseif (file_exists(__DIR__ . '/CMB2/init.php')) {
-        require_once __DIR__ . '/CMB2/init.php';
+    if (file_exists(get_template_directory() . '/cmb2/init.php')) {
+        require_once get_template_directory() . '/cmb2/init.php';
+    } elseif (file_exists(get_template_directory() . '/CMB2/init.php')) {
+        require_once get_template_directory() . '/CMB2/init.php';
     }
 } else {
     /*
