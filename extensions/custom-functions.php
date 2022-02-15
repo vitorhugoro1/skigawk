@@ -10,6 +10,8 @@ if (!function_exists('wp_handle_upload')) {
 include get_template_directory() . '/actions/action-editar-perfil.php';
 include get_template_directory() . '/actions/action-cadastrar-usuario.php';
 include get_template_directory() . '/actions/action-cadastrar-evento.php';
+include get_template_directory() . '/actions/action-generate.php';
+include get_template_directory() . '/actions/action-user-terms.php';
 
 add_action('admin_enqueue_scripts', 'admin_functions');
 function admin_functions()
@@ -25,8 +27,17 @@ function enqueue_scripts_and_styles()
     wp_enqueue_script('jquery', get_template_directory_uri() . '/js/jquery-2.1.4.min.js', array('jquery'), '2.1.4', true);
     wp_enqueue_script('maskinput', get_template_directory_uri() . '/js/jquery.mask.min.js', array('jquery'), '', true);
     wp_enqueue_script('mods', get_template_directory_uri() . '/js/mod.js', array('jquery'), '', true);
+    wp_enqueue_script('subscribe', get_template_directory_uri() . '/js/subscribe.js', array('jquery'), '', true);
     wp_enqueue_style('toogle-btn', get_template_directory_uri() . '/css/mdtoggle.min.css', '', true);
     wp_enqueue_style('modcss', get_template_directory_uri() . '/css/mod.css');
+}
+
+add_action('after_setup_theme', 'remove_admin_bar');
+function remove_admin_bar()
+{
+    if (!current_user_can('administrator') && !is_admin()) {
+        show_admin_bar(false);
+    }
 }
 
 add_action('init', 'controller_init', 9999);
@@ -186,7 +197,7 @@ function get_etaria_user($birth)
  * @param string $fieldName Qual o nome do campo
  * @param string $type      Seta o tipo do retorno da função
  *
- * @return array||string Retorna um array ou uma string dependendo do $type escolhido
+ * @return array|string|null Retorna um array ou uma string dependendo do $type escolhido
  */
 function fieldCampeonato($post_id, $fieldName, $type)
 {
@@ -717,6 +728,7 @@ function get_user_subscribes($echo = false)
 
         foreach ($events as $event) {
             $tbody .= "<tr>";
+            /** @var array */
             $value = $subscribes[$event['id']];
 
             // Visualiza o link do evento
@@ -755,35 +767,34 @@ function get_user_subscribes($echo = false)
 
 function get_event_price_text($echo = true)
 {
-    $postData = $_POST;
-    $isBilled = get_post_meta($postData['camp_id'], '_vhr_price_option', true);
-    $text = "";
+    $isBilled = get_post_meta($_POST['camp_id'], '_vhr_price_option', true);
+    $response = "";
 
     if ($isBilled === 's') {
-        $text .= sprintf(
+        $response .= sprintf(
             'Valor da inscrição para o primeiro <b>Estilo</b>: <b>R$ %s </b><br>',
-            get_post_meta($postData['camp_id'], '_vhr_price', true)
+            get_post_meta($_POST['camp_id'], '_vhr_price', true)
         );
 
-        if (get_post_meta($postData['camp_id'], '_vhr_price_extra', true) !== '0.00') {
-            $text .= sprintf(
+        if (get_post_meta($_POST['camp_id'], '_vhr_price_extra', true) !== '0.00') {
+            $response .= sprintf(
                 'Valor da inscrição para cada <b>Estilo</b> adicional: <b>R$ %s </b>',
-                get_post_meta($postData['camp_id'], '_vhr_price_extra', true)
+                get_post_meta($_POST['camp_id'], '_vhr_price_extra', true)
             );
         }
 
-        $text .= '<b>O valor total será mostrado na página seguinte</b><br>';
+        $response .= '<div class="text-bold mt-10">O valor total será mostrado na página seguinte</div>';
     }
 
     if ($isBilled !== 's') {
-        $text .= "<b>Campeonato Gratuito</b><br>";
+        $response .= '<div class="text-bold mt-10">Campeonato Gratuito</div>';
     }
 
     if (!$echo) {
-        return $text;
+        return $response;
     }
 
-    echo $text;
+    echo $response;
 }
 
 function children_ageing()

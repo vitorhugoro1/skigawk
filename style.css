@@ -32,13 +32,34 @@
    our animation centered, and no-repeating */
 .modal {
     display: none;
-    position: fixed;
-    z-index: 9999999;
+}
+
+body.loading>.modal {
+    display: none;
+    position: absolute;
+    z-index: 1100;
     top: 0;
     left: 0;
     height: 100%;
     width: 100%;
-    background: rgba(255, 255, 255, .8) url('http://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
+    margin: 0;
+    background: rgba(255, 255, 255, .8) url('https://i.stack.imgur.com/FhHRx.gif') 50% 50% no-repeat;
+}
+
+@media (min-width: 992px) {
+    #tc-reset-margin-top {
+        margin-top: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    #tc-reset-margin-top {
+        margin-top: 280px;
+    }
+}
+
+.mt-10 {
+    margin-top: 1rem;
 }
 
 /* When the body has the loading class, we turn
@@ -51,4 +72,30 @@ body.loading {
    modal element will be visible */
 body.loading .modal {
     display: block !important;
+}
+
+
+/*
+  Flex Table
+*/
+
+.flex-table {
+    display: flex;
+    flex-flow: column;
+    row-gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.flex-table>.flex-row {
+    display: flex;
+    flex-flow: row;
+    column-gap: 0.75rem
+}
+
+.flex-head {
+    font-weight: bold;
+}
+
+.text-bold {
+    font-weight: bold;
 }

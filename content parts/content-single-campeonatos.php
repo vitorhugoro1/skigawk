@@ -2,13 +2,12 @@
 
 // error_reporting(1);
 
-    if(is_user_logged_in()){
-
-        $user = wp_get_current_user();
-        $birth = date_create_from_format('d/m/Y', get_the_author_meta('birthday', $user->ID));
-        $birth = get_etaria_user($birth);
-        update_user_meta($user->ID, 'fEtaria', $birth);
-    }
+if (is_user_logged_in()) {
+    $user = wp_get_current_user();
+    $birth = date_create_from_format('d/m/Y', get_the_author_meta('birthday', $user->ID));
+    $birth = get_etaria_user($birth);
+    update_user_meta($user->ID, 'fEtaria', $birth);
+}
 $pages_ids = pages_group_ids();
 $categoria = fieldCampeonato($post->ID, '_vhr_nivel_luta', 'dado');
 $faixaEtaria = fieldCampeonato($post->ID, '_vhr_faixa_etaria', 'dado');
@@ -26,106 +25,143 @@ $Inscricao = date_create($dataInscricao);
 
 $now = date('Y-m-d');
 
-if(strtotime($dataInscricao) >= strtotime($now)):
+if (strtotime($dataInscricao) >= strtotime($now)) :
 
 ?>
 
-<article <?php tc__f( '__article_selectors' ) ?>>
+    <article <?php tc__f('__article_selectors') ?>>
 
-    <?php do_action( '__before_content' ); ?>
+        <?php do_action('__before_content'); ?>
 
-<section class="tc-content <?php echo $_layout_class; ?>">
+        <section class="tc-content <?php echo $_layout_class; ?>">
 
-<div class="entry-content">
+            <div class="entry-content">
 
-    <div class="clear">
+                <div class="clear">
 
-        <?php the_content(); ?>
+                    <?php the_content(); ?>
 
-        Local da competição: <?php echo $address; ?><br>
+                    <div class="flex-table">
+                        <div class="flex-row">
+                            <div class="flex-head">Local da competição:</div>
+                            <div><?= addressCampeonato($post->ID) ?></div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-head">Faixa etária <?php echo count($faixaEtariaP) > 1 ? 'disponíveis' : 'disponível' ?>:</div>
+                            <div><?= $faixaEtaria ?></div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-head">Categorias <?php echo count($categoriaP) > 1 ? 'disponíveis' : 'disponível' ?>:</div>
+                            <div><?= $categoria ?></div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-head">
+                                Valor da inscrição:
+                            </div>
+                            <div>
+                            <?php
+                            if ($priceOption === 's') {
+                                echo $price;
+                            }
 
-        <?php echo ((count($faixaEtariaP) == 1) ? 'Faixa etária disponível: ' : 'Faixa etária disponíveis: ').$faixaEtaria; ?><br>
+                            if ($priceOption !== 's') {
+                                echo sprintf("<b>Campeonato Gratuito</b>");
+                            }
+                            ?>
+                            </div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-head">Data da competição:</div>
+                            <div class="text-bold"><?=date_format($Competicao, 'd/m/Y')?></div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-head">Data de fechamento inscrições:</div>
+                            <div class="text-bold"><?=date_format($Inscricao, 'd/m/Y')?></div>
+                        </div>
+                    </div>
+                </div>
 
-        <?php echo ((count($categoriaP) > 1) ? 'Categorias disponíveis: ' : 'Categoria disponível: ').$categoria; ?><br>
+                <?php
 
-        <?php if($priceOption == 's'){ ?>
+                if (is_user_logged_in()) {
+                    echo subscriberButton($user->ID, $post->ID, get_post_type());
+                } else {
+                ?>
+                    <a class="btn" href="<?= get_permalink($pages_ids['login']) ?>?redirect=<?= get_permalink() ?>">Logar</a>
+                <?php  } ?>
+            </div>
 
-            Valor da inscrição: <b>R$ <?php echo $price; ?></b><br>
+        </section>
 
-            <?php  } else { ?>
+        <?php do_action('__after_content'); ?>
 
-            <b>Campeonato Gratuito</b><br>
+    </article>
 
-        <?php  } ?>
+<?php else : ?>
 
-        Data da competição: <b><?php echo date_format($Competicao, 'd/m/Y'); ?></b> <br>
+    <article <?php tc__f('__article_selectors') ?>>
 
-        Data de fechamento inscrições: <b><?php echo date_format($Inscricao, 'd/m/Y'); ?></b>
+        <?php do_action('__before_content'); ?>
 
-    </div><br>
+        <section class="tc-content <?php echo $_layout_class; ?>">
 
-    <?php
+            <div class="entry-content">
 
-    if(is_user_logged_in()){
-            echo subscriberButton($user->ID, $post->ID, get_post_type());
-      } else {
-         ?>
-          <a class="btn" href="<?=get_permalink($pages_ids['login'])?>?redirect=<?=get_permalink()?>">Logar</a>
-    <?php  } ?>
-</div>
+                <div class="clear">
 
-</section>
+                    <?php the_content(); ?>
 
-<?php do_action( '__after_content' ); ?>
+                    <div class="flex-table">
+                        <div class="flex-row">
+                            <div class="flex-head">Local da competição:</div>
+                            <div><?= addressCampeonato($post->ID) ?></div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-head">Faixa etária <?php echo count($faixaEtariaP) > 1 ? 'disponíveis' : 'disponível' ?>:</div>
+                            <div><?= $faixaEtaria ?></div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-head">Categorias <?php echo count($categoriaP) > 1 ? 'disponíveis' : 'disponível' ?>:</div>
+                            <div><?= $categoria ?></div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-head">
+                                Valor da inscrição:
+                            </div>
+                            <div>
+                            <?php
+                            if ($priceOption === 's') {
+                                echo $price;
+                            }
 
-</article>
+                            if ($priceOption !== 's') {
+                                echo sprintf("<b>Campeonato Gratuito</b>");
+                            }
+                            ?>
+                            </div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-head">Data da competição:</div>
+                            <div class="text-bold"><?=date_format($Competicao, 'd/m/Y')?></div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-head">Data de fechamento inscrições:</div>
+                            <div class="text-bold"><?=date_format($Inscricao, 'd/m/Y')?></div>
+                        </div>
+                    </div>
+                </div>
 
-<?php else: ?>
+                <div>
+                    <?php echo strtoupper(__('inscri&#199;&#213;es encerradas', 'twentyfifteen')); ?>
+                </div>
+            </div>
 
-<article <?php tc__f( '__article_selectors' ) ?>>
+            </div>
 
-    <?php do_action( '__before_content' ); ?>
+        </section>
 
-<section class="tc-content <?php echo $_layout_class; ?>">
+        <?php do_action('__after_content'); ?>
 
-    <div class="entry-content">
-
-        <div class="clear">
-
-          <?php the_excerpt(); ?>
-
-        Local da competição: <?php echo $address; ?><br>
-
-        <?php echo ((count($faixaEtariaP) == 1) ? 'Faixa etária disponível: ' : 'Faixa etária disponíveis: ').$faixaEtaria; ?><br>
-
-        <?php echo ((count($categoriaP) > 1) ? 'Categorias disponíveis: ' : 'Categoria disponível: ').$categoria; ?><br>
-
-        <?php if($priceOption == 's'){ ?>
-
-            Valor da inscrição: <b>R$ <?php echo $price; ?></b><br>
-
-            <?php  } else { ?>
-
-            <b>Campeonato Gratuito</b><br>
-
-        <?php  } ?>
-
-            Data da competição: <b><?php echo date_format($Competicao, 'd/m/Y'); ?></b> <br>
-
-            Data de fechamento inscrições: <b><?php echo date_format($Inscricao, 'd/m/Y'); ?></b>
-
-    </div><br>
-
-         <strong><?php echo strtoupper(__('inscri&#199;&#213;es encerradas', 'twentyfifteen')); ?></strong>
-
-        </div>
-
-    </div>
-
-</section>
-
-<?php do_action( '__after_content' ); ?>
-
-</article>
+    </article>
 
 <?php endif; ?>

@@ -35,7 +35,7 @@ function readURL(input) {
   if (input.files && input.files[0]) {
     var reader = new FileReader();
 
-    reader.onload = function(e) {
+    reader.onload = function (e) {
       jQuery('label[for=avatar] img').attr('src', e.target.result);
     }
 
@@ -43,7 +43,7 @@ function readURL(input) {
   }
 }
 
-function defineIdade(data){
+function defineIdade (data) {
   var obj = jQuery("#responsavel");
   var dataS = data.split("/");
   var userIdade = idade(dataS[2], dataS[1], dataS[0]);
@@ -51,20 +51,20 @@ function defineIdade(data){
   if (userIdade < 18) {
     obj.show();
     obj.children('input').attr({
-      disabled:"false",
-      required:"required"
+      disabled: "false",
+      required: "required"
     });
   } else {
     obj.hide();
     obj.children('input').attr({
-      disabled:"disabled",
-      required:"false",
-      value:""
+      disabled: "disabled",
+      required: "false",
+      value: ""
     });
   }
 }
 
-function userMaskLoad(){
+function userMaskLoad () {
   jQuery("#idade").mask("00/00/0000", {
     placeholder: "00/00/0000"
   });
@@ -78,12 +78,12 @@ function userMaskLoad(){
     placeholder: "(00) 00000-0000"
   });
 
-  if(jQuery('#idade') !== undefined){
+  if (jQuery('#idade') !== undefined) {
     defineIdade(jQuery('#idade').val() + '');
   }
 }
 
-function nacionalLoad(elem){
+function nacionalLoad (elem) {
   jQuery("#cep").mask("00000-000", {
     placeholder: "00000-000"
   });
@@ -101,7 +101,7 @@ function nacionalLoad(elem){
   }
 }
 
-jQuery("#assoc").change(function() {
+jQuery("#assoc").change(function () {
   var value = jQuery(this).val();
   if (value == 'other') {
     var text = '<input type="text" name="assoc_other" id="assoc_other" placeholder="Qual associação?" value="" required/>';
@@ -111,7 +111,7 @@ jQuery("#assoc").change(function() {
   }
 });
 
-jQuery("ul.modalidade input[type=checkbox]").change(function() {
+jQuery("ul.modalidade input[type=checkbox]").change(function () {
   var check = jQuery(this).prop('checked');
   if (check == true) {
     var elem = jQuery(this).parent().children('div').children('.categoria');
@@ -122,15 +122,22 @@ jQuery("ul.modalidade input[type=checkbox]").change(function() {
   }
 });
 
-function countCheck(){
-    var count = 0;
-    jQuery('#estilo ul li input:checkbox.active').each(function(i){
-        count++;
+function optionsAcceptedCount () {
+  let count = 0;
+
+  if (jQuery('#estilo ul li')) {
+    jQuery('#estilo ul li input:checkbox.active').each(function (i) {
+      count++;
     });
-    jQuery('#seleciona input:radio').each(function(i){
-        count++;
+  }
+
+  if (jQuery("#seleciona")) {
+    jQuery('#seleciona input:radio').each(function (i) {
+      count++;
     });
-    return count;
+  }
+
+  return count;
 }
 
 /**
@@ -143,7 +150,7 @@ function readURL(input) {
   if (input.files && input.files[0]) {
     var reader = new FileReader();
 
-    reader.onload = function(e) {
+    reader.onload = function (e) {
       jQuery('label[for=avatar] img').attr('src', e.target.result);
     }
 
@@ -151,18 +158,19 @@ function readURL(input) {
   }
 }
 
-function loadTermo(){
-  var term = jQuery("#term_url");
-
-  jQuery("#frame").attr('src', term.val());
-}
-
-jQuery(document).ready(function($){
-  loadTermo();
+jQuery(document).ready(function ($) {
+  $.ajaxSetup({
+    beforeSend: function () {
+      $("body").addClass("loading");
+    },
+    complete: function () {
+      $("body").removeClass("loading");
+    }
+  });
   userMaskLoad();
   nacionalLoad($('#nacionalidade'));
 
-  setInterval(function() {
+  setInterval(function () {
     $("#tc-page-wrap header.tc-header").css({
       "top": "25px",
       "height": "auto"
@@ -170,12 +178,12 @@ jQuery(document).ready(function($){
     $("#tc-sn").css("top", "25px");
   }, 50);
 
-  setTimeout(function() {
+  setTimeout(function () {
     $("#alerts").remove();
   }, 8000);
 
 
-  $("#nacionalidade").on('change', function() {
+  $("#nacionalidade").on('change', function () {
     if ($(this).val() == 'br') {
       $("input#state").prop('readonly', true);
       $("input#city").prop('readonly', true);
@@ -193,14 +201,14 @@ jQuery(document).ready(function($){
     }
   });
 
-  $("#cep").click(function() {
+  $("#cep").click(function () {
     if ($("#nacionalidade").val() == '') {
       alert("Selecione uma nacionalidade antes");
       $("#nacionalidade").focus();
     } else return
   });
 
-  $("#cep").change(function() {
+  $("#cep").change(function () {
     var cep_code = $(this).val();
 
     if ($("#nacionalidade").val() != 'br') {
@@ -210,34 +218,34 @@ jQuery(document).ready(function($){
       $("input#district").prop('readonly', false);
       $("input#address").prop('readonly', false);
     } else {
-        $.get(`https://viacep.com.br/ws/${cep_code}/json/`,
-        function(result) {
-            if (result.erro) {
-                alert("Cep não encontrado!");
-                $("input#cep").val("");
-                return;
-            }
+      $.get(`https://viacep.com.br/ws/${cep_code}/json/`,
+        function (result) {
+          if (result.erro) {
+            alert("Cep não encontrado!");
+            $("input#cep").val("");
+            return;
+          }
 
-            $("input#cep").val(result.cep);
-            $("input#state").val(result.uf);
-            $("input#city").val(result.localidade);
-            $("input#district").val(result.bairro);
-            $("input#address").val(result.logradouro);
+          $("input#cep").val(result.cep);
+          $("input#state").val(result.uf);
+          $("input#city").val(result.localidade);
+          $("input#district").val(result.bairro);
+          $("input#address").val(result.logradouro);
         });
     }
   });
 
 
   jQuery('.list-inscrito li ul li').hover(
-    function(){
+    function () {
       jQuery(this).children('.tooltip').addClass('in');
     },
-    function(){
+    function () {
       jQuery(this).children('.tooltip').removeClass('in');
     }
   );
 
-  $("#idade").change(function() {
+  $("#idade").change(function () {
     var data = $(this).val() + '';
     var dataS = data.split("/");
     var userIdade = idade(dataS[2], dataS[1], dataS[0]);
@@ -254,7 +262,7 @@ jQuery(document).ready(function($){
     }
   });
 
-  $("#confirm_password").change(function() {
+  $("#confirm_password").change(function () {
     var pass = $("#id_password").val();
     var confirm = $(this).val();
 
@@ -271,55 +279,50 @@ jQuery(document).ready(function($){
     }
   });
 
-  $('#avatar').change(function() {
-    readURL(this);
-  });
+  $('#inscrever').submit(function (e) {
+    // Aceitou os termos
+    if ($("#accept:not(:checked)").length > 0) {
+      alert('Obrigatório aceitar os termos.');
 
-  $("#accept").click(function(){
-    var accept = $(this);
-    var val = countCheck();
-    if(!$(accept).hasClass("accept") && val >= 1){
-      $(".btn:submit").prop("disabled", false);
-      $(accept).addClass("accept");
-    } else if(val == 0){
-        alert('Selecione pelo menos uma modalidade');
-    } else {
-      $(accept).removeClass("accept");
-      $(".btn:submit").prop("disabled", true);
+      return false;
     }
+
+    // Preencheu os todos os campos
+    if (!Subscribe.canSubscribe()) {
+      if (Subscribe.hasChampionshipGroups() && !Subscribe.hasFilledGroups()) {
+        alert('Preencha todos os grupos');
+      }
+
+      if (!Subscribe.hasChampionshipGroups()) {
+        alert('Selecione pelo menos uma modalidade');
+      }
+
+      return false;
+    }
+
+    return;
   });
 
-  $('#estilo ul li input').click(function(){
-    var category_url = $("#category_url").val();
+  $('#estilo ul li input').click(function () {
     var caminho = $(this);
-    if(!$(caminho).hasClass("active")){
-      $body = $("body");
-      $.ajaxSetup({
-             beforeSend: function(){
-               $body.addClass("loading");
-             },
-             complete: function(){
-               $body.removeClass("loading");
-             }
-          });
-
-      $.post(category_url,
-       {
-         slug : $(this).attr('id'),
-         sexo : $('#sex').val(),
-         fetaria : $('#fetaria').val(),
-         user_id : $('#user_id').val(),
-         post_id: $('#post_id').val()
-       },
-       function(data, status){
+    if (!$(caminho).hasClass("active")) {
+      $.post($("#category_url").val(),
+        {
+          slug: $(this).attr('id'),
+          sexo: $('#sex').val(),
+          fetaria: $('#fetaria').val(),
+          user_id: $('#user_id').val(),
+          post_id: $('#post_id').val()
+        },
+        function (data) {
           $(caminho).closest("li").children("div").html(data.data);
           $(caminho).addClass("active");
-       }
-     );
-    } else {
-      $(caminho).closest("li").children("div").html("");
-      $(caminho).removeClass("active");
+        });
+      return;
     }
+
+    $(caminho).closest("li").children("div").html("");
+    $(caminho).removeClass("active");
   });
 
   $('input[type=checkbox]#formasinternas').parent().children("div#formasinternas").unbind().on('click', 'input[type=checkbox]', function () {
@@ -328,9 +331,9 @@ jQuery(document).ready(function($){
     switch ($(this).val()) {
       case '7':
       case '8':
-        if(check == true){
+        if (check == true) {
           $(this).parent().children('.groups').show();
-        } else if(check == false) {
+        } else if (check == false) {
           $(this).parent().children('.groups').hide();
         }
         break;
@@ -345,9 +348,9 @@ jQuery(document).ready(function($){
       case '8':
       case '20':
       case '21':
-        if(check == true){
+        if (check == true) {
           $(this).parent().children('.groups').show();
-        } else if(check == false) {
+        } else if (check == false) {
           $(this).parent().children('.groups').hide();
         }
         break;
@@ -362,9 +365,9 @@ jQuery(document).ready(function($){
       case '9':
       case '12':
       case '13':
-        if(check == true){
+        if (check == true) {
           $(this).parent().children('.groups').show();
-        } else if(check == false) {
+        } else if (check == false) {
           $(this).parent().children('.groups').hide();
         }
         break;
@@ -378,9 +381,9 @@ jQuery(document).ready(function($){
       case '3':
       case '4':
       case '6':
-        if(check == true){
+        if (check == true) {
           $(this).parent().children('.groups').show();
-        } else if(check == false) {
+        } else if (check == false) {
           $(this).parent().children('.groups').hide();
         }
         break;
@@ -399,9 +402,9 @@ jQuery(document).ready(function($){
       case '14':
       case '15':
       case '16':
-        if(check == true){
+        if (check == true) {
           $(this).parent().children('.groups').show();
-        } else if(check == false) {
+        } else if (check == false) {
           $(this).parent().children('.groups').hide();
         }
         break;
@@ -411,12 +414,12 @@ jQuery(document).ready(function($){
   $('input[type=checkbox]#tree').parent().children("div#tree").unbind().on('click', 'input[type=radio]', function () {
     var check = $(this).is(':checked');
 
-    if(check === true){
-        $(this).parents('ul').find('.groups').hide().find('input').val("");
-        $(this).parent().children('.groups').show();
-    } else if(check === false) {
-        $(this).parents('ul').find('.groups').hide().find('input').val("");
-        $(this).parent().children('.groups').hide();
+    if (check === true) {
+      $(this).parents('ul').find('.groups').hide().find('input').val("");
+      $(this).parent().children('.groups').show();
+    } else if (check === false) {
+      $(this).parents('ul').find('.groups').hide().find('input').val("");
+      $(this).parent().children('.groups').hide();
     }
   });
 
@@ -429,7 +432,7 @@ jQuery(document).ready(function($){
     }
   });
 
-  $('div').on('click', '.groups .add-member' ,function(e){
+  $('div').on('click', '.groups .add-member', function (e) {
     var max = parseInt($(this).attr('data-max') || 100);
     var count = $(this).parents('.groups').children().length - 1;
 
@@ -446,19 +449,18 @@ jQuery(document).ready(function($){
     $(this).parents('.groups').children('li:last').before(li);
   });
 
-  $(document).on('click', '.groups .remove-member', function(e) {
+  $(document).on('click', '.groups .remove-member', function (e) {
     var count = $(this).parents('.groups').children().length - 1;
     var min = parseInt($(this).attr('data-min') || 5);
 
-    if(count <= min){
+    if (count <= min) {
       return;
     }
 
     $(this).parents('.groups').children('li:last').prev().remove();
   });
 
-  $('#avatar').change(function() {
+  $('#avatar').change(function () {
     readURL(this);
   });
-
 });
